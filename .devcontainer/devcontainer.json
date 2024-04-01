@@ -1,0 +1,19 @@
+{
+    "name": "Go",
+    "dockerFile": "Dockerfile",
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // "postCreateCommand": "sudo apt-get update && sudo apt-get install -y openssh-server",
+
+    // Comment out 'appPort' if you don't need to access a port.
+    // "appPort": [],
+
+    // Comment out 'extensions' if you don't want to install extensions.
+    // "extensions": ["golang.go"],
+
+    // Comment out 'forwardPorts' if you don't need to forward ports.
+    // "forwardPorts": [],
+
+    // Uncomment the next line to run commands after the container is created and the workspace is ready
+    // "postCreateCommand": "go get -u github.com/gorilla/mux"
+}
