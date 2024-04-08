@@ -6,11 +6,11 @@ import (
 
 type Program struct {
 	gorm.Model
-	ProgramID    uint    `gorm:"primaryKey"`
+	ID           uint `gorm:"primaryKey"`
+	FacultyID    uint
 	Faculty      Faculty
 	ProgramName  string
 	Detail       string
 	PricePerTerm float64
-	TotalTerms   int
 	Prefix       string
 }

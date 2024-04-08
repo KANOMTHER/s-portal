@@ -6,7 +6,7 @@ import (
 
 type Faculty struct {
 	gorm.Model
-	FacultyID uint `gorm:"primaryKey"`
-	MajorName string
+	ID         uint `gorm:"primaryKey"`
+	Major      string
 	Department string
 }

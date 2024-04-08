@@ -6,6 +6,9 @@ import (
 
 type Instructor struct {
 	gorm.Model
-	ClassID      Class     `gorm:"primaryKey"`
-	InstructorID Professor `gorm:"primaryKey"`
+	ID uint `gorm:"primaryKey"`
+	ClassID    uint
+	Class      Class
+	ProfessorID uint
+	Professor  Professor
 }

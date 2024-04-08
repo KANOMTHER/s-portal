@@ -6,10 +6,11 @@ import (
 
 type Course struct {
 	gorm.Model
-	Code        string `gorm:"primaryKey"`
-	Name        string
+	ID	uint `gorm:"primaryKey"`
+	CourseCode  string
+	CourseName  string
 	Detail 		string
-	Credit      int
-	ReqCourse   []Course `gorm:"many2many:course_prerequisites;"`
-	Semester	string
+	Credit      float32
+	Semester	int
+	Year		int
 }

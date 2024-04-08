@@ -6,10 +6,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type ClassTimetable struct {
+type Timetable struct {
 	gorm.Model
-	Class     Class `gorm:"primaryKey"`
-	No        int   `gorm:"primaryKey"`
+	ID		  uint `gorm:"primaryKey"`
+	ClassID   uint
+	Class     Class
 	Day       time.Weekday
 	StartTime time.Time
 	EndTime   time.Time

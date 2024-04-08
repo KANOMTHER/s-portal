@@ -6,7 +6,8 @@ import (
 
 type Class struct {
 	gorm.Model
-	ID      uint `gorm:"primaryKey"`
-	Section string
-	Course  Course
+	ID         uint `gorm:"primaryKey"`
+	CourseID   uint
+	Course     Course
+	Section    string
 }

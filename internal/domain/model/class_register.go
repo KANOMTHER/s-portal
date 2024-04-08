@@ -6,6 +6,9 @@ import (
 
 type ClassRegister struct {
 	gorm.Model
-	Class     Class `gorm:"primaryKey"`
-	StudentID Student  `gorm:"primaryKey"`
+	ID        uint `gorm:"primaryKey"`
+	PaymentID uint
+	Payment   Payment
+	ClassID   uint
+	Class     Class
 }
