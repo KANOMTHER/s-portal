@@ -1,4 +1,4 @@
-module github.com/s-portal
+module s-portal
 
 go 1.22
 
