@@ -1,9 +1,18 @@
 package routes
 
 import (
+	"s-portal/internal/domain/service"
+
 	"github.com/gin-gonic/gin"
 )
 
-func initializeRoutes() *gin.Engine {
-	router := gin.Default()
+func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine {
+	api := router.Group("/api") 
+	{
+		ExampleRoutes(api)
+		StudentRoute(api)
+		FacultyRoutes(api, services.FacultyService)
+		CourseRoutes(api, services.CourseService)
+	}
+	return router
 }

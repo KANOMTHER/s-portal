@@ -3,26 +3,24 @@ package main
 import (
 	"fmt"
 
+	"s-portal/internal/domain/service"
+	"s-portal/internal/infrastructure/db"
+	"s-portal/internal/server/routes"
+
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	// Connect to database
+	database := db.Connect()
+
+	// Initialize service
+	services := service.NewService(database)
+
+	// Initialize routes
 	router := gin.Default()
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Welcome to s-portal backend",
-		})
-	})
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	router.GET("/hello", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello World",
-		})
-	})
+	router = routes.InitializeRoutes(router, services)
+
 	fmt.Println("Server started at port 3000")
 	router.Run(":3000")
 }

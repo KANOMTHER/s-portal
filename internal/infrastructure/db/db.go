@@ -8,9 +8,10 @@ import (
 	"gorm.io/driver/mysql"
 
 	"github.com/joho/godotenv"
+	"s-portal/internal/domain/model"
 )
 
-func connectDB() *gorm.DB {
+func Connect() *gorm.DB {
 	err := godotenv.Load(".env.local")
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -24,6 +25,22 @@ func connectDB() *gorm.DB {
 
 	log.Default().Println("Connected to database")
 	log.Default().Println(db.Name())
+	
+	db.AutoMigrate(
+		&model.Payment{},
+		&model.ClassRegister{},
+		&model.Timetable{},
+		&model.Class{},
+		&model.Course{},
+		&model.Faculty{},
+		&model.Grade{},
+		&model.Instructor{},
+		&model.Professor{},
+		&model.Program{},
+		&model.Student{},
+		&model.TA{},
+		&model.User{},
+	)
 
 	return db;
 }
