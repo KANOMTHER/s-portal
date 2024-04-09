@@ -15,6 +15,6 @@ func FacultyRoutes(route *gin.RouterGroup, service *service.FacultyService) {
 		faculty.GET("/", facultyHandler.GetAllFaculties)
 		faculty.GET("/:id", facultyHandler.GetFacultyByID)
 		faculty.POST("/", facultyHandler.CreateFaculty)
-		faculty.PUT("/:id", facultyHandler.UpdateFacultyByID)
+		faculty.PUT("/update/:id", facultyHandler.UpdateFacultyByID)
 	}
 }
