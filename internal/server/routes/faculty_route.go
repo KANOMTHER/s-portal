@@ -13,5 +13,6 @@ func FacultyRoutes(route *gin.RouterGroup, service *service.FacultyService) {
 	faculty := route.Group("/faculty")
 	{
 		faculty.GET("/", facultyHandler.GetAllFaculties)
+		faculty.POST("/", facultyHandler.CreateFaculty)
 	}
 }
