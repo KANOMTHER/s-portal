@@ -15,7 +15,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "go install github.com/cosmtrek/air@latest"
+	"postCreateCommand": "GO111MODULE=on go get -u github.com/cosmtrek/air"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
