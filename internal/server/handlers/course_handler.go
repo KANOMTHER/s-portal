@@ -42,7 +42,7 @@ func (h *CourseHandler) CreateCourse(context *gin.Context) {
 		return
 	}
 
-	if err := h.courseService.CreateCourse(context, &course); err != nil {
+	if err := h.courseService.CreateCourse(&course); err != nil {
 		// Handle error
 		context.JSON(400, gin.H{
 			"message": err.Error(),
@@ -58,7 +58,7 @@ func (h *CourseHandler) CreateCourse(context *gin.Context) {
 
 func (h *CourseHandler) FindCourseByID(context *gin.Context) {
 	id := context.Param("id")
-	course, err := h.courseService.FindCourseByID(context, id)
+	course, err := h.courseService.FindCourseByID(id)
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
@@ -85,5 +85,21 @@ func (h *CourseHandler) UpdateCourseByID(context *gin.Context) {
 	// Return success message
 	context.JSON(200, gin.H{
 		"message": "Course updated successfully",
+	})
+}
+
+func (h *CourseHandler) DeleteCourseByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.courseService.DeleteCourseByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err,
+		})
+		return;
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Course deleted successfully",
 	})
 }

@@ -25,14 +25,14 @@ func (cs *CourseService) GetAllCourses() ([]model.Course, error) {
 	return courses, nil
 }
 
-func (cs *CourseService) CreateCourse(context *gin.Context, course *model.Course) error {
+func (cs *CourseService) CreateCourse(course *model.Course) error {
 	if err := cs.db.Create(&course).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (cs *CourseService) FindCourseByID(context *gin.Context, id string) (*model.Course, error) {
+func (cs *CourseService) FindCourseByID(id string) (*model.Course, error) {
 	var course *model.Course
 	if err := cs.db.First(&course, id).Error; err != nil {
 		return nil, err
@@ -51,6 +51,19 @@ func (cs *CourseService) UpdateCourseByID(context *gin.Context, id string) error
 	}
 
 	if err := cs.db.Save(&course).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (cs *CourseService) DeleteCourseByID(id string) error {
+	course := model.Course{}
+	if err := cs.db.First(&course, id).Error; err != nil {
+		return err
+	}
+
+	if err := cs.db.Delete(&course).Error; err != nil {
 		return err
 	}
 
