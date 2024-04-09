@@ -71,3 +71,19 @@ func (h *CourseHandler) FindCourseByID(context *gin.Context) {
 		"message": course,
 	})
 }
+
+func (h *CourseHandler) UpdateCourseByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.courseService.UpdateCourseByID(context, id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err,
+		})
+		return;
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Course updated successfully",
+	})
+}

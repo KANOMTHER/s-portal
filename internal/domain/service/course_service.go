@@ -39,3 +39,20 @@ func (cs *CourseService) FindCourseByID(context *gin.Context, id string) (*model
 	}
 	return course, nil
 }
+
+func (cs *CourseService) UpdateCourseByID(context *gin.Context, id string) error {
+	course := model.Course{}
+	if err := cs.db.First(&course, id).Error; err != nil {
+		return err
+	}
+
+	if err := context.ShouldBindJSON(&course); err != nil {
+		return err
+	}
+
+	if err := cs.db.Save(&course).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
