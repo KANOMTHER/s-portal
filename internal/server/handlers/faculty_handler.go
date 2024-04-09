@@ -87,3 +87,19 @@ func (h *FacultyHandler) UpdateFacultyByID(context *gin.Context) {
 		"message": "Faculty updated successfully",
 	})
 }
+
+func (h *FacultyHandler) DeleteFacultyByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.facultyService.DeleteFacultyByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Faculty deleted successfully",
+	})
+}

@@ -56,3 +56,10 @@ func (fs *FacultyService) UpdateFacultyByID(context *gin.Context, id string) err
 
 	return nil
 }
+
+func (fs *FacultyService) DeleteFacultyByID(id string) error {
+	if err := fs.db.Delete(&model.Faculty{}, id).Error; err != nil {
+		return err
+	}
+	return nil
+}
