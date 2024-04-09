@@ -55,3 +55,19 @@ func (h *CourseHandler) CreateCourse(context *gin.Context) {
 		"message": "Course created successfully",
 	})
 }
+
+func (h *CourseHandler) FindCourseByID(context *gin.Context) {
+	id := context.Param("id")
+	course, err := h.courseService.FindCourseByID(context, id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": "No course found",
+		})
+		return;
+	}
+	// Return courses
+	context.JSON(200, gin.H{
+		"message": course,
+	})
+}

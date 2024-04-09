@@ -17,17 +17,25 @@ func NewCourseService(db *gorm.DB) *CourseService {
 	}
 }
 
-func (fs *CourseService) GetAllCourses() ([]model.Course, error) {
+func (cs *CourseService) GetAllCourses() ([]model.Course, error) {
 	var courses []model.Course
-	if err := fs.db.Find(&courses).Error; err != nil {
+	if err := cs.db.Find(&courses).Error; err != nil {
 		return nil, err
 	}
 	return courses, nil
 }
 
-func (fs *CourseService) CreateCourse(context *gin.Context, course *model.Course) error {
-	if err := fs.db.Create(&course).Error; err != nil {
+func (cs *CourseService) CreateCourse(context *gin.Context, course *model.Course) error {
+	if err := cs.db.Create(&course).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+func (cs *CourseService) FindCourseByID(context *gin.Context, id string) (*model.Course, error) {
+	var course *model.Course
+	if err := cs.db.First(&course, id).Error; err != nil {
+		return nil, err
+	}
+	return course, nil
 }
