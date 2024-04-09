@@ -31,3 +31,28 @@ func (fs *FacultyService) CreateFaculty(context *gin.Context, course *model.Facu
 	}
 	return nil
 }
+
+func (fs *FacultyService) GetFacultyByID(id string) (*model.Faculty, error) {
+	var faculty model.Faculty
+	if err := fs.db.First(&faculty, id).Error; err != nil {
+		return nil, err
+	}
+	return &faculty, nil
+}
+
+func (fs *FacultyService) UpdateFacultyByID(context *gin.Context, id string) error {
+	faculty := model.Faculty{}
+	if err := fs.db.First(&faculty, id).Error; err != nil {
+		return err
+	}
+
+	if err := context.ShouldBindJSON(&faculty); err != nil {
+		return err
+	}
+
+	if err := fs.db.Save(&faculty).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

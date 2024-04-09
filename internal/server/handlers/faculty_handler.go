@@ -55,3 +55,35 @@ func (h *FacultyHandler) CreateFaculty(context *gin.Context) {
 		"message": "Faculty created successfully",
 	})
 }
+
+func (h *FacultyHandler) GetFacultyByID(context *gin.Context) {
+	id := context.Param("id")
+	faculty, err := h.facultyService.GetFacultyByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": "Faculty not found",
+		})
+		return
+	}
+	// Return faculty
+	context.JSON(200, gin.H{
+		"message": faculty,
+	})
+}
+
+func (h *FacultyHandler) UpdateFacultyByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.facultyService.UpdateFacultyByID(context, id)
+	if err != nil {
+		// Handle error
+		context.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Faculty updated successfully",
+	})
+}
