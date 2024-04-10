@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
@@ -59,12 +61,8 @@ func (cs *CourseService) UpdateCourseByID(context *gin.Context, id string) error
 
 func (cs *CourseService) DeleteCourseByID(id string) error {
 	course := model.Course{}
-	if err := cs.db.First(&course, id).Error; err != nil {
-		return err
-	}
-
-	if err := cs.db.Delete(&course).Error; err != nil {
-		return err
+	if result := cs.db.Delete(&course, id); result.RowsAffected < 1 {
+		return fmt.Errorf("were not able to delete the Course")
 	}
 
 	return nil
