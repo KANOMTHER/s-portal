@@ -22,7 +22,7 @@ func (h *CourseHandler) GetAllCourses(context *gin.Context) {
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
-			"message": "No courses found",
+			"message": err.Error(),
 		})
 	}
 	// Return courses
@@ -62,7 +62,7 @@ func (h *CourseHandler) FindCourseByID(context *gin.Context) {
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
-			"message": "No course found",
+			"message": err.Error(),
 		})
 		return;
 	}
@@ -78,7 +78,7 @@ func (h *CourseHandler) UpdateCourseByID(context *gin.Context) {
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
-			"message": err,
+			"message": err.Error(),
 		})
 		return;
 	}
@@ -94,7 +94,7 @@ func (h *CourseHandler) DeleteCourseByID(context *gin.Context) {
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
-			"message": err,
+			"message": err.Error(),
 		})
 		return;
 	}
