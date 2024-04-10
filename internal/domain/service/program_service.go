@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -55,6 +56,15 @@ func (ps *ProgramService) UpdateProgramByID(context *gin.Context, id string) err
 
 	if err := ps.db.Save(&program).Error; err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (ps *ProgramService) DeleteProgramByID(id string) error {
+	program := model.Program{}
+	if result := ps.db.Delete(&program, id); result.RowsAffected < 1 {
+		return fmt.Errorf("were not able to delete the program")
 	}
 
 	return nil

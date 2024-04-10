@@ -87,3 +87,19 @@ func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
 		"message": "Program updated successfully",
 	})
 }
+
+func (h *ProgramHandler) DeleteProgramByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.programService.DeleteProgramByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Program deleted successfully",
+	})
+}
