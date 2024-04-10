@@ -71,3 +71,19 @@ func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 		"message": program,
 	})
 }
+
+func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.programService.UpdateProgramByID(context, id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Program updated successfully",
+	})
+}

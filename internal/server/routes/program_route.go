@@ -15,5 +15,6 @@ func ProgramRoutes(route *gin.RouterGroup, service *service.ProgramService) {
 		program.GET("/", programHandler.GetAllPrograms)
 		program.GET("/:id", programHandler.GetProgramByID)
 		program.POST("/", programHandler.CreateProgram)
+		program.PUT("/update/:id", programHandler.UpdateProgramByID)
 	}
 }

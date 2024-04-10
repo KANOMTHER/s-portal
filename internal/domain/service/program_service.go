@@ -2,6 +2,7 @@ package service
 
 import (
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
 	"s-portal/internal/domain/model"
@@ -38,4 +39,23 @@ func (ps *ProgramService) GetProgramByID(id string) (*model.Program, error) {
 		return nil, err
 	}
 	return program, nil
+}
+
+func (ps *ProgramService) UpdateProgramByID(context *gin.Context, id string) error {
+	program := model.Program{}
+	
+
+	if err := ps.db.First(&program, id).Error; err != nil {
+		return err
+	}
+
+	if err := context.ShouldBindJSON(&program); err != nil {
+		return err
+	}
+
+	if err := ps.db.Save(&program).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
