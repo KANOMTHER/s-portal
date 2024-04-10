@@ -13,6 +13,7 @@ func ProgramRoutes(route *gin.RouterGroup, service *service.ProgramService) {
 	program := route.Group("/program")
 	{
 		program.GET("/", programHandler.GetAllPrograms)
+		program.GET("/:id", programHandler.GetProgramByID)
 		program.POST("/", programHandler.CreateProgram)
 	}
 }

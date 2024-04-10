@@ -55,3 +55,19 @@ func (h *ProgramHandler) CreateProgram(context *gin.Context) {
 		"message": "Program created successfully",
 	})
 }
+
+func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
+	id := context.Param("id")
+	program, err := h.programService.GetProgramByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": program,
+	})
+}
