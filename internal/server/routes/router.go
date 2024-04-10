@@ -13,6 +13,7 @@ func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine
 		StudentRoute(api)
 		FacultyRoutes(api, services.FacultyService)
 		CourseRoutes(api, services.CourseService)
+		ProgramRoutes(api, services.ProgramService)
 	}
 	return router
 }
