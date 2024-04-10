@@ -24,3 +24,10 @@ func (ps *ProgramService) GetAllPrograms() ([]model.Program, error) {
 	}
 	return Programs, nil
 }
+
+func (ps *ProgramService) CreateProgram(program *model.Program) error {
+	if err := ps.db.Create(&program).Error; err != nil {
+		return err
+	}
+	return nil
+}

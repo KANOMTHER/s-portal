@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 
-
+	"s-portal/internal/domain/model"
 	"s-portal/internal/domain/service"
 )
 
@@ -28,5 +28,30 @@ func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 	// Return programs
 	context.JSON(200, gin.H{
 		"message": programs,
+	})
+}
+
+func (h *ProgramHandler) CreateProgram(context *gin.Context) {
+	program := model.Program{}
+
+	if err := context.ShouldBindJSON(&program); err != nil {
+		// Handle error
+		context.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := h.programService.CreateProgram(&program); err != nil {
+		// Handle error
+		context.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Program created successfully",
 	})
 }
