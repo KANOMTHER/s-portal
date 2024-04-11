@@ -41,6 +41,14 @@ func (cs *ClassService) GetClassByCourseID(course_id string) ([]model.Class, err
 	return class, nil
 }
 
+func (cs *ClassService) GetClassBySemester(semester string) ([]int, error) {
+	var class []int
+	if err := cs.db.Model(&model.Class{}).Joins("inner join Courses on Classes.course_id = Courses.ID ").Distinct("Classes.ID").Order("Classes.ID ASC").Where("semester = ?", semester).Pluck("Classes.ID", &class).Error; err != nil {
+		return nil, err
+	}
+	return class, nil
+}
+
 func (cs *ClassService) DeleteClassByID(id string) error {
 	class := model.Class{}
 	if result := cs.db.Delete(&class, id); result.RowsAffected < 1 {

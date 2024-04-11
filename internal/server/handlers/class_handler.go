@@ -74,6 +74,22 @@ func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 	})
 }
 
+func (h *ClassHandler) GetClassBySemester(context *gin.Context) {
+	semester := context.Query("semester")
+	class, err := h.classService.GetClassBySemester(semester)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return classs
+	context.JSON(200, gin.H{
+		"message": class,
+	})
+}
+
 func (h *ClassHandler) DeleteClassByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.classService.DeleteClassByID(id)
