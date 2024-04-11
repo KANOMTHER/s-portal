@@ -9,6 +9,7 @@ type Service struct {
 	CourseService *CourseService
 	ProgramService *ProgramService
 	TimeTableService *TimeTableService
+	ClassService *ClassService
 }
 
 func NewService(db *gorm.DB) *Service {
@@ -17,5 +18,6 @@ func NewService(db *gorm.DB) *Service {
 		CourseService: NewCourseService(db),
 		ProgramService: NewProgramService(db),
 		TimeTableService: NewTimeTableService(db),
+		ClassService: NewClassService(db),
 	}
 }
