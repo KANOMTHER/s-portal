@@ -27,6 +27,15 @@ func (cs *CourseService) GetAllCourses() ([]model.Course, error) {
 	return courses, nil
 }
 
+func (cs *CourseService) GetAllDistinctSemester() ([]int, error) {
+	var courses []model.Course
+	var semesters []int
+	if err := cs.db.Distinct("semester").Order("semester DESC").Find(&courses).Pluck("Semester", &semesters).Error; err != nil {
+		return nil, err
+	}
+	return semesters, nil
+}
+
 func (cs *CourseService) CreateCourse(course *model.Course) error {
 	if err := cs.db.Create(&course).Error; err != nil {
 		return err
