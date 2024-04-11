@@ -59,8 +59,8 @@ func (h *ClassHandler) GetClassByID(context *gin.Context) {
 }
 
 func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
-	id := context.Param("id")
-	class, err := h.classService.GetClassByID(id)
+	course_id := context.Query("course_id")
+	class, err := h.classService.GetClassByCourseID(course_id)
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{

@@ -33,9 +33,9 @@ func (cs *ClassService) GetClassByID(id string) (*model.Class, error) {
 	return class, nil
 }
 
-func (cs *ClassService) GetClassByCourseID(id string) ([]model.Class, error) {
+func (cs *ClassService) GetClassByCourseID(course_id string) ([]model.Class, error) {
 	var class []model.Class
-	if err := cs.db.Where("course_id = ?", id).Preload("Course").Find(&class).Error; err != nil {
+	if err := cs.db.Where("course_id = ?", course_id).Preload("Course").Find(&class).Error; err != nil {
 		return nil, err
 	}
 	return class, nil

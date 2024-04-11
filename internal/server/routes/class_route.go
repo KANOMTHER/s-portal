@@ -13,7 +13,7 @@ func ClassRoutes(route *gin.RouterGroup, service *service.ClassService) {
 	class := route.Group("/class")
 	{
 		class.GET("/:id", classHandler.GetClassByID)
-		class.GET("/get_by_course/:id", classHandler.GetClassByCourseID)
+		class.GET("/course", classHandler.GetClassByCourseID)
 		class.POST("/", classHandler.CreateClass)
 		class.DELETE("/delete/:id", classHandler.DeleteClassByID)
 	}
