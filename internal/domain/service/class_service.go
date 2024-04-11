@@ -31,3 +31,11 @@ func (ps *ClassService) GetClassByID(id string) (*model.Class, error) {
 	}
 	return class, nil
 }
+
+func (ps *ClassService) GetClassByCourseID(id string) ([]model.Class, error) {
+	var class []model.Class
+	if err := ps.db.Where("course_id = ?", id).Preload("Course").Find(&class).Error; err != nil {
+		return nil, err
+	}
+	return class, nil
+}
