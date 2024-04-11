@@ -41,3 +41,19 @@ func (h *ClassHandler) CreateClass(context *gin.Context) {
 		"message": "Class created successfully",
 	})
 }
+
+func (h *ClassHandler) GetClassByID(context *gin.Context) {
+	id := context.Param("id")
+	class, err := h.classService.GetClassByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return classs
+	context.JSON(200, gin.H{
+		"message": class,
+	})
+}

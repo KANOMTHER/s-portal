@@ -23,3 +23,11 @@ func (ps *ClassService) CreateClass(class *model.Class) error {
 	}
 	return nil
 }
+
+func (ps *ClassService) GetClassByID(id string) (*model.Class, error) {
+	var class *model.Class
+	if err := ps.db.Preload("Course").First(&class, id).Error; err != nil {
+		return nil, err
+	}
+	return class, nil
+}

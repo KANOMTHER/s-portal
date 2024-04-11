@@ -12,6 +12,7 @@ func ClassRoutes(route *gin.RouterGroup, service *service.ClassService) {
 
 	class := route.Group("/class")
 	{
+		class.GET("/:id", classHandler.GetClassByID)
 		class.POST("/", classHandler.CreateClass)
 	}
 }
