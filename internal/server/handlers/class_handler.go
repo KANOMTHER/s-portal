@@ -60,7 +60,7 @@ func (h *ClassHandler) GetClassByID(context *gin.Context) {
 
 func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 	id := context.Param("id")
-	class, err := h.classService.GetClassByCourseID(id)
+	class, err := h.classService.GetClassByID(id)
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
@@ -71,5 +71,21 @@ func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 	// Return classs
 	context.JSON(200, gin.H{
 		"message": class,
+	})
+}
+
+func (h *ClassHandler) DeleteClassByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.classService.DeleteClassByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Class deleted successfully",
 	})
 }

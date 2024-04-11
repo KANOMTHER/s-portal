@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 
 	"gorm.io/gorm"
 
@@ -38,4 +39,13 @@ func (ps *ClassService) GetClassByCourseID(id string) ([]model.Class, error) {
 		return nil, err
 	}
 	return class, nil
+}
+
+func (ps *ClassService) DeleteClassByID(id string) error {
+	class := model.Class{}
+	if result := ps.db.Delete(&class, id); result.RowsAffected < 1 {
+		return fmt.Errorf("were not able to delete the class")
+	}
+
+	return nil
 }
