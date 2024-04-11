@@ -3,7 +3,7 @@ A backend of website using Gin framework.
 
 ## To create local database
 ```bash
-docker compose -f "db.local.compose.yml" up -d --build
+docker compose --env-file ".env.local" -f "db.local.compose.yml" up -d --build
 ```
 
 ## To develope our backend
