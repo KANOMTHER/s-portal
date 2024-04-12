@@ -45,6 +45,21 @@ func (h *CourseHandler) GetAllDistinctSemester(context *gin.Context) {
 	})
 }
 
+func (h *CourseHandler) GetSectionByClassID(context *gin.Context) {
+	classID := context.Query("class_id")
+	sections, err := h.courseService.GetSectionByClassID(classID)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+	}
+	// Return sections
+	context.JSON(200, gin.H{
+		"message": sections,
+	})
+}
+
 func (h *CourseHandler) CreateCourse(context *gin.Context) {
 	course := model.Course{}
 
