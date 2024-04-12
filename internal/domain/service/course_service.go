@@ -36,14 +36,14 @@ func (cs *CourseService) GetAllDistinctSemester() ([]int, error) {
 	return semesters, nil
 }
 
-func (cs *CourseService) GetSectionByClassID(classID string) ([]model.Class, error) {
-	var sections []model.Class
+func (cs *CourseService) GetSectionByClassID(classID string) (*model.Class, error) {
+	var sections *model.Class
     if err := cs.db.
         Model(&model.Class{}).
         Preload("Course", func(db *gorm.DB) *gorm.DB {
             return db.Select("ID","course_code")
         }).
-        Find(&sections, classID).Error; err != nil {
+        First(&sections, classID).Error; err != nil {
         return nil, err
     }
     return sections, nil
