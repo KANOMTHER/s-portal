@@ -17,6 +17,22 @@ func NewTimeTableHandler(timeTableService *service.TimeTableService) *TimeTableH
 	}
 }
 
+func (h *TimeTableHandler) GetTimetableByClassID(context *gin.Context) {
+	class_id := context.Query("class_id")
+	timetables, err := h.timeTableService.GetTimetableByClassID(class_id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": "No timetables found",
+		})
+		return
+	}
+	// Return timetables
+	context.JSON(200, gin.H{
+		"message": timetables,
+	})
+}
+
 func (h *TimeTableHandler) CreateTimeTable(context *gin.Context) {
 	timeTable := model.Timetable{}
 
