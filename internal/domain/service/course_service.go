@@ -36,18 +36,36 @@ func (cs *CourseService) GetAllDistinctSemester() ([]int, error) {
 	return semesters, nil
 }
 
-func (cs *CourseService) GetSectionByClassID(classID string) (*model.Class, error) {
-	var sections *model.Class
-    if err := cs.db.
+type GetSectionByClassIDField struct {
+    CourseCode string
+    Section    string
+}
+
+func (cs *CourseService) GetSectionByClassID(classID string) (*GetSectionByClassIDField, error) {
+	// uses join + smart select
+	var sections *GetSectionByClassIDField
+    if err := cs.db.Debug().
         Model(&model.Class{}).
-        Preload("Course", func(db *gorm.DB) *gorm.DB {
-            return db.Select("ID","course_code")
-        }).
+        Select("courses.course_code AS CourseCode, classes.section AS section").
+        Joins("INNER JOIN courses ON classes.course_id = courses.id").
         First(&sections, classID).Error; err != nil {
         return nil, err
     }
     return sections, nil
+	
+	// no join
+	// var sections *model.Class
+    // if err := cs.db.
+    //     Model(&model.Class{}).
+    //     Preload("Course", func(db *gorm.DB) *gorm.DB {
+    //         return db.Select("ID","course_code")
+    //     }).
+    //     First(&sections, classID).Error; err != nil {
+    //     return nil, err
+    // }
+    // return sections, nil
 }
+
 
 func (cs *CourseService) CreateCourse(course *model.Course) error {
 	if err := cs.db.Create(&course).Error; err != nil {
