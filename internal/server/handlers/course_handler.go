@@ -24,6 +24,7 @@ func (h *CourseHandler) GetAllCourses(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
+		return
 	}
 	// Return courses
 	context.JSON(200, gin.H{
@@ -38,6 +39,7 @@ func (h *CourseHandler) GetAllDistinctSemester(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
+		return
 	}
 	// Return semesters
 	context.JSON(200, gin.H{
@@ -53,6 +55,7 @@ func (h *CourseHandler) GetSectionByClassID(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
+		return
 	}
 	// Return sections
 	context.JSON(200, gin.H{
