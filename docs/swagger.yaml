@@ -1,0 +1,389 @@
+basePath: /api
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  model.Course:
+    properties:
+      courseCode:
+        type: string
+      courseName:
+        type: string
+      createdAt:
+        type: string
+      credit:
+        type: number
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      detail:
+        type: string
+      id:
+        type: integer
+      semester:
+        type: integer
+      updatedAt:
+        type: string
+      year:
+        type: integer
+    type: object
+  model.Faculty:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      department:
+        type: string
+      id:
+        type: integer
+      major:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.Program:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      detail:
+        type: string
+      faculty:
+        allOf:
+        - $ref: '#/definitions/model.Faculty'
+        description: (optional)
+      facultyID:
+        type: integer
+      id:
+        type: integer
+      prefix:
+        type: string
+      pricePerTerm:
+        type: number
+      programName:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  service.GetSectionByClassIDField:
+    properties:
+      courseCode:
+        type: string
+      section:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /course:
+    get:
+      consumes:
+      - application/json
+      description: get all courses
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Course'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetAllCourses
+      tags:
+      - Course
+    post:
+      consumes:
+      - application/json
+      description: create a new course
+      parameters:
+      - description: Course object
+        in: body
+        name: program
+        schema:
+          $ref: '#/definitions/model.Course'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: CreateCourse
+      tags:
+      - Course
+  /course/:id:
+    get:
+      consumes:
+      - application/json
+      description: get a course by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Course'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetCourseByID
+      tags:
+      - Course
+  /course/delete/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete a course by id
+      parameters:
+      - description: course id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: DeleteCourseByID
+      tags:
+      - Course
+  /course/section:
+    get:
+      consumes:
+      - application/json
+      description: get section search by id
+      parameters:
+      - description: class id
+        in: query
+        name: class_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/service.GetSectionByClassIDField'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetSectionByClassID
+      tags:
+      - Course
+  /course/semester:
+    get:
+      consumes:
+      - application/json
+      description: get semester from all course [no duplicate]
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: integer
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetAllDistinctSemester
+      tags:
+      - Course
+  /course/update/:id:
+    put:
+      consumes:
+      - application/json
+      description: update a course by id
+      parameters:
+      - description: course id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: UpdateCourseByID
+      tags:
+      - Course
+  /program:
+    get:
+      consumes:
+      - application/json
+      description: get all programs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Program'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetAllPrograms
+      tags:
+      - Program
+    post:
+      consumes:
+      - application/json
+      description: create a new program
+      parameters:
+      - description: Program object
+        in: body
+        name: program
+        schema:
+          $ref: '#/definitions/model.Program'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: CreateProgram
+      tags:
+      - Program
+  /program/:id:
+    get:
+      consumes:
+      - application/json
+      description: get a program by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Program'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetProgramByID
+      tags:
+      - Program
+  /program/delete/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete a program by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: DeleteProgramByID
+      tags:
+      - Program
+  /program/update/:id:
+    put:
+      consumes:
+      - application/json
+      description: update a program by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: UpdateProgramByID
+      tags:
+      - Program
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

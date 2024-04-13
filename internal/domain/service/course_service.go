@@ -74,7 +74,7 @@ func (cs *CourseService) CreateCourse(course *model.Course) error {
 	return nil
 }
 
-func (cs *CourseService) FindCourseByID(id string) (*model.Course, error) {
+func (cs *CourseService) GetCourseByID(id string) (*model.Course, error) {
 	var course *model.Course
 	if err := cs.db.First(&course, id).Error; err != nil {
 		return nil, err
