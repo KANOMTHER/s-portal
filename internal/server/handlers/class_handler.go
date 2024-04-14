@@ -17,6 +17,15 @@ func NewClassHandler(classService *service.ClassService) *ClassHandler {
 	}
 }
 
+//	@Summary		CreateClass
+//	@Description	create a new class
+//	@Tags			Class
+//	@Accept			json
+//	@Produce		json
+//	@Param			class	body		model.Class	false	"Class object"
+//	@Success		200		{object}	string		"Class created successfully"
+//	@Failure		400		{object}	string		"some error message here (from err.Error())"
+//	@Router			/class [POST]
 func (h *ClassHandler) CreateClass(context *gin.Context) {
 	class := model.Class{}
 
@@ -42,6 +51,15 @@ func (h *ClassHandler) CreateClass(context *gin.Context) {
 	})
 }
 
+//	@Summary		GetClassByID
+//	@Description	get class search by id
+//	@Tags			Class
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"class id"
+//	@Success		200	{object}	model.Class
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
+//	@Router			/class/:id [get]
 func (h *ClassHandler) GetClassByID(context *gin.Context) {
 	id := context.Param("id")
 	class, err := h.classService.GetClassByID(id)
@@ -58,6 +76,15 @@ func (h *ClassHandler) GetClassByID(context *gin.Context) {
 	})
 }
 
+//	@Summary		GetClassByCourseID
+//	@Description	get class search by course_id
+//	@Tags			Class
+//	@Accept			json
+//	@Produce		json
+//	@Param			course_id	query		string	true	"course id"
+//	@Success		200			{array}		model.Class
+//	@Failure		404			{object}	string	"some error message here (from err.Error())"
+//	@Router			/class/course [get]
 func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 	course_id := context.Query("course_id")
 	class, err := h.classService.GetClassByCourseID(course_id)
@@ -74,6 +101,15 @@ func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 	})
 }
 
+//	@Summary		GetClassBySemester
+//	@Description	get class search by semester
+//	@Tags			Class
+//	@Accept			json
+//	@Produce		json
+//	@Param			semester	query		string	true	"1, 2, ..."
+//	@Success		200			{array}		uint	"array of class_id"
+//	@Failure		404			{object}	string	"some error message here (from err.Error())"
+//	@Router			/class/semester [get]
 func (h *ClassHandler) GetClassBySemester(context *gin.Context) {
 	semester := context.Query("semester")
 	class, err := h.classService.GetClassBySemester(semester)
@@ -90,6 +126,15 @@ func (h *ClassHandler) GetClassBySemester(context *gin.Context) {
 	})
 }
 
+//	@Summary		DeleteClassByID
+//	@Description	delete class by class_id
+//	@Tags			Class
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"class_id"
+//	@Success		200	{object}	string	"Class deleted successfully"
+//	@Failure		404	{object}	string	"were not able to delete the class"
+//	@Router			/class/delete/:id [DELETE]
 func (h *ClassHandler) DeleteClassByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.classService.DeleteClassByID(id)

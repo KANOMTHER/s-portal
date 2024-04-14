@@ -18,6 +18,203 @@
     "host": "localhost:3000",
     "basePath": "/api",
     "paths": {
+        "/class": {
+            "post": {
+                "description": "create a new class",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "CreateClass",
+                "parameters": [
+                    {
+                        "description": "Class object",
+                        "name": "class",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/model.Class"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/:id": {
+            "get": {
+                "description": "get class search by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "GetClassByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Class"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/course": {
+            "get": {
+                "description": "get class search by course_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "GetClassByCourseID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "course id",
+                        "name": "course_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Class"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/delete/:id": {
+            "delete": {
+                "description": "delete class by class_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "DeleteClassByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "were not able to delete the class",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/semester": {
+            "get": {
+                "description": "get class search by semester",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "GetClassBySemester",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "1, 2, ...",
+                        "name": "semester",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "array of class_id",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/course": {
             "get": {
                 "description": "get all courses",
@@ -165,7 +362,7 @@
         },
         "/course/section": {
             "get": {
-                "description": "get section search by id",
+                "description": "get section search by class_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -471,6 +668,32 @@
                 }
             }
         },
+        "model.Class": {
+            "type": "object",
+            "properties": {
+                "course": {
+                    "$ref": "#/definitions/model.Course"
+                },
+                "courseID": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "section": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Course": {
             "type": "object",
             "properties": {
@@ -542,12 +765,7 @@
                     "type": "string"
                 },
                 "faculty": {
-                    "description": "(optional)",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.Faculty"
-                        }
-                    ]
+                    "$ref": "#/definitions/model.Faculty"
                 },
                 "facultyID": {
                     "type": "integer"
