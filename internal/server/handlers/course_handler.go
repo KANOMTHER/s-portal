@@ -65,7 +65,7 @@ func (h *CourseHandler) GetAllDistinctSemester(context *gin.Context) {
 }
 
 //	@Summary		GetSectionByClassID
-//	@Description	get section search by id
+//	@Description	get section search by class_id
 //	@Tags			Course
 //	@Accept			json
 //	@Produce		json
