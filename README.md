@@ -36,6 +36,7 @@ For an example of using Swaggo with Gin, check out the [Swaggo example with Gin]
 
 ## To format swag
 The Swag Comments can be automatically formatted, similar to go fmt.
+
 Usuage:
 ```bash
 swag fmt
