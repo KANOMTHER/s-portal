@@ -22,7 +22,7 @@ func NewClassHandler(classService *service.ClassService) *ClassHandler {
 //	@Tags			Class
 //	@Accept			json
 //	@Produce		json
-//	@Param			class	body		model.Class	false	"Class object"
+//	@Param			class	body		model.Class	true	"Class object"
 //	@Success		200		{object}	string		"Class created successfully"
 //	@Failure		400		{object}	string		"some error message here (from err.Error())"
 //	@Router			/class [POST]
@@ -59,7 +59,7 @@ func (h *ClassHandler) CreateClass(context *gin.Context) {
 //	@Param			id	path		string	true	"class id"
 //	@Success		200	{object}	model.Class
 //	@Failure		404	{object}	string	"some error message here (from err.Error())"
-//	@Router			/class/:id [get]
+//	@Router			/class/:id [GET]
 func (h *ClassHandler) GetClassByID(context *gin.Context) {
 	id := context.Param("id")
 	class, err := h.classService.GetClassByID(id)
@@ -84,7 +84,7 @@ func (h *ClassHandler) GetClassByID(context *gin.Context) {
 //	@Param			course_id	query		string	true	"course id"
 //	@Success		200			{array}		model.Class
 //	@Failure		404			{object}	string	"some error message here (from err.Error())"
-//	@Router			/class/course [get]
+//	@Router			/class/course [GET]
 func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 	course_id := context.Query("course_id")
 	class, err := h.classService.GetClassByCourseID(course_id)
@@ -109,7 +109,7 @@ func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 //	@Param			semester	query		string	true	"1, 2, ..."
 //	@Success		200			{array}		uint	"array of class_id"
 //	@Failure		404			{object}	string	"some error message here (from err.Error())"
-//	@Router			/class/semester [get]
+//	@Router			/class/semester [GET]
 func (h *ClassHandler) GetClassBySemester(context *gin.Context) {
 	semester := context.Query("semester")
 	class, err := h.classService.GetClassBySemester(semester)

@@ -42,6 +42,7 @@ const docTemplate = `{
                         "description": "Class object",
                         "name": "class",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/model.Class"
                         }
@@ -276,13 +277,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Course created successfully",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -320,7 +321,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -352,13 +353,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Course deleted successfully",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -390,7 +391,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "CourseCode, Section",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -399,7 +400,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -431,7 +432,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -463,13 +464,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Course updated successfully",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -525,6 +526,7 @@ const docTemplate = `{
                         "description": "Program object",
                         "name": "program",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/model.Program"
                         }
@@ -653,6 +655,162 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable": {
+            "post": {
+                "description": "create a new timetable",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "CreateTimeTable",
+                "parameters": [
+                    {
+                        "description": "Timetable object",
+                        "name": "timetable",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Timetable"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Timetable created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable/class": {
+            "get": {
+                "description": "get timetable search by class_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "GetTimetableByClassID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "class_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.GetTimetableByClassIDField"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No timetables found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable/count": {
+            "get": {
+                "description": "get timetable search by class_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "CountTimeTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "you add your own search field in timetable model here (check equal only) but in php version it was searched by class_id",
+                        "name": "{field_name}",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Count of timetables",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable/delete/:id": {
+            "delete": {
+                "description": "delete a timetable by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "DeleteTimeTableByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "timetable id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Timetable deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -793,6 +951,44 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Timetable": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "$ref": "#/definitions/model.Class"
+                },
+                "classID": {
+                    "type": "integer"
+                },
+                "classType": {
+                    "type": "string"
+                },
+                "classroom": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "day": {
+                    "$ref": "#/definitions/time.Weekday"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "service.GetSectionByClassIDField": {
             "type": "object",
             "properties": {
@@ -803,6 +999,53 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "service.GetTimetableByClassIDField": {
+            "type": "object",
+            "properties": {
+                "classType": {
+                    "type": "string"
+                },
+                "classroom": {
+                    "type": "string"
+                },
+                "courseCode": {
+                    "type": "string"
+                },
+                "day": {
+                    "$ref": "#/definitions/time.Weekday"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "section": {
+                    "type": "string"
+                },
+                "startTime": {
+                    "type": "string"
+                }
+            }
+        },
+        "time.Weekday": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "x-enum-varnames": [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday"
+            ]
         }
     },
     "securityDefinitions": {

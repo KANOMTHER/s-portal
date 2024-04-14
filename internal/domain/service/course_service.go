@@ -27,9 +27,9 @@ func (cs *CourseService) GetAllCourses() ([]model.Course, error) {
 	return courses, nil
 }
 
-func (cs *CourseService) GetAllDistinctSemester() ([]int, error) {
+func (cs *CourseService) GetAllDistinctSemester() ([]uint, error) {
 	var courses []model.Course
-	var semesters []int
+	var semesters []uint
 	if err := cs.db.Distinct("semester").Order("semester DESC").Find(&courses).Pluck("Semester", &semesters).Error; err != nil {
 		return nil, err
 	}

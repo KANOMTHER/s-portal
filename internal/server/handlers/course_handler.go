@@ -25,7 +25,7 @@ func NewCourseHandler(courseService *service.CourseService) *CourseHandler {
 //	@Produce		json
 //	@Success		200	{array}		model.Course
 //	@Failure		404	{object}	string
-//	@Router			/course [get]
+//	@Router			/course [GET]
 func (h *CourseHandler) GetAllCourses(context *gin.Context) {
 	courses, err := h.courseService.GetAllCourses()
 	if err != nil {
@@ -46,9 +46,9 @@ func (h *CourseHandler) GetAllCourses(context *gin.Context) {
 //	@Tags			Course
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{array}		int
-//	@Failure		404	{object}	string
-//	@Router			/course/semester [get]
+//	@Success		200	{array}		uint
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
+//	@Router			/course/semester [GET]
 func (h *CourseHandler) GetAllDistinctSemester(context *gin.Context) {
 	semesters, err := h.courseService.GetAllDistinctSemester()
 	if err != nil {
@@ -69,10 +69,10 @@ func (h *CourseHandler) GetAllDistinctSemester(context *gin.Context) {
 //	@Tags			Course
 //	@Accept			json
 //	@Produce		json
-//	@Param			class_id	query		string	true	"class id"
-//	@Success		200			{array}		service.GetSectionByClassIDField
-//	@Failure		404			{object}	string
-//	@Router			/course/section [get]
+//	@Param			class_id	query		string								true	"class id"
+//	@Success		200			{array}		service.GetSectionByClassIDField	"CourseCode, Section"
+//	@Failure		404			{object}	string								"some error message here (from err.Error())"
+//	@Router			/course/section [GET]
 func (h *CourseHandler) GetSectionByClassID(context *gin.Context) {
 	classID := context.Query("class_id")
 	sections, err := h.courseService.GetSectionByClassID(classID)
@@ -95,8 +95,8 @@ func (h *CourseHandler) GetSectionByClassID(context *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			program	body		model.Course	false	"Course object"
-//	@Success		200		{object}	string
-//	@Failure		400		{object}	string
+//	@Success		200		{object}	string			"Course created successfully"
+//	@Failure		400		{object}	string			"some error message here (from err.Error())"
 //	@Router			/course [POST]
 func (h *CourseHandler) CreateCourse(context *gin.Context) {
 	course := model.Course{}
@@ -130,8 +130,8 @@ func (h *CourseHandler) CreateCourse(context *gin.Context) {
 //	@Produce		json
 //	@Param			id	path		string	true	"program id"
 //	@Success		200	{object}	model.Course
-//	@Failure		404	{object}	string
-//	@Router			/course/:id [get]
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
+//	@Router			/course/:id [GET]
 func (h *CourseHandler) GetCourseByID(context *gin.Context) {
 	id := context.Param("id")
 	course, err := h.courseService.GetCourseByID(id)
@@ -154,8 +154,8 @@ func (h *CourseHandler) GetCourseByID(context *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"course id"
-//	@Success		200	{object}	string
-//	@Failure		404	{object}	string
+//	@Success		200	{object}	string	"Course updated successfully"
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
 //	@Router			/course/update/:id [PUT]
 func (h *CourseHandler) UpdateCourseByID(context *gin.Context) {
 	id := context.Param("id")
@@ -179,8 +179,8 @@ func (h *CourseHandler) UpdateCourseByID(context *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"course id"
-//	@Success		200	{object}	string
-//	@Failure		404	{object}	string
+//	@Success		200	{object}	string	"Course deleted successfully"
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
 //	@Router			/course/delete/:id [DELETE]
 func (h *CourseHandler) DeleteCourseByID(context *gin.Context) {
 	id := context.Param("id")

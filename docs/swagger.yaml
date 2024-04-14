@@ -86,6 +86,31 @@ definitions:
       updatedAt:
         type: string
     type: object
+  model.Timetable:
+    properties:
+      class:
+        $ref: '#/definitions/model.Class'
+      classID:
+        type: integer
+      classType:
+        type: string
+      classroom:
+        type: string
+      createdAt:
+        type: string
+      day:
+        $ref: '#/definitions/time.Weekday'
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      endTime:
+        type: string
+      id:
+        type: integer
+      startTime:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   service.GetSectionByClassIDField:
     properties:
       courseCode:
@@ -93,6 +118,41 @@ definitions:
       section:
         type: string
     type: object
+  service.GetTimetableByClassIDField:
+    properties:
+      classType:
+        type: string
+      classroom:
+        type: string
+      courseCode:
+        type: string
+      day:
+        $ref: '#/definitions/time.Weekday'
+      endTime:
+        type: string
+      section:
+        type: string
+      startTime:
+        type: string
+    type: object
+  time.Weekday:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    type: integer
+    x-enum-varnames:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -119,6 +179,7 @@ paths:
       - description: Class object
         in: body
         name: class
+        required: true
         schema:
           $ref: '#/definitions/model.Class'
       produces:
@@ -274,11 +335,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Course created successfully
           schema:
             type: string
         "400":
-          description: Bad Request
+          description: some error message here (from err.Error())
           schema:
             type: string
       summary: CreateCourse
@@ -303,7 +364,7 @@ paths:
           schema:
             $ref: '#/definitions/model.Course'
         "404":
-          description: Not Found
+          description: some error message here (from err.Error())
           schema:
             type: string
       summary: GetCourseByID
@@ -324,11 +385,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Course deleted successfully
           schema:
             type: string
         "404":
-          description: Not Found
+          description: some error message here (from err.Error())
           schema:
             type: string
       summary: DeleteCourseByID
@@ -349,13 +410,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: CourseCode, Section
           schema:
             items:
               $ref: '#/definitions/service.GetSectionByClassIDField'
             type: array
         "404":
-          description: Not Found
+          description: some error message here (from err.Error())
           schema:
             type: string
       summary: GetSectionByClassID
@@ -376,7 +437,7 @@ paths:
               type: integer
             type: array
         "404":
-          description: Not Found
+          description: some error message here (from err.Error())
           schema:
             type: string
       summary: GetAllDistinctSemester
@@ -397,11 +458,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Course updated successfully
           schema:
             type: string
         "404":
-          description: Not Found
+          description: some error message here (from err.Error())
           schema:
             type: string
       summary: UpdateCourseByID
@@ -436,6 +497,7 @@ paths:
       - description: Program object
         in: body
         name: program
+        required: true
         schema:
           $ref: '#/definitions/model.Program'
       produces:
@@ -527,6 +589,109 @@ paths:
       summary: UpdateProgramByID
       tags:
       - Program
+  /timetable:
+    post:
+      consumes:
+      - application/json
+      description: create a new timetable
+      parameters:
+      - description: Timetable object
+        in: body
+        name: timetable
+        required: true
+        schema:
+          $ref: '#/definitions/model.Timetable'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Timetable created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateTimeTable
+      tags:
+      - Timetable
+  /timetable/class:
+    get:
+      consumes:
+      - application/json
+      description: get timetable search by class_id
+      parameters:
+      - description: class id
+        in: query
+        name: class_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/service.GetTimetableByClassIDField'
+            type: array
+        "404":
+          description: No timetables found
+          schema:
+            type: string
+      summary: GetTimetableByClassID
+      tags:
+      - Timetable
+  /timetable/count:
+    get:
+      consumes:
+      - application/json
+      description: get timetable search by class_id
+      parameters:
+      - description: you add your own search field in timetable model here (check
+          equal only) but in php version it was searched by class_id
+        in: query
+        name: '{field_name}'
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Count of timetables
+          schema:
+            type: integer
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CountTimeTable
+      tags:
+      - Timetable
+  /timetable/delete/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete a timetable by id
+      parameters:
+      - description: timetable id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Timetable deleted successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: DeleteTimeTableByID
+      tags:
+      - Timetable
 securityDefinitions:
   BasicAuth:
     type: basic

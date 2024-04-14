@@ -17,6 +17,15 @@ func NewTimeTableHandler(timeTableService *service.TimeTableService) *TimeTableH
 	}
 }
 
+//	@Summary		GetTimetableByClassID
+//	@Description	get timetable search by class_id
+//	@Tags			Timetable
+//	@Accept			json
+//	@Produce		json
+//	@Param			class_id	query		string	true	"class id"
+//	@Success		200			{array}		service.GetTimetableByClassIDField
+//	@Failure		404			{object}	string	"No timetables found"
+//	@Router			/timetable/class [GET]
 func (h *TimeTableHandler) GetTimetableByClassID(context *gin.Context) {
 	class_id := context.Query("class_id")
 	timetables, err := h.timeTableService.GetTimetableByClassID(class_id)
@@ -33,6 +42,15 @@ func (h *TimeTableHandler) GetTimetableByClassID(context *gin.Context) {
 	})
 }
 
+//	@Summary		CreateTimeTable
+//	@Description	create a new timetable
+//	@Tags			Timetable
+//	@Accept			json
+//	@Produce		json
+//	@Param			timetable	body		model.Timetable	true	"Timetable object"
+//	@Success		200			{object}	string			"Timetable created successfully"
+//	@Failure		400			{object}	string			"some error message here (from err.Error())"
+//	@Router			/timetable [POST]
 func (h *TimeTableHandler) CreateTimeTable(context *gin.Context) {
 	timeTable := model.Timetable{}
 
@@ -58,6 +76,15 @@ func (h *TimeTableHandler) CreateTimeTable(context *gin.Context) {
 	})
 }
 
+//	@Summary		CountTimeTable
+//	@Description	get timetable search by class_id
+//	@Tags			Timetable
+//	@Accept			json
+//	@Produce		json
+//	@Param			{field_name}	query		string	false	"you add your own search field in timetable model here (check equal only) but in php version it was searched by class_id"
+//	@Success		200				{object}	int64	"Count of timetables"
+//	@Failure		404				{object}	string	"some error message here (from err.Error())"
+//	@Router			/timetable/count [GET]
 func (h *TimeTableHandler) CountTimeTable(context *gin.Context) {
 	queryParams := context.Request.URL.Query()
 	count, err := h.timeTableService.CountTimeTable(queryParams)
@@ -74,6 +101,15 @@ func (h *TimeTableHandler) CountTimeTable(context *gin.Context) {
 	})
 }
 
+//	@Summary		DeleteTimeTableByID
+//	@Description	delete a timetable by id
+//	@Tags			Timetable
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"timetable id"
+//	@Success		200	{object}	string	"Timetable deleted successfully"
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
+//	@Router			/timetable/delete/:id [DELETE]
 func (h *TimeTableHandler) DeleteTimeTableByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.timeTableService.DeleteTimeTableByID(id)

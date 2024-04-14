@@ -24,7 +24,7 @@ func NewProgramHandler(programService *service.ProgramService) *ProgramHandler {
 //	@Produce		json
 //	@Success		200	{array}		model.Program
 //	@Failure		404	{object}	string
-//	@Router			/program [get]
+//	@Router			/program [GET]
 func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 	programs, err := h.programService.GetAllPrograms()
 	if err != nil {
@@ -44,7 +44,7 @@ func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 //	@Tags			Program
 //	@Accept			json
 //	@Produce		json
-//	@Param			program	body		model.Program	false	"Program object"
+//	@Param			program	body		model.Program	true	"Program object"
 //	@Success		200		{object}	string
 //	@Failure		400		{object}	string
 //	@Router			/program [POST]
@@ -81,7 +81,7 @@ func (h *ProgramHandler) CreateProgram(context *gin.Context) {
 //	@Param			id	path		string	true	"program id"
 //	@Success		200	{object}	model.Program
 //	@Failure		404	{object}	string
-//	@Router			/program/:id [get]
+//	@Router			/program/:id [GET]
 func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 	id := context.Param("id")
 	program, err := h.programService.GetProgramByID(id)
