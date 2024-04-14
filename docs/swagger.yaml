@@ -1,138 +1,146 @@
 basePath: /api
 definitions:
-  gorm.DeletedAt:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
-    type: object
   model.Class:
     properties:
       course:
         $ref: '#/definitions/model.Course'
       courseID:
+        example: 1
         type: integer
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
       id:
+        example: 1
         type: integer
       section:
+        example: A
         type: string
-      updatedAt:
-        type: string
+    required:
+    - courseID
     type: object
   model.Course:
     properties:
       courseCode:
+        example: CPE313
         type: string
       courseName:
-        type: string
-      createdAt:
+        example: signals and linear systems
         type: string
       credit:
+        example: 3
         type: number
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
       detail:
+        example: Continuous and Discrete-time signals. Mathematical representation
+          of signals, frequency-domain representation of signals, time- domain representation
+          of systems, transform-domain representation of systems and system architecture.
+          First order and higher order differential equations. Frequency response,
+          Fourier analysis, Laplace transforms, and Z-transform.
         type: string
       id:
+        example: 1
         type: integer
       semester:
+        example: 2
         type: integer
-      updatedAt:
-        type: string
       year:
+        example: 3
         type: integer
     type: object
   model.Faculty:
     properties:
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
       department:
+        example: Computer Engineering
         type: string
       id:
+        example: 1
         type: integer
       major:
-        type: string
-      updatedAt:
+        example: Engineering
         type: string
     type: object
   model.Program:
     properties:
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
       detail:
+        example: Regular Program
         type: string
       faculty:
         $ref: '#/definitions/model.Faculty'
       facultyID:
+        example: 1
         type: integer
       id:
         type: integer
       prefix:
+        example: "7050"
         type: string
       pricePerTerm:
+        example: 10000
         type: number
       programName:
+        example: Regular
         type: string
-      updatedAt:
-        type: string
+    required:
+    - facultyID
     type: object
   model.Timetable:
     properties:
       class:
         $ref: '#/definitions/model.Class'
       classID:
+        example: 1
         type: integer
       classType:
+        example: Lecture
         type: string
       classroom:
-        type: string
-      createdAt:
+        example: CPE1102
         type: string
       day:
-        $ref: '#/definitions/time.Weekday'
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
+        allOf:
+        - $ref: '#/definitions/time.Weekday'
+        example: 0
       endTime:
+        example: "2021-08-01T09:00:00Z"
         type: string
       id:
+        example: 1
         type: integer
       startTime:
+        example: "2021-08-01T08:00:00Z"
         type: string
-      updatedAt:
-        type: string
+    required:
+    - classID
     type: object
   service.GetSectionByClassIDField:
     properties:
       courseCode:
+        example: CPE313
         type: string
       section:
+        example: A
         type: string
     type: object
   service.GetTimetableByClassIDField:
     properties:
       classType:
+        example: Lecture
         type: string
       classroom:
+        example: CPE1102
         type: string
       courseCode:
+        example: CPE313
         type: string
       day:
-        $ref: '#/definitions/time.Weekday'
+        allOf:
+        - $ref: '#/definitions/time.Weekday'
+        example: 0
       endTime:
+        example: "2021-08-01T09:00:00Z"
         type: string
       section:
+        example: A
         type: string
       startTime:
+        example: "2021-08-01T08:00:00Z"
         type: string
     type: object
   time.Weekday:
@@ -196,7 +204,7 @@ paths:
       summary: CreateClass
       tags:
       - Class
-  /class/:id:
+  /class/{id}:
     get:
       consumes:
       - application/json
@@ -248,7 +256,7 @@ paths:
       summary: GetClassByCourseID
       tags:
       - Class
-  /class/delete/:id:
+  /class/delete/{id}:
     delete:
       consumes:
       - application/json
@@ -345,7 +353,7 @@ paths:
       summary: CreateCourse
       tags:
       - Course
-  /course/:id:
+  /course/{id}:
     get:
       consumes:
       - application/json
@@ -370,7 +378,7 @@ paths:
       summary: GetCourseByID
       tags:
       - Course
-  /course/delete/:id:
+  /course/delete/{id}:
     delete:
       consumes:
       - application/json
@@ -443,7 +451,7 @@ paths:
       summary: GetAllDistinctSemester
       tags:
       - Course
-  /course/update/:id:
+  /course/update/{id}:
     put:
       consumes:
       - application/json
@@ -454,6 +462,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Course object
+        in: body
+        name: Course
+        schema:
+          $ref: '#/definitions/model.Course'
       produces:
       - application/json
       responses:
@@ -514,7 +527,7 @@ paths:
       summary: CreateProgram
       tags:
       - Program
-  /program/:id:
+  /program/{id}:
     get:
       consumes:
       - application/json
@@ -539,7 +552,7 @@ paths:
       summary: GetProgramByID
       tags:
       - Program
-  /program/delete/:id:
+  /program/delete/{id}:
     delete:
       consumes:
       - application/json
@@ -564,7 +577,7 @@ paths:
       summary: DeleteProgramByID
       tags:
       - Program
-  /program/update/:id:
+  /program/update/{id}:
     put:
       consumes:
       - application/json
@@ -575,6 +588,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: Program object
+        in: body
+        name: Program
+        required: true
+        schema:
+          $ref: '#/definitions/model.Program'
       produces:
       - application/json
       responses:
@@ -648,16 +667,35 @@ paths:
       - application/json
       description: get timetable search by class_id
       parameters:
-      - description: you add your own search field in timetable model here (check
-          equal only) but in php version it was searched by class_id
+      - description: filter by class_id (original from php version)
         in: query
-        name: '{field_name}'
+        name: class_id
+        type: string
+      - description: filter by day
+        in: query
+        name: Day
+        type: string
+      - description: filter by StartTime
+        in: query
+        name: StartTime
+        type: string
+      - description: filter by EndTime
+        in: query
+        name: EndTime
+        type: string
+      - description: filter by Classroom
+        in: query
+        name: Classroom
+        type: string
+      - description: filter by ClassType
+        in: query
+        name: Classtype
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: Count of timetables
+          description: count of timetables
           schema:
             type: integer
         "404":
@@ -667,7 +705,7 @@ paths:
       summary: CountTimeTable
       tags:
       - Timetable
-  /timetable/delete/:id:
+  /timetable/delete/{id}:
     delete:
       consumes:
       - application/json

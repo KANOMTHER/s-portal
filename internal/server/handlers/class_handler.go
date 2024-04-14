@@ -59,7 +59,7 @@ func (h *ClassHandler) CreateClass(context *gin.Context) {
 //	@Param			id	path		string	true	"class id"
 //	@Success		200	{object}	model.Class
 //	@Failure		404	{object}	string	"some error message here (from err.Error())"
-//	@Router			/class/:id [GET]
+//	@Router			/class/{id} [GET]
 func (h *ClassHandler) GetClassByID(context *gin.Context) {
 	id := context.Param("id")
 	class, err := h.classService.GetClassByID(id)
@@ -134,7 +134,7 @@ func (h *ClassHandler) GetClassBySemester(context *gin.Context) {
 //	@Param			id	path		string	true	"class_id"
 //	@Success		200	{object}	string	"Class deleted successfully"
 //	@Failure		404	{object}	string	"were not able to delete the class"
-//	@Router			/class/delete/:id [DELETE]
+//	@Router			/class/delete/{id} [DELETE]
 func (h *ClassHandler) DeleteClassByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.classService.DeleteClassByID(id)

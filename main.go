@@ -38,7 +38,7 @@ func main() {
 	docs.SwaggerInfo.Title = "s-api"
 	docs.SwaggerInfo.Description = "This is a api docs for s-api."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "localhost:3000"
+	// docs.SwaggerInfo.Host = "localhost:3000"
 	docs.SwaggerInfo.BasePath = "/api"
 	// docs.SwaggerInfo.Schemes = []string{"http", "https"}
 

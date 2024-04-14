@@ -37,8 +37,8 @@ func (cs *CourseService) GetAllDistinctSemester() ([]uint, error) {
 }
 
 type GetSectionByClassIDField struct {
-    CourseCode string
-    Section    string
+    CourseCode string `example:"CPE313"`
+    Section    string `example:"A"`
 }
 
 func (cs *CourseService) GetSectionByClassID(classID string) (*GetSectionByClassIDField, error) {

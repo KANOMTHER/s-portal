@@ -22,13 +22,13 @@ func NewTimeTableService(db *gorm.DB) *TimeTableService {
 
 
 type GetTimetableByClassIDField struct {
-    CourseCode string
-    Section   string
-    Day       time.Weekday
-    StartTime time.Time
-    EndTime   time.Time
-    Classroom string
-    ClassType string
+    CourseCode string `example:"CPE313"`
+    Section   string `example:"A"`
+    Day       time.Weekday `example:"0"`
+    StartTime time.Time `example:"2021-08-01T08:00:00Z"`
+    EndTime   time.Time `example:"2021-08-01T09:00:00Z"`
+    Classroom string `example:"CPE1102"`
+    ClassType string `example:"Lecture"`
 }
 
 func (ts *TimeTableService) GetTimetableByClassID(class_id string) ([]GetTimetableByClassIDField, error) {

@@ -64,44 +64,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/:id": {
-            "get": {
-                "description": "get class search by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Class"
-                ],
-                "summary": "GetClassByID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "class id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Class"
-                        }
-                    },
-                    "404": {
-                        "description": "some error message here (from err.Error())",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/class/course": {
             "get": {
                 "description": "get class search by course_id",
@@ -143,7 +105,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/delete/:id": {
+        "/class/delete/{id}": {
             "delete": {
                 "description": "delete class by class_id",
                 "consumes": [
@@ -211,6 +173,44 @@ const docTemplate = `{
                             "items": {
                                 "type": "integer"
                             }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/{id}": {
+            "get": {
+                "description": "get class search by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "GetClassByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Class"
                         }
                     },
                     "404": {
@@ -291,45 +291,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/course/:id": {
-            "get": {
-                "description": "get a course by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Course"
-                ],
-                "summary": "GetCourseByID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "program id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Course"
-                        }
-                    },
-                    "404": {
-                        "description": "some error message here (from err.Error())",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/course/delete/:id": {
+        "/course/delete/{id}": {
             "delete": {
                 "description": "delete a course by id",
                 "consumes": [
@@ -440,7 +402,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/course/update/:id": {
+        "/course/update/{id}": {
             "put": {
                 "description": "update a course by id",
                 "consumes": [
@@ -460,6 +422,14 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Course object",
+                        "name": "Course",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/model.Course"
+                        }
                     }
                 ],
                 "responses": {
@@ -467,6 +437,44 @@ const docTemplate = `{
                         "description": "Course updated successfully",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/{id}": {
+            "get": {
+                "description": "get a course by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "GetCourseByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "program id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Course"
                         }
                     },
                     "404": {
@@ -548,45 +556,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/program/:id": {
-            "get": {
-                "description": "get a program by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Program"
-                ],
-                "summary": "GetProgramByID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "program id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Program"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/program/delete/:id": {
+        "/program/delete/{id}": {
             "delete": {
                 "description": "delete a program by id",
                 "consumes": [
@@ -624,7 +594,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/program/update/:id": {
+        "/program/update/{id}": {
             "put": {
                 "description": "update a program by id",
                 "consumes": [
@@ -644,6 +614,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Program object",
+                        "name": "Program",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Program"
+                        }
                     }
                 ],
                 "responses": {
@@ -651,6 +630,44 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/program/{id}": {
+            "get": {
+                "description": "get a program by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "GetProgramByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "program id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Program"
                         }
                     },
                     "404": {
@@ -759,14 +776,44 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "you add your own search field in timetable model here (check equal only) but in php version it was searched by class_id",
-                        "name": "{field_name}",
+                        "description": "filter by class_id (original from php version)",
+                        "name": "class_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by day",
+                        "name": "Day",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by StartTime",
+                        "name": "StartTime",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by EndTime",
+                        "name": "EndTime",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by Classroom",
+                        "name": "Classroom",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by ClassType",
+                        "name": "Classtype",
                         "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Count of timetables",
+                        "description": "count of timetables",
                         "schema": {
                             "type": "integer"
                         }
@@ -780,7 +827,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/timetable/delete/:id": {
+        "/timetable/delete/{id}": {
             "delete": {
                 "description": "delete a timetable by id",
                 "consumes": [
@@ -820,41 +867,26 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
         "model.Class": {
             "type": "object",
+            "required": [
+                "courseID"
+            ],
             "properties": {
                 "course": {
                     "$ref": "#/definitions/model.Course"
                 },
                 "courseID": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
+                    "type": "integer",
+                    "example": 1
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "section": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "A"
                 }
             }
         },
@@ -862,130 +894,126 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "courseCode": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "CPE313"
                 },
                 "courseName": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "signals and linear systems"
                 },
                 "credit": {
-                    "type": "number"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
+                    "type": "number",
+                    "example": 3
                 },
                 "detail": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Continuous and Discrete-time signals. Mathematical representation of signals, frequency-domain representation of signals, time- domain representation of systems, transform-domain representation of systems and system architecture. First order and higher order differential equations. Frequency response, Fourier analysis, Laplace transforms, and Z-transform."
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "semester": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
+                    "type": "integer",
+                    "example": 2
                 },
                 "year": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 }
             }
         },
         "model.Faculty": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
                 "department": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Computer Engineering"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "major": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Engineering"
                 }
             }
         },
         "model.Program": {
             "type": "object",
+            "required": [
+                "facultyID"
+            ],
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
                 "detail": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Regular Program"
                 },
                 "faculty": {
                     "$ref": "#/definitions/model.Faculty"
                 },
                 "facultyID": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "id": {
                     "type": "integer"
                 },
                 "prefix": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7050"
                 },
                 "pricePerTerm": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 10000
                 },
                 "programName": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Regular"
                 }
             }
         },
         "model.Timetable": {
             "type": "object",
+            "required": [
+                "classID"
+            ],
             "properties": {
                 "class": {
                     "$ref": "#/definitions/model.Class"
                 },
                 "classID": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "classType": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Lecture"
                 },
                 "classroom": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "CPE1102"
                 },
                 "day": {
-                    "$ref": "#/definitions/time.Weekday"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/time.Weekday"
+                        }
+                    ],
+                    "example": 0
                 },
                 "endTime": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2021-08-01T09:00:00Z"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "startTime": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2021-08-01T08:00:00Z"
                 }
             }
         },
@@ -993,10 +1021,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "courseCode": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "CPE313"
                 },
                 "section": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "A"
                 }
             }
         },
@@ -1004,25 +1034,36 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "classType": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Lecture"
                 },
                 "classroom": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "CPE1102"
                 },
                 "courseCode": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "CPE313"
                 },
                 "day": {
-                    "$ref": "#/definitions/time.Weekday"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/time.Weekday"
+                        }
+                    ],
+                    "example": 0
                 },
                 "endTime": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2021-08-01T09:00:00Z"
                 },
                 "section": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "A"
                 },
                 "startTime": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2021-08-01T08:00:00Z"
                 }
             }
         },

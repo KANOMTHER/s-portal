@@ -81,9 +81,14 @@ func (h *TimeTableHandler) CreateTimeTable(context *gin.Context) {
 //	@Tags			Timetable
 //	@Accept			json
 //	@Produce		json
-//	@Param			{field_name}	query		string	false	"you add your own search field in timetable model here (check equal only) but in php version it was searched by class_id"
-//	@Success		200				{object}	int64	"Count of timetables"
-//	@Failure		404				{object}	string	"some error message here (from err.Error())"
+//	@Param			class_id	query		string	false	"filter by class_id (original from php version)"	example:"1"
+//	@Param			Day			query		string	false	"filter by day"										example:"0"
+//	@Param			StartTime	query		string	false	"filter by StartTime"								example:"2021-08-01T08:00:00Z"
+//	@Param			EndTime		query		string	false	"filter by EndTime"									example:"2021-08-01T09:00:00Z"
+//	@Param			Classroom	query		string	false	"filter by Classroom"								example:"CPE1102"
+//	@Param			Classtype	query		string	false	"filter by ClassType"								example:"Lecture"
+//	@Success		200			{object}	int64	"count of timetables"
+//	@Failure		404			{object}	string	"some error message here (from err.Error())"
 //	@Router			/timetable/count [GET]
 func (h *TimeTableHandler) CountTimeTable(context *gin.Context) {
 	queryParams := context.Request.URL.Query()
@@ -109,7 +114,7 @@ func (h *TimeTableHandler) CountTimeTable(context *gin.Context) {
 //	@Param			id	path		string	true	"timetable id"
 //	@Success		200	{object}	string	"Timetable deleted successfully"
 //	@Failure		404	{object}	string	"some error message here (from err.Error())"
-//	@Router			/timetable/delete/:id [DELETE]
+//	@Router			/timetable/delete/{id} [DELETE]
 func (h *TimeTableHandler) DeleteTimeTableByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.timeTableService.DeleteTimeTableByID(id)
