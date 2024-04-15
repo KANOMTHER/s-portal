@@ -9,7 +9,7 @@ import (
 type Timetable struct {
 	gorm.Model `swaggerignore:"true"`
 	ID		  uint `gorm:"primaryKey" example:"1"`
-	ClassID   uint `example:"1" binding:"required"`
+	ClassID   uint `example:"1"`
 	Class     Class
 	Day       time.Weekday `example:"0"`
 	StartTime time.Time `example:"2021-08-01T08:00:00Z"`
