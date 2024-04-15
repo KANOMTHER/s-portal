@@ -53,7 +53,6 @@ func main() {
 	router = routes.InitializeRoutes(router, services)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	// router.Run(":8080")
 
 	fmt.Println("Server started at port 3000")
 	router.Run(":3000")
