@@ -14,6 +14,8 @@ func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine
 		FacultyRoutes(api, services.FacultyService)
 		CourseRoutes(api, services.CourseService)
 		ProgramRoutes(api, services.ProgramService)
+		TimeTableRoutes(api, services.TimeTableService)
+		ClassRoutes(api, services.ClassService)
 		ProfessorRoutes(api, services.ProfessorService)
 		InstructorRoutes(api, services.InstructorService)
 	}

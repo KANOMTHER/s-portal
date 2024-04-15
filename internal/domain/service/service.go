@@ -8,6 +8,8 @@ type Service struct {
 	FacultyService *FacultyService
 	CourseService *CourseService
 	ProgramService *ProgramService
+	TimeTableService *TimeTableService
+	ClassService *ClassService
 	ProfessorService *ProfessorService
 	InstructorService *InstructorService
 }
@@ -17,6 +19,8 @@ func NewService(db *gorm.DB) *Service {
 		FacultyService: NewFacultyService(db),
 		CourseService: NewCourseService(db),
 		ProgramService: NewProgramService(db),
+		TimeTableService: NewTimeTableService(db),
+		ClassService: NewClassService(db),
 		ProfessorService: NewProfessorService(db),
 		InstructorService: NewInstructorService(db),
 	}

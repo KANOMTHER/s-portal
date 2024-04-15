@@ -5,8 +5,8 @@ import (
 )
 
 type Faculty struct {
-	gorm.Model
-	ID         uint `gorm:"primaryKey"`
-	Major      string
-	Department string
+	gorm.Model `swaggerignore:"true"`
+	ID         uint `gorm:"primaryKey" example:"1"`
+	Major      string `example:"Engineering"`
+	Department string `example:"Computer Engineering"`
 }
