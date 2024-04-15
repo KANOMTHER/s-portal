@@ -12,8 +12,11 @@ func TARoute(route *gin.RouterGroup, service *service.TAService) {
 
 	students := route.Group("/ta")
 	{
-		students.GET("/yo", taHandler.GetHello)
+		students.GET("/get", taHandler.GetClassTA)
+		students.GET("/get/:id", taHandler.GetClassTAByClassID)
 		students.POST("/create", taHandler.CreateClassTA)
 		students.PUT("/update", taHandler.UpdateClassTA)
+		students.POST("/schedule", taHandler.GetScheduleTA)
+		students.DELETE("/delete/:id", taHandler.DeleteClassTA)
 	}
 }

@@ -17,9 +17,33 @@ func NewTAHandler(TAService *service.TAService) *TAHandler {
 	}
 }
 
-func (h *TAHandler) GetHello(context *gin.Context) {
-	ta := h.TAService.GetTA()
+func (h *TAHandler) GetClassTA(context *gin.Context) {
+	ta, err := h.TAService.GetTA(context)
+	
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message err": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": ta,
+	})
+}
 
+func (h *TAHandler) GetClassTAByClassID(context *gin.Context) {
+	ta, err := h.TAService.GetTAByClassID(context)
+	
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message err": err.Error(),
+		})
+		return;
+	}
+	// Return programs
 	context.JSON(200, gin.H{
 		"message": ta,
 	})
@@ -31,13 +55,13 @@ func (h *TAHandler) CreateClassTA(context *gin.Context) {
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
-			"message": err.Error(),
+			"message err": err.Error(),
 		})
 		return;
 	}
 	// Return programs
 	context.JSON(200, gin.H{
-		"message": "sth",
+		"message": "create ta success",
 	})
 }
 
@@ -47,12 +71,44 @@ func (h *TAHandler) UpdateClassTA(context *gin.Context) {
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
-			"message": err.Error(),
+			"message err": err.Error(),
 		})
 		return;
 	}
 	// Return programs
 	context.JSON(200, gin.H{
-		"message": "sth",
+		"message": "Update ta success",
+	})
+}
+
+func (h *TAHandler) GetScheduleTA(context *gin.Context) {
+	schedule, err := h.TAService.SchedualTA(context)
+	
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message err": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": schedule,
+	})
+}
+
+func (h *TAHandler) DeleteClassTA(context *gin.Context) {
+	err := h.TAService.DeleteTA(context)
+	
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message err": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": "delete ta complete",
 	})
 }
