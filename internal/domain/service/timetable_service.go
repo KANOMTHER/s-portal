@@ -39,6 +39,7 @@ func (ts *TimeTableService) GetTimetableByClassID(class_id string) ([]GetTimetab
 	Joins("inner join classes on classes.id = timetables.class_id").
 	Joins("inner join courses on courses.id = classes.course_id").
 	Where("timetables.class_id = ?", class_id).
+	Order("CASE Day WHEN 0 THEN 7 ELSE Day END ASC, StartTime ASC").
 	Scan(&timetables).Error; err != nil {
 		return nil, err
 	}
