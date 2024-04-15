@@ -94,7 +94,7 @@ func (h *CourseHandler) GetSectionByClassID(context *gin.Context) {
 //	@Tags			Course
 //	@Accept			json
 //	@Produce		json
-//	@Param			program	body		model.Course	false	"Course object"
+//	@Param			program	body		model.Course	true	"Course object"
 //	@Success		200		{object}	string			"Course created successfully"
 //	@Failure		400		{object}	string			"some error message here (from err.Error())"
 //	@Router			/course [POST]
@@ -154,7 +154,7 @@ func (h *CourseHandler) GetCourseByID(context *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id		path		string			true	"course id"
-//	@Param			Course	body		model.Course	false	"Course object"
+//	@Param			Course	body		model.Course	true	"Course object"
 //	@Success		200		{object}	string			"Course updated successfully"
 //	@Failure		404		{object}	string			"some error message here (from err.Error())"
 //	@Router			/course/update/{id} [PUT]
