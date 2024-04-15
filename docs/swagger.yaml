@@ -337,6 +337,7 @@ paths:
       - description: Course object
         in: body
         name: program
+        required: true
         schema:
           $ref: '#/definitions/model.Course'
       produces:
@@ -465,6 +466,7 @@ paths:
       - description: Course object
         in: body
         name: Course
+        required: true
         schema:
           $ref: '#/definitions/model.Course'
       produces:
@@ -481,6 +483,133 @@ paths:
       summary: UpdateCourseByID
       tags:
       - Course
+  /faculty:
+    get:
+      consumes:
+      - application/json
+      description: get all faculties
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: list of faculties
+          schema:
+            items:
+              $ref: '#/definitions/model.Faculty'
+            type: array
+        "404":
+          description: No faculties found
+          schema:
+            type: string
+      summary: GetAllFaculties
+      tags:
+      - Faculty
+    post:
+      consumes:
+      - application/json
+      description: create a new faculty
+      parameters:
+      - description: Faculty object
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/model.Faculty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Faculty created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateFaculty
+      tags:
+      - Faculty
+  /faculty/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a faculty by id
+      parameters:
+      - description: faculty id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Faculty'
+        "404":
+          description: Faculty not found
+          schema:
+            type: string
+      summary: GetFacultyByID
+      tags:
+      - Faculty
+  /faculty/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a faculty by id
+      parameters:
+      - description: faculty id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Faculty deleted successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: DeleteFacultyByID
+      tags:
+      - Course
+  /faculty/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a facluty by id
+      parameters:
+      - description: Faculty id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Faculty object
+        in: body
+        name: Faculty
+        required: true
+        schema:
+          $ref: '#/definitions/model.Faculty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Faculty updated successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateFacultyByID
+      tags:
+      - Faculty
   /program:
     get:
       consumes:

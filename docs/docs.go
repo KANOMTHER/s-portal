@@ -270,6 +270,7 @@ const docTemplate = `{
                         "description": "Course object",
                         "name": "program",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/model.Course"
                         }
@@ -427,6 +428,7 @@ const docTemplate = `{
                         "description": "Course object",
                         "name": "Course",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/model.Course"
                         }
@@ -479,6 +481,199 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty": {
+            "get": {
+                "description": "get all faculties",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "GetAllFaculties",
+                "responses": {
+                    "200": {
+                        "description": "list of faculties",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Faculty"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No faculties found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new faculty",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "CreateFaculty",
+                "parameters": [
+                    {
+                        "description": "Faculty object",
+                        "name": "program",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Faculty"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty/delete/{id}": {
+            "delete": {
+                "description": "delete a faculty by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "DeleteFacultyByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "faculty id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty/update/{id}": {
+            "put": {
+                "description": "update a facluty by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "UpdateFacultyByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Faculty id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Faculty object",
+                        "name": "Faculty",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Faculty"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty/{id}": {
+            "get": {
+                "description": "get a faculty by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "GetFacultyByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "faculty id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Faculty"
+                        }
+                    },
+                    "404": {
+                        "description": "Faculty not found",
                         "schema": {
                             "type": "string"
                         }
