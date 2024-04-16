@@ -17,6 +17,14 @@ func NewProgramHandler(programService *service.ProgramService) *ProgramHandler {
 	}
 }
 
+//	@Summary		GetAllPrograms
+//	@Description	get all programs
+//	@Tags			Program
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		model.Program
+//	@Failure		404	{object}	string
+//	@Router			/program [GET]
 func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 	programs, err := h.programService.GetAllPrograms()
 	if err != nil {
@@ -31,6 +39,15 @@ func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 	})
 }
 
+//	@Summary		CreateProgram
+//	@Description	create a new program
+//	@Tags			Program
+//	@Accept			json
+//	@Produce		json
+//	@Param			program	body		model.Program	true	"Program object"
+//	@Success		200		{object}	string
+//	@Failure		400		{object}	string
+//	@Router			/program [POST]
 func (h *ProgramHandler) CreateProgram(context *gin.Context) {
 	program := model.Program{}
 
@@ -56,6 +73,15 @@ func (h *ProgramHandler) CreateProgram(context *gin.Context) {
 	})
 }
 
+//	@Summary		GetProgramByID
+//	@Description	get a program by id
+//	@Tags			Program
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"program id"
+//	@Success		200	{object}	model.Program
+//	@Failure		404	{object}	string
+//	@Router			/program/{id} [GET]
 func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 	id := context.Param("id")
 	program, err := h.programService.GetProgramByID(id)
@@ -72,6 +98,16 @@ func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 	})
 }
 
+//	@Summary		UpdateProgramByID
+//	@Description	update a program by id
+//	@Tags			Program
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		string			true	"program id"
+//	@Param			Program	body		model.Program	true	"Program object"
+//	@Success		200		{object}	string
+//	@Failure		404		{object}	string
+//	@Router			/program/update/{id} [PUT]
 func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.programService.UpdateProgramByID(context, id)
@@ -88,6 +124,15 @@ func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
 	})
 }
 
+//	@Summary		DeleteProgramByID
+//	@Description	delete a program by id
+//	@Tags			Program
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"program id"
+//	@Success		200	{object}	string
+//	@Failure		404	{object}	string
+//	@Router			/program/delete/{id} [DELETE]
 func (h *ProgramHandler) DeleteProgramByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.programService.DeleteProgramByID(id)

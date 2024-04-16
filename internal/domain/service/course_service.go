@@ -27,6 +27,46 @@ func (cs *CourseService) GetAllCourses() ([]model.Course, error) {
 	return courses, nil
 }
 
+func (cs *CourseService) GetAllDistinctSemester() ([]uint, error) {
+	var courses []model.Course
+	var semesters []uint
+	if err := cs.db.Distinct("semester").Order("semester DESC").Find(&courses).Pluck("Semester", &semesters).Error; err != nil {
+		return nil, err
+	}
+	return semesters, nil
+}
+
+type GetSectionByClassIDField struct {
+    CourseCode string `example:"CPE313"`
+    Section    string `example:"A"`
+}
+
+func (cs *CourseService) GetSectionByClassID(classID string) (*GetSectionByClassIDField, error) {
+	// uses join + smart select
+	var sections *GetSectionByClassIDField
+    if err := cs.db.Debug().
+        Model(&model.Class{}).
+        Select("courses.course_code AS CourseCode, classes.section AS section").
+        Joins("INNER JOIN courses ON classes.course_id = courses.id").
+        First(&sections, classID).Error; err != nil {
+        return nil, err
+    }
+    return sections, nil
+	
+	// no join
+	// var sections *model.Class
+    // if err := cs.db.
+    //     Model(&model.Class{}).
+    //     Preload("Course", func(db *gorm.DB) *gorm.DB {
+    //         return db.Select("ID","course_code")
+    //     }).
+    //     First(&sections, classID).Error; err != nil {
+    //     return nil, err
+    // }
+    // return sections, nil
+}
+
+
 func (cs *CourseService) CreateCourse(course *model.Course) error {
 	if err := cs.db.Create(&course).Error; err != nil {
 		return err
@@ -34,7 +74,7 @@ func (cs *CourseService) CreateCourse(course *model.Course) error {
 	return nil
 }
 
-func (cs *CourseService) FindCourseByID(id string) (*model.Course, error) {
+func (cs *CourseService) GetCourseByID(id string) (*model.Course, error) {
 	var course *model.Course
 	if err := cs.db.First(&course, id).Error; err != nil {
 		return nil, err

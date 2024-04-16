@@ -13,7 +13,9 @@ func CourseRoutes(route *gin.RouterGroup, service *service.CourseService) {
 	course := route.Group("/course")
 	{
 		course.GET("/", courseHandler.GetAllCourses)
-		course.GET("/:id", courseHandler.FindCourseByID)
+		course.GET("/:id", courseHandler.GetCourseByID)
+		course.GET("/semester", courseHandler.GetAllDistinctSemester)
+		course.GET("/section", courseHandler.GetSectionByClassID)
 		course.POST("/", courseHandler.CreateCourse)
 		course.PUT("/update/:id", courseHandler.UpdateCourseByID)
 		course.DELETE("/delete/:id", courseHandler.DeleteCourseByID)

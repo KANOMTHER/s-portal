@@ -1,0 +1,1290 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server celler server.",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "paths": {
+        "/class": {
+            "post": {
+                "description": "create a new class",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "CreateClass",
+                "parameters": [
+                    {
+                        "description": "Class object",
+                        "name": "class",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Class"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/course": {
+            "get": {
+                "description": "get class search by course_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "GetClassByCourseID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "course id",
+                        "name": "course_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Class"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/delete/{id}": {
+            "delete": {
+                "description": "delete class by class_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "DeleteClassByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "were not able to delete the class",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/semester": {
+            "get": {
+                "description": "get class search by semester",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "GetClassBySemester",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "1, 2, ...",
+                        "name": "semester",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "array of class_id",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/class/{id}": {
+            "get": {
+                "description": "get class search by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Class"
+                ],
+                "summary": "GetClassByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Class"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/course": {
+            "get": {
+                "description": "get all courses",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "GetAllCourses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Course"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new course",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "CreateCourse",
+                "parameters": [
+                    {
+                        "description": "Course object",
+                        "name": "program",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Course"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/delete/{id}": {
+            "delete": {
+                "description": "delete a course by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "DeleteCourseByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "course id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/section": {
+            "get": {
+                "description": "get section search by class_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "GetSectionByClassID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "class_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CourseCode, Section",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.GetSectionByClassIDField"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/semester": {
+            "get": {
+                "description": "get semester from all course [no duplicate]",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "GetAllDistinctSemester",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/update/{id}": {
+            "put": {
+                "description": "update a course by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "UpdateCourseByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "course id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Course object",
+                        "name": "Course",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Course"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/{id}": {
+            "get": {
+                "description": "get a course by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "GetCourseByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "program id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Course"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty": {
+            "get": {
+                "description": "get all faculties",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "GetAllFaculties",
+                "responses": {
+                    "200": {
+                        "description": "list of faculties",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Faculty"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No faculties found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new faculty",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "CreateFaculty",
+                "parameters": [
+                    {
+                        "description": "Faculty object",
+                        "name": "program",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Faculty"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty/delete/{id}": {
+            "delete": {
+                "description": "delete a faculty by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "summary": "DeleteFacultyByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "faculty id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty/update/{id}": {
+            "put": {
+                "description": "update a facluty by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "UpdateFacultyByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Faculty id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Faculty object",
+                        "name": "Faculty",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Faculty"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/faculty/{id}": {
+            "get": {
+                "description": "get a faculty by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Faculty"
+                ],
+                "summary": "GetFacultyByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "faculty id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Faculty"
+                        }
+                    },
+                    "404": {
+                        "description": "Faculty not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/program": {
+            "get": {
+                "description": "get all programs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "GetAllPrograms",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Program"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new program",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "CreateProgram",
+                "parameters": [
+                    {
+                        "description": "Program object",
+                        "name": "program",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Program"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/program/delete/{id}": {
+            "delete": {
+                "description": "delete a program by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "DeleteProgramByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "program id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/program/update/{id}": {
+            "put": {
+                "description": "update a program by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "UpdateProgramByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "program id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Program object",
+                        "name": "Program",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Program"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/program/{id}": {
+            "get": {
+                "description": "get a program by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "GetProgramByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "program id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Program"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable": {
+            "post": {
+                "description": "create a new timetable",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "CreateTimeTable",
+                "parameters": [
+                    {
+                        "description": "Timetable object",
+                        "name": "timetable",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Timetable"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Timetable created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable/class": {
+            "get": {
+                "description": "get timetable search by class_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "GetTimetableByClassID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "class_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.GetTimetableByClassIDField"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No timetables found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable/count": {
+            "get": {
+                "description": "get timetable search by class_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "CountTimeTable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "filter by class_id (original from php version)",
+                        "name": "class_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by day",
+                        "name": "Day",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by StartTime",
+                        "name": "StartTime",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by EndTime",
+                        "name": "EndTime",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by Classroom",
+                        "name": "Classroom",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by ClassType",
+                        "name": "Classtype",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "count of timetables",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timetable/delete/{id}": {
+            "delete": {
+                "description": "delete a timetable by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Timetable"
+                ],
+                "summary": "DeleteTimeTableByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "timetable id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Timetable deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Class": {
+            "type": "object",
+            "required": [
+                "courseID"
+            ],
+            "properties": {
+                "course": {
+                    "$ref": "#/definitions/model.Course"
+                },
+                "courseID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "section": {
+                    "type": "string",
+                    "example": "A"
+                }
+            }
+        },
+        "model.Course": {
+            "type": "object",
+            "properties": {
+                "courseCode": {
+                    "type": "string",
+                    "example": "CPE313"
+                },
+                "courseName": {
+                    "type": "string",
+                    "example": "signals and linear systems"
+                },
+                "credit": {
+                    "type": "number",
+                    "example": 3
+                },
+                "detail": {
+                    "type": "string",
+                    "example": "Continuous and Discrete-time signals. Mathematical representation of signals, frequency-domain representation of signals, time- domain representation of systems, transform-domain representation of systems and system architecture. First order and higher order differential equations. Frequency response, Fourier analysis, Laplace transforms, and Z-transform."
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "semester": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "year": {
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "model.Faculty": {
+            "type": "object",
+            "properties": {
+                "department": {
+                    "type": "string",
+                    "example": "Computer Engineering"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "major": {
+                    "type": "string",
+                    "example": "Engineering"
+                }
+            }
+        },
+        "model.Program": {
+            "type": "object",
+            "required": [
+                "facultyID"
+            ],
+            "properties": {
+                "detail": {
+                    "type": "string",
+                    "example": "Regular Program"
+                },
+                "faculty": {
+                    "$ref": "#/definitions/model.Faculty"
+                },
+                "facultyID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "prefix": {
+                    "type": "string",
+                    "example": "7050"
+                },
+                "pricePerTerm": {
+                    "type": "number",
+                    "example": 10000
+                },
+                "programName": {
+                    "type": "string",
+                    "example": "Regular"
+                }
+            }
+        },
+        "model.Timetable": {
+            "type": "object",
+            "required": [
+                "classID"
+            ],
+            "properties": {
+                "class": {
+                    "$ref": "#/definitions/model.Class"
+                },
+                "classID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "classType": {
+                    "type": "string",
+                    "example": "Lecture"
+                },
+                "classroom": {
+                    "type": "string",
+                    "example": "CPE1102"
+                },
+                "day": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/time.Weekday"
+                        }
+                    ],
+                    "example": 0
+                },
+                "endTime": {
+                    "type": "string",
+                    "example": "2021-08-01T09:00:00Z"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "startTime": {
+                    "type": "string",
+                    "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "service.GetSectionByClassIDField": {
+            "type": "object",
+            "properties": {
+                "courseCode": {
+                    "type": "string",
+                    "example": "CPE313"
+                },
+                "section": {
+                    "type": "string",
+                    "example": "A"
+                }
+            }
+        },
+        "service.GetTimetableByClassIDField": {
+            "type": "object",
+            "properties": {
+                "classType": {
+                    "type": "string",
+                    "example": "Lecture"
+                },
+                "classroom": {
+                    "type": "string",
+                    "example": "CPE1102"
+                },
+                "courseCode": {
+                    "type": "string",
+                    "example": "CPE313"
+                },
+                "day": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/time.Weekday"
+                        }
+                    ],
+                    "example": 0
+                },
+                "endTime": {
+                    "type": "string",
+                    "example": "2021-08-01T09:00:00Z"
+                },
+                "section": {
+                    "type": "string",
+                    "example": "A"
+                },
+                "startTime": {
+                    "type": "string",
+                    "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "time.Weekday": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "x-enum-varnames": [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}

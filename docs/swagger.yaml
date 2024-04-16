@@ -1,0 +1,865 @@
+basePath: /api
+definitions:
+  model.Class:
+    properties:
+      course:
+        $ref: '#/definitions/model.Course'
+      courseID:
+        example: 1
+        type: integer
+      id:
+        example: 1
+        type: integer
+      section:
+        example: A
+        type: string
+    required:
+    - courseID
+    type: object
+  model.Course:
+    properties:
+      courseCode:
+        example: CPE313
+        type: string
+      courseName:
+        example: signals and linear systems
+        type: string
+      credit:
+        example: 3
+        type: number
+      detail:
+        example: Continuous and Discrete-time signals. Mathematical representation
+          of signals, frequency-domain representation of signals, time- domain representation
+          of systems, transform-domain representation of systems and system architecture.
+          First order and higher order differential equations. Frequency response,
+          Fourier analysis, Laplace transforms, and Z-transform.
+        type: string
+      id:
+        example: 1
+        type: integer
+      semester:
+        example: 2
+        type: integer
+      year:
+        example: 3
+        type: integer
+    type: object
+  model.Faculty:
+    properties:
+      department:
+        example: Computer Engineering
+        type: string
+      id:
+        example: 1
+        type: integer
+      major:
+        example: Engineering
+        type: string
+    type: object
+  model.Program:
+    properties:
+      detail:
+        example: Regular Program
+        type: string
+      faculty:
+        $ref: '#/definitions/model.Faculty'
+      facultyID:
+        example: 1
+        type: integer
+      id:
+        type: integer
+      prefix:
+        example: "7050"
+        type: string
+      pricePerTerm:
+        example: 10000
+        type: number
+      programName:
+        example: Regular
+        type: string
+    required:
+    - facultyID
+    type: object
+  model.Timetable:
+    properties:
+      class:
+        $ref: '#/definitions/model.Class'
+      classID:
+        example: 1
+        type: integer
+      classType:
+        example: Lecture
+        type: string
+      classroom:
+        example: CPE1102
+        type: string
+      day:
+        allOf:
+        - $ref: '#/definitions/time.Weekday'
+        example: 0
+      endTime:
+        example: "2021-08-01T09:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      startTime:
+        example: "2021-08-01T08:00:00Z"
+        type: string
+    required:
+    - classID
+    type: object
+  service.GetSectionByClassIDField:
+    properties:
+      courseCode:
+        example: CPE313
+        type: string
+      section:
+        example: A
+        type: string
+    type: object
+  service.GetTimetableByClassIDField:
+    properties:
+      classType:
+        example: Lecture
+        type: string
+      classroom:
+        example: CPE1102
+        type: string
+      courseCode:
+        example: CPE313
+        type: string
+      day:
+        allOf:
+        - $ref: '#/definitions/time.Weekday'
+        example: 0
+      endTime:
+        example: "2021-08-01T09:00:00Z"
+        type: string
+      section:
+        example: A
+        type: string
+      startTime:
+        example: "2021-08-01T08:00:00Z"
+        type: string
+    type: object
+  time.Weekday:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    type: integer
+    x-enum-varnames:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /class:
+    post:
+      consumes:
+      - application/json
+      description: create a new class
+      parameters:
+      - description: Class object
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/model.Class'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateClass
+      tags:
+      - Class
+  /class/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get class search by id
+      parameters:
+      - description: class id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Class'
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetClassByID
+      tags:
+      - Class
+  /class/course:
+    get:
+      consumes:
+      - application/json
+      description: get class search by course_id
+      parameters:
+      - description: course id
+        in: query
+        name: course_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Class'
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetClassByCourseID
+      tags:
+      - Class
+  /class/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete class by class_id
+      parameters:
+      - description: class_id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class deleted successfully
+          schema:
+            type: string
+        "404":
+          description: were not able to delete the class
+          schema:
+            type: string
+      summary: DeleteClassByID
+      tags:
+      - Class
+  /class/semester:
+    get:
+      consumes:
+      - application/json
+      description: get class search by semester
+      parameters:
+      - description: 1, 2, ...
+        in: query
+        name: semester
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: array of class_id
+          schema:
+            items:
+              type: integer
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetClassBySemester
+      tags:
+      - Class
+  /course:
+    get:
+      consumes:
+      - application/json
+      description: get all courses
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Course'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetAllCourses
+      tags:
+      - Course
+    post:
+      consumes:
+      - application/json
+      description: create a new course
+      parameters:
+      - description: Course object
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/model.Course'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Course created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateCourse
+      tags:
+      - Course
+  /course/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a course by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Course'
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetCourseByID
+      tags:
+      - Course
+  /course/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a course by id
+      parameters:
+      - description: course id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Course deleted successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: DeleteCourseByID
+      tags:
+      - Course
+  /course/section:
+    get:
+      consumes:
+      - application/json
+      description: get section search by class_id
+      parameters:
+      - description: class id
+        in: query
+        name: class_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CourseCode, Section
+          schema:
+            items:
+              $ref: '#/definitions/service.GetSectionByClassIDField'
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetSectionByClassID
+      tags:
+      - Course
+  /course/semester:
+    get:
+      consumes:
+      - application/json
+      description: get semester from all course [no duplicate]
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: integer
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetAllDistinctSemester
+      tags:
+      - Course
+  /course/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a course by id
+      parameters:
+      - description: course id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Course object
+        in: body
+        name: Course
+        required: true
+        schema:
+          $ref: '#/definitions/model.Course'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Course updated successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateCourseByID
+      tags:
+      - Course
+  /faculty:
+    get:
+      consumes:
+      - application/json
+      description: get all faculties
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: list of faculties
+          schema:
+            items:
+              $ref: '#/definitions/model.Faculty'
+            type: array
+        "404":
+          description: No faculties found
+          schema:
+            type: string
+      summary: GetAllFaculties
+      tags:
+      - Faculty
+    post:
+      consumes:
+      - application/json
+      description: create a new faculty
+      parameters:
+      - description: Faculty object
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/model.Faculty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Faculty created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateFaculty
+      tags:
+      - Faculty
+  /faculty/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a faculty by id
+      parameters:
+      - description: faculty id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Faculty'
+        "404":
+          description: Faculty not found
+          schema:
+            type: string
+      summary: GetFacultyByID
+      tags:
+      - Faculty
+  /faculty/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a faculty by id
+      parameters:
+      - description: faculty id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Faculty deleted successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: DeleteFacultyByID
+      tags:
+      - Course
+  /faculty/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a facluty by id
+      parameters:
+      - description: Faculty id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Faculty object
+        in: body
+        name: Faculty
+        required: true
+        schema:
+          $ref: '#/definitions/model.Faculty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Faculty updated successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateFacultyByID
+      tags:
+      - Faculty
+  /program:
+    get:
+      consumes:
+      - application/json
+      description: get all programs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Program'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetAllPrograms
+      tags:
+      - Program
+    post:
+      consumes:
+      - application/json
+      description: create a new program
+      parameters:
+      - description: Program object
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/model.Program'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: CreateProgram
+      tags:
+      - Program
+  /program/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a program by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Program'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetProgramByID
+      tags:
+      - Program
+  /program/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a program by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: DeleteProgramByID
+      tags:
+      - Program
+  /program/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a program by id
+      parameters:
+      - description: program id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Program object
+        in: body
+        name: Program
+        required: true
+        schema:
+          $ref: '#/definitions/model.Program'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: UpdateProgramByID
+      tags:
+      - Program
+  /timetable:
+    post:
+      consumes:
+      - application/json
+      description: create a new timetable
+      parameters:
+      - description: Timetable object
+        in: body
+        name: timetable
+        required: true
+        schema:
+          $ref: '#/definitions/model.Timetable'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Timetable created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateTimeTable
+      tags:
+      - Timetable
+  /timetable/class:
+    get:
+      consumes:
+      - application/json
+      description: get timetable search by class_id
+      parameters:
+      - description: class id
+        in: query
+        name: class_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/service.GetTimetableByClassIDField'
+            type: array
+        "404":
+          description: No timetables found
+          schema:
+            type: string
+      summary: GetTimetableByClassID
+      tags:
+      - Timetable
+  /timetable/count:
+    get:
+      consumes:
+      - application/json
+      description: get timetable search by class_id
+      parameters:
+      - description: filter by class_id (original from php version)
+        in: query
+        name: class_id
+        type: string
+      - description: filter by day
+        in: query
+        name: Day
+        type: string
+      - description: filter by StartTime
+        in: query
+        name: StartTime
+        type: string
+      - description: filter by EndTime
+        in: query
+        name: EndTime
+        type: string
+      - description: filter by Classroom
+        in: query
+        name: Classroom
+        type: string
+      - description: filter by ClassType
+        in: query
+        name: Classtype
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: count of timetables
+          schema:
+            type: integer
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CountTimeTable
+      tags:
+      - Timetable
+  /timetable/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a timetable by id
+      parameters:
+      - description: timetable id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Timetable deleted successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: DeleteTimeTableByID
+      tags:
+      - Timetable
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
