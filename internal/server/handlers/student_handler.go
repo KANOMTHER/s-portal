@@ -125,3 +125,29 @@ func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 		"message": student,
 	})
 }
+
+//	@Summary		UpdateStudentByID
+//	@Description	update a student by id
+//	@Tags			Student
+//	@Accept			json
+//	@Produce		json
+//	@Param			id				path		string						true	"student id"
+//	@Param			updatedField	body		service.UpdateStudentFields	true	"UpdateStudentFields object"
+//	@Success		200				{object}	string						"Student updated successfully"
+//	@Failure		400				{object}	string						"some error message here (from err.Error())"
+//	@Router			/student/{id} [PUT]
+func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
+	id := context.Param("id")
+	err := h.studentService.UpdateStudentByID(context, id)
+	if err != nil {
+		// Handle error
+		context.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": "Student updated successfully",
+	})
+}

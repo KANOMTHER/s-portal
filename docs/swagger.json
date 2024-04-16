@@ -1058,6 +1058,51 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "description": "update a student by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "UpdateStudentByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "student id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateStudentFields object",
+                        "name": "updatedField",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.UpdateStudentFields"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/timetable": {
@@ -1596,6 +1641,31 @@
                 "startTime": {
                     "type": "string",
                     "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "service.UpdateStudentFields": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "example@hotmail.com"
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "Nontawat"
+                },
+                "graduated": {
+                    "type": "string",
+                    "example": "2024-04-16T00:00:00Z"
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Kunlayawuttipong"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0812345678"
                 }
             }
         },

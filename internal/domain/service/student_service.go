@@ -1,11 +1,11 @@
 package service
 
 import (
-
 	"fmt"
 	"strconv"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
 	"s-portal/internal/domain/model"
@@ -124,4 +124,37 @@ func (ss *StudentService) GetStudentByID(id string) (*model.Student, error) {
 		return nil, err
 	}
 	return student, nil
+}
+
+type UpdateStudentFields struct {
+	FName	string    `example:"Nontawat"`
+	LName	string    `example:"Kunlayawuttipong"`
+	Graduated *time.Time `example:"2024-04-16T00:00:00Z"`
+	Email	string    `example:"example@hotmail.com"`
+	Phone	string    `example:"0812345678"`
+}
+
+func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string) error {
+	student := UpdateStudentFields{}
+	if err := ss.db.First(&model.Student{}, id).Error; err != nil {
+		return err
+	}
+
+	if err := context.ShouldBindJSON(&student); err != nil {
+		return err
+	}
+
+	if err := ss.db.Model(&model.Student{}).
+        Where("ID = ?", id).
+        Updates(map[string]interface{}{
+            "FName": student.FName,
+            "LName": student.LName,
+            "Graduated": student.Graduated,
+            "Email": student.Email,
+            "Phone": student.Phone,
+        }).Error; err != nil {
+        return err
+    }
+
+	return nil
 }
