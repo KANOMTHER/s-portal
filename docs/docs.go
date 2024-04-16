@@ -789,6 +789,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/program/faculty": {
+            "get": {
+                "description": "get a program by faculty_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "GetProgramByFacultyID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "faculty id",
+                        "name": "faculty_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.GetProgramByFacultyIDField"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/program/update/{id}": {
             "put": {
                 "description": "update a program by id",
@@ -1281,6 +1322,19 @@ const docTemplate = `{
                 "year": {
                     "type": "integer",
                     "example": 2021
+                }
+            }
+        },
+        "service.GetProgramByFacultyIDField": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "programName": {
+                    "type": "string",
+                    "example": "Regular"
                 }
             }
         },

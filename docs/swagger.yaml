@@ -133,6 +133,15 @@ definitions:
         example: 2021
         type: integer
     type: object
+  service.GetProgramByFacultyIDField:
+    properties:
+      id:
+        example: 1
+        type: integer
+      programName:
+        example: Regular
+        type: string
+    type: object
   service.GetSectionByClassIDField:
     properties:
       courseCode:
@@ -728,6 +737,33 @@ paths:
           schema:
             type: string
       summary: DeleteProgramByID
+      tags:
+      - Program
+  /program/faculty:
+    get:
+      consumes:
+      - application/json
+      description: get a program by faculty_id
+      parameters:
+      - description: faculty id
+        in: query
+        name: faculty_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/service.GetProgramByFacultyIDField'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetProgramByFacultyID
       tags:
       - Program
   /program/update/{id}:
