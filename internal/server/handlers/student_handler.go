@@ -1,7 +1,6 @@
 package handlers
 
 import (
-
 	"github.com/gin-gonic/gin"
 
 	// "s-portal/internal/domain/model"
@@ -81,12 +80,12 @@ func (h *StudentHandler) GetDistinctYears(context *gin.Context) {
 //	@Tags			Student
 //	@Accept			json
 //	@Produce		json
-//	@Param			year	query		string	true	"64, 65, 66, 67, ..."
+//	@Param			year	path		string	true	"64, 65, 66, 67, ..."
 //	@Success		200		{array}		uint	"Array of student's year [64, 65, 66, 67, ...]"
 //	@Failure		404		{object}	string	"some error message here (from err.Error())"
 //	@Router			/student/getByYear [GET]
 func (h *StudentHandler) GetStudentsIDByYear(context *gin.Context) {
-	year := context.Query("year")
+	year := context.Param("year")
 	distinct_year, err := h.studentService.GetStudentsIDByYear(year)
 	if err != nil {
 		// Handle error
@@ -149,5 +148,30 @@ func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
 	// Return success message
 	context.JSON(200, gin.H{
 		"message": "Student updated successfully",
+	})
+}
+
+//	@Summary		IsTA
+//	@Description	check if a student is a TA
+//	@Tags			Student
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"student id"
+//	@Success		200	{object}	uint	"TA id or null value if not TA"
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
+//	@Router			/student/is-ta/{id} [GET]
+func (h *StudentHandler) IsTA(context *gin.Context) {
+	id := context.Param("id")
+	ta_id, err := h.studentService.IsTA(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": ta_id,
 	})
 }

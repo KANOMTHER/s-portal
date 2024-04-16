@@ -973,7 +973,7 @@ paths:
       description: get a student by year
       parameters:
       - description: 64, 65, 66, 67, ...
-        in: query
+        in: path
         name: year
         required: true
         type: string
@@ -991,6 +991,31 @@ paths:
           schema:
             type: string
       summary: GetStudentsByYear
+      tags:
+      - Student
+  /student/is-ta/{id}:
+    get:
+      consumes:
+      - application/json
+      description: check if a student is a TA
+      parameters:
+      - description: student id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: TA id or null value if not TA
+          schema:
+            type: integer
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: IsTA
       tags:
       - Student
   /student/year:

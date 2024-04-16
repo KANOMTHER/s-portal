@@ -973,7 +973,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "64, 65, 66, 67, ...",
                         "name": "year",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -985,6 +985,44 @@ const docTemplate = `{
                             "items": {
                                 "type": "integer"
                             }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/is-ta/{id}": {
+            "get": {
+                "description": "check if a student is a TA",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "IsTA",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "student id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "TA id or null value if not TA",
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     "404": {
