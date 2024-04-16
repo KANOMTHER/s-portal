@@ -107,3 +107,16 @@ func (cs *CourseService) DeleteCourseByID(id string) error {
 
 	return nil
 }
+
+func (cs *CourseService) GetCourseBySemesterAndYear(semester string, year string) ([]model.Course, error) {
+	if len(semester) == 0 || len(year) == 0 {
+		return nil, fmt.Errorf("invalid input")
+	}
+
+	course := []model.Course{}
+	if err := cs.db.Model(model.Course{}).Where("semester = ? AND year = ?", semester, year).Find(&course).Error; err!=nil {
+		return nil, err
+	}
+
+	return course, nil
+}

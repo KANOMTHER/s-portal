@@ -198,3 +198,22 @@ func (h *CourseHandler) DeleteCourseByID(context *gin.Context) {
 		"message": "Course deleted successfully",
 	})
 }
+
+func (h *CourseHandler) GetCourseBySemesterAndYear(context *gin.Context) {
+	semester := context.Query("semester")
+	year := context.Query("year")
+
+	course, err := h.courseService.GetCourseBySemesterAndYear(semester, year)
+
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": course,
+	})
+}

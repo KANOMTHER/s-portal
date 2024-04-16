@@ -19,5 +19,8 @@ func CourseRoutes(route *gin.RouterGroup, service *service.CourseService) {
 		course.POST("/", courseHandler.CreateCourse)
 		course.PUT("/update/:id", courseHandler.UpdateCourseByID)
 		course.DELETE("/delete/:id", courseHandler.DeleteCourseByID)
+
+		//for class register added by ParnNoi
+		course.GET("/sem-year")
 	}
 }
