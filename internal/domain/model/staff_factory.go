@@ -16,11 +16,12 @@ func (f*StaffFactory) CreateInstructor(classID uint, class Class, professorID ui
 	}
 }
 
-func (f*StaffFactory) CreateAssistance(classID uint, class Class, studentId uint, student Student) TA{
+//func (f*StaffFactory) CreateAssistance(classID uint, class Class, studentId uint, student Student) TA{
+func (f*StaffFactory) CreateAssistance(classID uint, studentId uint) TA{
 	return TA{
 		ClassID: classID,
-		Class: class,
+		//Class: class,
 		StudentID: studentId,
-		Student: student,
+		//Student: student,
 	}
 }
