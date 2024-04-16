@@ -98,3 +98,30 @@ func (ss *StudentService) CreateStudent(student *CreateStudentFields) (error) {
 
 	return nil
 }
+
+func (ss *StudentService) GetDistinctYears() ([]uint, error) {
+    var years []uint
+    if err := ss.db.Model(&model.Student{}).
+        Select("DISTINCT CAST(FLOOR(ID / 1000000000) AS UNSIGNED) AS year").
+        Order("year DESC").
+        Pluck("year", &years).Error; err != nil {
+        return nil, err
+    }
+    return years, nil
+}
+
+func (ss *StudentService) GetStudentsIDByYear(year string) ([]uint, error) {
+	var students []uint
+	if err := ss.db.Model(&model.Student{}).Where("CAST(ID / 1000000000 AS UNSIGNED) = ?", year).Order("ID").Pluck("ID", &students).Error; err != nil {
+        return nil, err
+    }
+	return students, nil
+}
+
+func (ss *StudentService) GetStudentByID(id string) (*model.Student, error) {
+	var student *model.Student
+	if err := ss.db.Preload("Program.Faculty").Preload("Advisor.Faculty").First(&student, id).Error; err != nil {
+		return nil, err
+	}
+	return student, nil
+}

@@ -52,3 +52,76 @@ func (h *StudentHandler) CreateStudent(context *gin.Context) {
 		"message": "Student created successfully",
 	})
 }
+
+//	@Summary		GetDistinctYears
+//	@Description	get a distinct year of student
+//	@Tags			Student
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		uint	"Array of distinct year in dedscending order"
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
+//	@Router			/student/year [GET]
+func (h *StudentHandler) GetDistinctYears(context *gin.Context) {
+	distinct_year, err := h.studentService.GetDistinctYears()
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": distinct_year,
+	})
+}
+
+//	@Summary		GetStudentsByYear
+//	@Description	get a student by year
+//	@Tags			Student
+//	@Accept			json
+//	@Produce		json
+//	@Param			year	query		string	true	"64, 65, 66, 67, ..."
+//	@Success		200		{array}		uint	"Array of student's year [64, 65, 66, 67, ...]"
+//	@Failure		404		{object}	string	"some error message here (from err.Error())"
+//	@Router			/student/getByYear [GET]
+func (h *StudentHandler) GetStudentsIDByYear(context *gin.Context) {
+	year := context.Query("year")
+	distinct_year, err := h.studentService.GetStudentsIDByYear(year)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": distinct_year,
+	})
+}
+
+//	@Summary		GetStudentByID
+//	@Description	get a student by id
+//	@Tags			Student
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"student id"
+//	@Success		200	{object}	model.Student
+//	@Failure		404	{object}	string
+//	@Router			/student/{id} [GET]
+func (h *StudentHandler) GetStudentByID(context *gin.Context) {
+	id := context.Param("id")
+	student, err := h.studentService.GetStudentByID(id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": student,
+	})
+}

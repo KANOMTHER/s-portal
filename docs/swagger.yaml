@@ -1,5 +1,13 @@
 basePath: /api
 definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
   model.Class:
     properties:
       course:
@@ -54,6 +62,31 @@ definitions:
         example: Engineering
         type: string
     type: object
+  model.Professor:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      faculty:
+        $ref: '#/definitions/model.Faculty'
+      facultyID:
+        type: integer
+      fname:
+        type: string
+      id:
+        type: integer
+      lname:
+        type: string
+      phone:
+        type: string
+      position:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   model.Program:
     properties:
       detail:
@@ -75,6 +108,43 @@ definitions:
       programName:
         example: Regular
         type: string
+    type: object
+  model.Student:
+    properties:
+      advisor:
+        $ref: '#/definitions/model.Professor'
+      advisorID:
+        type: integer
+      createdAt:
+        type: string
+      degree:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dob:
+        type: string
+      email:
+        type: string
+      entered:
+        type: string
+      fname:
+        type: string
+      graduated:
+        type: string
+      id:
+        type: integer
+      lname:
+        type: string
+      phone:
+        type: string
+      program:
+        $ref: '#/definitions/model.Program'
+      programID:
+        type: integer
+      updatedAt:
+        type: string
+      year:
+        type: integer
     type: object
   model.Timetable:
     properties:
@@ -821,6 +891,79 @@ paths:
           schema:
             type: string
       summary: CreateStudent
+      tags:
+      - Student
+  /student/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a student by id
+      parameters:
+      - description: student id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Student'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetStudentByID
+      tags:
+      - Student
+  /student/getByYear:
+    get:
+      consumes:
+      - application/json
+      description: get a student by year
+      parameters:
+      - description: 64, 65, 66, 67, ...
+        in: query
+        name: year
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Array of student's year [64, 65, 66, 67, ...]
+          schema:
+            items:
+              type: integer
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetStudentsByYear
+      tags:
+      - Student
+  /student/year:
+    get:
+      consumes:
+      - application/json
+      description: get a distinct year of student
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Array of distinct year in dedscending order
+          schema:
+            items:
+              type: integer
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetDistinctYears
       tags:
       - Student
   /timetable:
