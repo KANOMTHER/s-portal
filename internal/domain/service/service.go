@@ -5,6 +5,7 @@ import (
 )
 
 type Service struct {
+	StudentService *StudentService
 	FacultyService *FacultyService
 	CourseService *CourseService
 	ProgramService *ProgramService
@@ -16,6 +17,7 @@ type Service struct {
 
 func NewService(db *gorm.DB) *Service {
 	return &Service{
+		StudentService: NewStudentService(db),
 		FacultyService: NewFacultyService(db),
 		CourseService: NewCourseService(db),
 		ProgramService: NewProgramService(db),

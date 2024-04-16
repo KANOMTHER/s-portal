@@ -13,8 +13,6 @@ definitions:
       section:
         example: A
         type: string
-    required:
-    - courseID
     type: object
   model.Course:
     properties:
@@ -77,8 +75,6 @@ definitions:
       programName:
         example: Regular
         type: string
-    required:
-    - facultyID
     type: object
   model.Timetable:
     properties:
@@ -106,8 +102,36 @@ definitions:
       startTime:
         example: "2021-08-01T08:00:00Z"
         type: string
-    required:
-    - classID
+    type: object
+  service.CreateStudentFields:
+    properties:
+      advisorID:
+        example: 1
+        type: integer
+      degree:
+        example: Bachelor
+        type: string
+      dob:
+        example: "2002-12-18T00:00:00Z"
+        type: string
+      entered:
+        example: "2024-04-16T00:00:00Z"
+        type: string
+      fname:
+        example: Nontawat
+        type: string
+      id:
+        example: 64070501093
+        type: integer
+      lname:
+        example: Kunlayawuttipong
+        type: string
+      programID:
+        example: 1
+        type: integer
+      year:
+        example: 2021
+        type: integer
     type: object
   service.GetSectionByClassIDField:
     properties:
@@ -737,6 +761,32 @@ paths:
       summary: UpdateProgramByID
       tags:
       - Program
+  /student:
+    post:
+      consumes:
+      - application/json
+      description: create a new student
+      parameters:
+      - description: CreateStudentFields object
+        in: body
+        name: CreateStudentFields
+        required: true
+        schema:
+          $ref: '#/definitions/service.CreateStudentFields'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateStudent
+      tags:
+      - Student
   /timetable:
     post:
       consumes:

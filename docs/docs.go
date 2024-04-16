@@ -874,6 +874,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/student": {
+            "post": {
+                "description": "create a new student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "CreateStudent",
+                "parameters": [
+                    {
+                        "description": "CreateStudentFields object",
+                        "name": "CreateStudentFields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.CreateStudentFields"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/timetable": {
             "post": {
                 "description": "create a new timetable",
@@ -1064,9 +1104,6 @@ const docTemplate = `{
     "definitions": {
         "model.Class": {
             "type": "object",
-            "required": [
-                "courseID"
-            ],
             "properties": {
                 "course": {
                     "$ref": "#/definitions/model.Course"
@@ -1137,9 +1174,6 @@ const docTemplate = `{
         },
         "model.Program": {
             "type": "object",
-            "required": [
-                "facultyID"
-            ],
             "properties": {
                 "detail": {
                     "type": "string",
@@ -1171,9 +1205,6 @@ const docTemplate = `{
         },
         "model.Timetable": {
             "type": "object",
-            "required": [
-                "classID"
-            ],
             "properties": {
                 "class": {
                     "$ref": "#/definitions/model.Class"
@@ -1209,6 +1240,47 @@ const docTemplate = `{
                 "startTime": {
                     "type": "string",
                     "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "service.CreateStudentFields": {
+            "type": "object",
+            "properties": {
+                "advisorID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "degree": {
+                    "type": "string",
+                    "example": "Bachelor"
+                },
+                "dob": {
+                    "type": "string",
+                    "example": "2002-12-18T00:00:00Z"
+                },
+                "entered": {
+                    "type": "string",
+                    "example": "2024-04-16T00:00:00Z"
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "Nontawat"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 64070501093
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Kunlayawuttipong"
+                },
+                "programID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "year": {
+                    "type": "integer",
+                    "example": 2021
                 }
             }
         },
