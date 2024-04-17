@@ -1476,7 +1476,7 @@ const docTemplate = `{
                 },
                 "prefix": {
                     "type": "string",
-                    "example": "7050"
+                    "example": "0705010"
                 },
                 "pricePerTerm": {
                     "type": "number",

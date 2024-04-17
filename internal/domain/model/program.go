@@ -12,5 +12,5 @@ type Program struct {
 	ProgramName  string `example:"Regular"`
 	Detail       string `example:"Regular Program"`
 	PricePerTerm float64 `example:"10000"`
-	Prefix       string `example:"7050"`
+	Prefix       string `example:"0705010"`
 }

@@ -87,6 +87,8 @@ func (ss *StudentService) CreateStudent(student *CreateStudentFields) error {
 	}
 	student.ID = *newID
 	student.Entered = time.Now()
+	// change year to academic year
+	student.Year = 1
 
 	// create new student
 	if result := ss.db.Where("ID = ?", student.ID).FirstOrCreate(&model.Student{}, &student); result.Error != nil {
@@ -94,6 +96,11 @@ func (ss *StudentService) CreateStudent(student *CreateStudentFields) error {
 			return fmt.Errorf("unable to create student because this program is full %v,\n error msg: %v", student.ID, result.Error.Error())
 		}
 		return result.Error
+	}
+
+	user := model.User{ID: student.ID, PWD: strconv.FormatUint(uint64(student.ID), 10), Role: "student"}
+	if	err := ss.db.Create(&user).Error; err != nil {
+		return err
 	}
 
 	return nil
