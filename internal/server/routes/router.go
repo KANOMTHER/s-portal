@@ -7,7 +7,7 @@ import (
 )
 
 func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine {
-	api := router.Group("/api") 
+	api := router.Group("/api")
 	{
 		ExampleRoutes(api)
 		StudentRoutes(api, services.StudentService)
@@ -21,6 +21,7 @@ func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine
 		ClassRegisterRoutes(api, services.ClassRegisterService)
 		PaymentRoutes(api, services.PaymentService)
     	TARoute(api, services.TAService)
+		AuthRoutes(api, services.AuthService)
 	}
 	return router
 }
