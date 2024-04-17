@@ -87,6 +87,8 @@ func (ss *StudentService) CreateStudent(student *CreateStudentFields) error {
 	}
 	student.ID = *newID
 	student.Entered = time.Now()
+	// change year to academic year
+	student.Year = 1
 
 	// create new student
 	if result := ss.db.Where("ID = ?", student.ID).FirstOrCreate(&model.Student{}, &student); result.Error != nil {
