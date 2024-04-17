@@ -96,6 +96,11 @@ func (ss *StudentService) CreateStudent(student *CreateStudentFields) error {
 		return result.Error
 	}
 
+	user := model.User{ID: student.ID, PWD: strconv.FormatUint(uint64(student.ID), 10), Role: "student"}
+	if	err := ss.db.Create(&user).Error; err != nil {
+		return err
+	}
+
 	return nil
 }
 
