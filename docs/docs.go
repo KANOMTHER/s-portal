@@ -789,6 +789,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/program/faculty": {
+            "get": {
+                "description": "get a program by faculty_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Program"
+                ],
+                "summary": "GetProgramByFacultyID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "faculty id",
+                        "name": "faculty_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.GetProgramByFacultyIDField"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/program/update/{id}": {
             "put": {
                 "description": "update a program by id",
@@ -867,6 +908,240 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/student": {
+            "post": {
+                "description": "create a new student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "CreateStudent",
+                "parameters": [
+                    {
+                        "description": "CreateStudentFields object",
+                        "name": "CreateStudentFields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.CreateStudentFields"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/getByYear": {
+            "get": {
+                "description": "get a student by year",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "GetStudentsByYear",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "64, 65, 66, 67, ...",
+                        "name": "year",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of student's year [64, 65, 66, 67, ...]",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/is-ta/{id}": {
+            "get": {
+                "description": "check if a student is a TA",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "IsTA",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "student id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "TA id or null value if not TA",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/year": {
+            "get": {
+                "description": "get a distinct year of student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "GetDistinctYears",
+                "responses": {
+                    "200": {
+                        "description": "Array of distinct year in dedscending order",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/{id}": {
+            "get": {
+                "description": "get a student by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "GetStudentByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "student id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Student"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update a student by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "UpdateStudentByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "student id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateStudentFields object",
+                        "name": "updatedField",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.UpdateStudentFields"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -1062,11 +1337,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
         "model.Class": {
             "type": "object",
-            "required": [
-                "courseID"
-            ],
             "properties": {
                 "course": {
                     "$ref": "#/definitions/model.Course"
@@ -1135,11 +1419,46 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Professor": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "faculty": {
+                    "$ref": "#/definitions/model.Faculty"
+                },
+                "facultyID": {
+                    "type": "integer"
+                },
+                "fname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lname": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Program": {
             "type": "object",
-            "required": [
-                "facultyID"
-            ],
             "properties": {
                 "detail": {
                     "type": "string",
@@ -1169,11 +1488,64 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Student": {
+            "type": "object",
+            "properties": {
+                "advisor": {
+                    "$ref": "#/definitions/model.Professor"
+                },
+                "advisorID": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "degree": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "dob": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "entered": {
+                    "type": "string"
+                },
+                "fname": {
+                    "type": "string"
+                },
+                "graduated": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lname": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "program": {
+                    "$ref": "#/definitions/model.Program"
+                },
+                "programID": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.Timetable": {
             "type": "object",
-            "required": [
-                "classID"
-            ],
             "properties": {
                 "class": {
                     "$ref": "#/definitions/model.Class"
@@ -1209,6 +1581,60 @@ const docTemplate = `{
                 "startTime": {
                     "type": "string",
                     "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "service.CreateStudentFields": {
+            "type": "object",
+            "properties": {
+                "advisorID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "degree": {
+                    "type": "string",
+                    "example": "Bachelor"
+                },
+                "dob": {
+                    "type": "string",
+                    "example": "2002-12-18T00:00:00Z"
+                },
+                "entered": {
+                    "type": "string",
+                    "example": "2024-04-16T00:00:00Z"
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "Nontawat"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 64070501093
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Kunlayawuttipong"
+                },
+                "programID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "year": {
+                    "type": "integer",
+                    "example": 2021
+                }
+            }
+        },
+        "service.GetProgramByFacultyIDField": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "programName": {
+                    "type": "string",
+                    "example": "Regular"
                 }
             }
         },
@@ -1259,6 +1685,31 @@ const docTemplate = `{
                 "startTime": {
                     "type": "string",
                     "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "service.UpdateStudentFields": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "example@hotmail.com"
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "Nontawat"
+                },
+                "graduated": {
+                    "type": "string",
+                    "example": "2024-04-16T00:00:00Z"
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Kunlayawuttipong"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0812345678"
                 }
             }
         },

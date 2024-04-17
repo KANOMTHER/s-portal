@@ -98,6 +98,31 @@ func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 	})
 }
 
+//	@Summary		GetProgramByFacultyID
+//	@Description	get a program by faculty_id
+//	@Tags			Program
+//	@Accept			json
+//	@Produce		json
+//	@Param			faculty_id	query		string	true	"faculty id"
+//	@Success		200			{array}		service.GetProgramByFacultyIDField
+//	@Failure		404			{object}	string
+//	@Router			/program/faculty [GET]
+func (h *ProgramHandler) GetProgramByFacultyID(context *gin.Context) {
+	fauclty_id := context.Query("faculty_id")
+	program, err := h.programService.GetProgramByFacultyID(fauclty_id)
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": program,
+	})
+}
+
 //	@Summary		UpdateProgramByID
 //	@Description	update a program by id
 //	@Tags			Program

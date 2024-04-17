@@ -1,5 +1,13 @@
 basePath: /api
 definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
   model.Class:
     properties:
       course:
@@ -13,8 +21,6 @@ definitions:
       section:
         example: A
         type: string
-    required:
-    - courseID
     type: object
   model.Course:
     properties:
@@ -56,6 +62,31 @@ definitions:
         example: Engineering
         type: string
     type: object
+  model.Professor:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      faculty:
+        $ref: '#/definitions/model.Faculty'
+      facultyID:
+        type: integer
+      fname:
+        type: string
+      id:
+        type: integer
+      lname:
+        type: string
+      phone:
+        type: string
+      position:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   model.Program:
     properties:
       detail:
@@ -77,8 +108,43 @@ definitions:
       programName:
         example: Regular
         type: string
-    required:
-    - facultyID
+    type: object
+  model.Student:
+    properties:
+      advisor:
+        $ref: '#/definitions/model.Professor'
+      advisorID:
+        type: integer
+      createdAt:
+        type: string
+      degree:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dob:
+        type: string
+      email:
+        type: string
+      entered:
+        type: string
+      fname:
+        type: string
+      graduated:
+        type: string
+      id:
+        type: integer
+      lname:
+        type: string
+      phone:
+        type: string
+      program:
+        $ref: '#/definitions/model.Program'
+      programID:
+        type: integer
+      updatedAt:
+        type: string
+      year:
+        type: integer
     type: object
   model.Timetable:
     properties:
@@ -106,8 +172,45 @@ definitions:
       startTime:
         example: "2021-08-01T08:00:00Z"
         type: string
-    required:
-    - classID
+    type: object
+  service.CreateStudentFields:
+    properties:
+      advisorID:
+        example: 1
+        type: integer
+      degree:
+        example: Bachelor
+        type: string
+      dob:
+        example: "2002-12-18T00:00:00Z"
+        type: string
+      entered:
+        example: "2024-04-16T00:00:00Z"
+        type: string
+      fname:
+        example: Nontawat
+        type: string
+      id:
+        example: 64070501093
+        type: integer
+      lname:
+        example: Kunlayawuttipong
+        type: string
+      programID:
+        example: 1
+        type: integer
+      year:
+        example: 2021
+        type: integer
+    type: object
+  service.GetProgramByFacultyIDField:
+    properties:
+      id:
+        example: 1
+        type: integer
+      programName:
+        example: Regular
+        type: string
     type: object
   service.GetSectionByClassIDField:
     properties:
@@ -141,6 +244,24 @@ definitions:
         type: string
       startTime:
         example: "2021-08-01T08:00:00Z"
+        type: string
+    type: object
+  service.UpdateStudentFields:
+    properties:
+      email:
+        example: example@hotmail.com
+        type: string
+      fname:
+        example: Nontawat
+        type: string
+      graduated:
+        example: "2024-04-16T00:00:00Z"
+        type: string
+      lname:
+        example: Kunlayawuttipong
+        type: string
+      phone:
+        example: "0812345678"
         type: string
     type: object
   time.Weekday:
@@ -706,6 +827,33 @@ paths:
       summary: DeleteProgramByID
       tags:
       - Program
+  /program/faculty:
+    get:
+      consumes:
+      - application/json
+      description: get a program by faculty_id
+      parameters:
+      - description: faculty id
+        in: query
+        name: faculty_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/service.GetProgramByFacultyIDField'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetProgramByFacultyID
+      tags:
+      - Program
   /program/update/{id}:
     put:
       consumes:
@@ -737,6 +885,160 @@ paths:
       summary: UpdateProgramByID
       tags:
       - Program
+  /student:
+    post:
+      consumes:
+      - application/json
+      description: create a new student
+      parameters:
+      - description: CreateStudentFields object
+        in: body
+        name: CreateStudentFields
+        required: true
+        schema:
+          $ref: '#/definitions/service.CreateStudentFields'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateStudent
+      tags:
+      - Student
+  /student/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a student by id
+      parameters:
+      - description: student id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Student'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GetStudentByID
+      tags:
+      - Student
+    put:
+      consumes:
+      - application/json
+      description: update a student by id
+      parameters:
+      - description: student id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: UpdateStudentFields object
+        in: body
+        name: updatedField
+        required: true
+        schema:
+          $ref: '#/definitions/service.UpdateStudentFields'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student updated successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateStudentByID
+      tags:
+      - Student
+  /student/getByYear:
+    get:
+      consumes:
+      - application/json
+      description: get a student by year
+      parameters:
+      - description: 64, 65, 66, 67, ...
+        in: path
+        name: year
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Array of student's year [64, 65, 66, 67, ...]
+          schema:
+            items:
+              type: integer
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetStudentsByYear
+      tags:
+      - Student
+  /student/is-ta/{id}:
+    get:
+      consumes:
+      - application/json
+      description: check if a student is a TA
+      parameters:
+      - description: student id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: TA id or null value if not TA
+          schema:
+            type: integer
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: IsTA
+      tags:
+      - Student
+  /student/year:
+    get:
+      consumes:
+      - application/json
+      description: get a distinct year of student
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Array of distinct year in dedscending order
+          schema:
+            items:
+              type: integer
+            type: array
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetDistinctYears
+      tags:
+      - Student
   /timetable:
     post:
       consumes:
