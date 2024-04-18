@@ -50,7 +50,7 @@ type GetClassBySemesterAndYearField struct {
 		CourseCode  string `example:"CPE313"`
 		CourseName  string `example:"signals and linear systems"`
 		Semester	int `example:"2"`
-		Year		int `example:"3"`
+		Year		int `example:"2021"`
 	}
 }
 

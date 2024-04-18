@@ -1652,7 +1652,7 @@ const docTemplate = `{
                         },
                         "year": {
                             "type": "integer",
-                            "example": 3
+                            "example": 2021
                         }
                     }
                 },
