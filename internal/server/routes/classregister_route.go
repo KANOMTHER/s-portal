@@ -12,9 +12,9 @@ func ClassRegisterRoutes(route *gin.RouterGroup, service *service.ClassRegisterS
 
 	class := route.Group("/register")
 	{
+		class.GET("/get", classRegisterHandler.GetRegisterClassByID)
 		class.POST("/create", classRegisterHandler.CreateRegisterClass)
 		class.PUT("/update", classRegisterHandler.UpdateRegisterClass)
 		class.DELETE("/delete", classRegisterHandler.DeleteRegisterClass)
-		class.POST("/get", classRegisterHandler.GetRegisterClassByID)
 	}
 }
