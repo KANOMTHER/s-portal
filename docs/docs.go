@@ -159,8 +159,15 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "1, 2, ...",
+                        "description": "1, 2, 3, ...",
                         "name": "semester",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "..., 2021, 2022, 2023, ...",
+                        "name": "year",
                         "in": "query",
                         "required": true
                     }

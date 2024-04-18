@@ -41,9 +41,9 @@ func (cs *ClassService) GetClassByCourseID(course_id string) ([]model.Class, err
 	return class, nil
 }
 
-func (cs *ClassService) GetClassBySemester(semester string) ([]uint, error) {
+func (cs *ClassService) GetClassBySemesterAndYear(semester string, year string) ([]uint, error) {
 	var class_id []uint
-	if err := cs.db.Model(&model.Class{}).Joins("inner join Courses on Classes.course_id = Courses.ID ").Distinct("Classes.ID").Order("Classes.ID ASC").Where("semester = ?", semester).Pluck("Classes.ID", &class_id).Error; err != nil {
+	if err := cs.db.Model(&model.Class{}).Joins("inner join courses on classes.course_id = courses.ID ").Distinct("classes.ID").Order("classes.ID ASC").Where("semester = ? AND year = ?", semester, year).Pluck("classes.ID", &class_id).Error; err != nil {
 		return nil, err
 	}
 	return class_id, nil
