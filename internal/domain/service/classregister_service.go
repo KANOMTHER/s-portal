@@ -21,14 +21,15 @@ func NewClassRegisterService(db *gorm.DB) *ClassRegisterService {
 
 func (cr *ClassRegisterService) GetRegisterClassByID(context *gin.Context) ([]model.ClassRegister, error) {
 	payment := model.Payment{}
+	ps := NewPaymentService(cr.db)
 
 	if err := context.ShouldBindJSON(&payment); err!=nil {
 		return nil, err
 	}
-
-	//replace with GetPaymentByID in payment
-	if err := cr.db.Where(payment).First(&payment).Error; err!=nil {
-		return nil, err
+	
+	payment, payment_err := ps.GetAndCreatePaymentByID(payment)
+	if payment_err!=nil {
+		return nil, payment_err
 	}
 
 	var result []model.ClassRegister
@@ -47,6 +48,7 @@ func (cr *ClassRegisterService) CreateRegisterClass(context *gin.Context) error 
 		Semester  uint `json:"semester"`
 		ClassID   uint `json:"ClassID"`
 	}
+	ps := NewPaymentService(cr.db)
 
 	if err := context.ShouldBindJSON(&data); err!=nil {
 		return err
@@ -56,32 +58,35 @@ func (cr *ClassRegisterService) CreateRegisterClass(context *gin.Context) error 
 		return fmt.Errorf("invalid input")
 	}
 
-	//replace with GetPaymentByID in payment
 	payment := model.Payment{
 		StudentID: data.StudentID,
 		Semester: int(data.Semester),
 		Year: int(data.Year),
 	}
-	if err := cr.db.Where(payment).FirstOrCreate(&payment).Error; err!=nil {
-		return err
+	payment, payment_err := ps.GetAndCreatePaymentByID(payment)
+	if payment_err!=nil {
+		return payment_err
 	}
 
 	//require step for initial class_grade
-	// -> insert after end phase, or insert after create (this method need to think about update and delete)
+	// -> insert after end phase
 
 	class_register := model.ClassRegister{
 		PaymentID: payment.ID,
 		ClassID: data.ClassID,
 	}
+	//please check before insert
 	if err := cr.db.Where(class_register).FirstOrCreate(&class_register).Error ; err!=nil {
 		return err
 	}
+	ps.UpdateTotalCreditByID(class_register.PaymentID)
 
 	return nil
 }
 
 func (cr *ClassRegisterService) UpdateRegisterClass(context *gin.Context) error { 
 	id := context.Param("id")
+	ps := NewPaymentService(cr.db)
 
 	class_register := model.ClassRegister{}
 
@@ -103,9 +108,12 @@ func (cr *ClassRegisterService) UpdateRegisterClass(context *gin.Context) error 
 		return fmt.Errorf("your class_id is already registed")
 	}
 
+	//please check before update
 	if err := cr.db.Save(&class_register).Error; err!=nil {
 		return err
 	}
+
+	ps.UpdateTotalCreditByID(class_register.PaymentID)
 
 	return nil
 }
@@ -118,6 +126,8 @@ func (cr *ClassRegisterService) DeleteRegisterClass(context *gin.Context) error 
 	if result := cr.db.Delete(&class_register, id); result.RowsAffected < 1 {
 		return fmt.Errorf("were not able to delete this register")
 	}
+	ps := NewPaymentService(cr.db)
+	ps.UpdateTotalCreditByID(class_register.PaymentID)
 	
 	return nil
 }
