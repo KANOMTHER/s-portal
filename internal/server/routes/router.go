@@ -19,6 +19,7 @@ func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine
 		ProfessorRoutes(api, services.ProfessorService)
 		InstructorRoutes(api, services.InstructorService)
 		ClassRegisterRoutes(api, services.ClassRegisterService)
+		PaymentRoutes(api, services.PaymentService)
 	}
 	return router
 }
