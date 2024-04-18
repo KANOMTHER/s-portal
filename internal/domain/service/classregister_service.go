@@ -34,7 +34,7 @@ func (cr *ClassRegisterService) GetRegisterClassByID(context *gin.Context) ([]mo
 
 	var result []model.ClassRegister
 
-	if err := cr.db.Where("payment_id = ?", payment.ID).Find(&result).Error; err!=nil {
+	if err := cr.db.Where("payment_id = ?", payment.ID).Preload("Class").Find(&result).Error; err!=nil {
 		return nil, err
 	}
 
@@ -85,12 +85,19 @@ func (cr *ClassRegisterService) CreateRegisterClass(context *gin.Context) error 
 }
 
 func (cr *ClassRegisterService) UpdateRegisterClass(context *gin.Context) error { 
-	id := context.Param("id")
+	var data struct{
+		ID uint `json:"id"`
+		ClassID uint `json:"ClassID"`
+	}
 	ps := NewPaymentService(cr.db)
+
+	if err := context.ShouldBindJSON(&data); err!=nil {
+		return err
+	}
 
 	class_register := model.ClassRegister{}
 
-	if err := cr.db.First(&class_register, id).Error; err!=nil {
+	if err := cr.db.First(&class_register, data.ID).Error; err!=nil {
 		return err
 	}
 
@@ -120,13 +127,18 @@ func (cr *ClassRegisterService) UpdateRegisterClass(context *gin.Context) error 
 
 func (cr *ClassRegisterService) DeleteRegisterClass(context *gin.Context) error {
 	class_register := model.ClassRegister{}
-
-	id := context.Param("id")
-
-	if result := cr.db.Delete(&class_register, id); result.RowsAffected < 1 {
-		return fmt.Errorf("were not able to delete this register")
+	var data struct{
+		ID uint `json:"id"`
 	}
 	ps := NewPaymentService(cr.db)
+
+	if err := context.ShouldBindJSON(&data); err!=nil {
+		return err
+	}
+
+	if result := cr.db.Delete(&class_register, data.ID); result.RowsAffected < 1 {
+		return fmt.Errorf("were not able to delete this register")
+	}
 	ps.UpdateTotalCreditByID(class_register.PaymentID)
 	
 	return nil
