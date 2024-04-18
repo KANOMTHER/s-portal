@@ -190,9 +190,6 @@ definitions:
       fname:
         example: Nontawat
         type: string
-      id:
-        example: 64070501093
-        type: integer
       lname:
         example: Kunlayawuttipong
         type: string
@@ -406,7 +403,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: get class search by semester
+      description: get class search by semester & year
       parameters:
       - description: 1, 2, 3, ...
         in: query
@@ -431,7 +428,7 @@ paths:
           description: some error message here (from err.Error())
           schema:
             type: string
-      summary: GetClassBySemester
+      summary: GetClassBySemesterAndYear
       tags:
       - Class
   /course:

@@ -145,7 +145,7 @@ const docTemplate = `{
         },
         "/class/semester": {
             "get": {
-                "description": "get class search by semester",
+                "description": "get class search by semester \u0026 year",
                 "consumes": [
                     "application/json"
                 ],
@@ -155,7 +155,7 @@ const docTemplate = `{
                 "tags": [
                     "Class"
                 ],
-                "summary": "GetClassBySemester",
+                "summary": "GetClassBySemesterAndYear",
                 "parameters": [
                     {
                         "type": "string",
@@ -1613,10 +1613,6 @@ const docTemplate = `{
                 "fname": {
                     "type": "string",
                     "example": "Nontawat"
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 64070501093
                 },
                 "lname": {
                     "type": "string",

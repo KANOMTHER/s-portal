@@ -16,7 +16,7 @@ type StudentService struct {
 }
 
 type CreateStudentFields struct {
-	ID        uint      `example:"64070501093"`
+	ID        uint      `swaggerignore:"true"`
 	ProgramID uint      `example:"1"`
 	Degree    string    `example:"Bachelor"`
 	Year      int       `example:"2021"`

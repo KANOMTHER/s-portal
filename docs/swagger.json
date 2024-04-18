@@ -139,7 +139,7 @@
         },
         "/class/semester": {
             "get": {
-                "description": "get class search by semester",
+                "description": "get class search by semester \u0026 year",
                 "consumes": [
                     "application/json"
                 ],
@@ -149,7 +149,7 @@
                 "tags": [
                     "Class"
                 ],
-                "summary": "GetClassBySemester",
+                "summary": "GetClassBySemesterAndYear",
                 "parameters": [
                     {
                         "type": "string",
@@ -1607,10 +1607,6 @@
                 "fname": {
                     "type": "string",
                     "example": "Nontawat"
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 64070501093
                 },
                 "lname": {
                     "type": "string",
