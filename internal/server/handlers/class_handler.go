@@ -106,11 +106,11 @@ func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 //	@Tags			Class
 //	@Accept			json
 //	@Produce		json
-//	@Param			semester	query		string	true	"1, 2, 3, ..."
-//	@Param			year		query		string	true	"..., 2021, 2022, 2023, ..."
-//	@Success		200			{array}		uint	"array of class_id"
-//	@Failure		404			{object}	string	"some error message here (from err.Error())"
-//	@Router			/class/semester [GET]
+//	@Param			semester	query		string									true	"1, 2, 3, ..."
+//	@Param			year		query		string									true	"..., 2021, 2022, 2023, ..."
+//	@Success		200			{array}		service.GetClassBySemesterAndYearField	"object GetClassBySemesterAndYearField"
+//	@Failure		404			{object}	string									"some error message here (from err.Error())"
+//	@Router			/class/semester-year [GET]
 func (h *ClassHandler) GetClassBySemesterAndYear(context *gin.Context) {
 	semester := context.Query("semester")
 	year := context.Query("year")

@@ -200,6 +200,36 @@ definitions:
         example: 2021
         type: integer
     type: object
+  service.GetClassBySemesterAndYearField:
+    properties:
+      course:
+        properties:
+          courseCode:
+            example: CPE313
+            type: string
+          courseName:
+            example: signals and linear systems
+            type: string
+          id:
+            example: 1
+            type: integer
+          semester:
+            example: 2
+            type: integer
+          year:
+            example: 3
+            type: integer
+        type: object
+      courseID:
+        example: 1
+        type: integer
+      id:
+        example: 1
+        type: integer
+      section:
+        example: A
+        type: string
+    type: object
   service.GetProgramByFacultyIDField:
     properties:
       id:
@@ -399,7 +429,7 @@ paths:
       summary: DeleteClassByID
       tags:
       - Class
-  /class/semester:
+  /class/semester-year:
     get:
       consumes:
       - application/json
@@ -419,10 +449,10 @@ paths:
       - application/json
       responses:
         "200":
-          description: array of class_id
+          description: object GetClassBySemesterAndYearField
           schema:
             items:
-              type: integer
+              $ref: '#/definitions/service.GetClassBySemesterAndYearField'
             type: array
         "404":
           description: some error message here (from err.Error())

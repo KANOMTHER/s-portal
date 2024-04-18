@@ -143,7 +143,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/semester": {
+        "/class/semester-year": {
             "get": {
                 "description": "get class search by semester \u0026 year",
                 "consumes": [
@@ -174,11 +174,11 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "array of class_id",
+                        "description": "object GetClassBySemesterAndYearField",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "integer"
+                                "$ref": "#/definitions/service.GetClassBySemesterAndYearField"
                             }
                         }
                     },
@@ -1625,6 +1625,48 @@ const docTemplate = `{
                 "year": {
                     "type": "integer",
                     "example": 2021
+                }
+            }
+        },
+        "service.GetClassBySemesterAndYearField": {
+            "type": "object",
+            "properties": {
+                "course": {
+                    "type": "object",
+                    "properties": {
+                        "courseCode": {
+                            "type": "string",
+                            "example": "CPE313"
+                        },
+                        "courseName": {
+                            "type": "string",
+                            "example": "signals and linear systems"
+                        },
+                        "id": {
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "semester": {
+                            "type": "integer",
+                            "example": 2
+                        },
+                        "year": {
+                            "type": "integer",
+                            "example": 3
+                        }
+                    }
+                },
+                "courseID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "section": {
+                    "type": "string",
+                    "example": "A"
                 }
             }
         },
