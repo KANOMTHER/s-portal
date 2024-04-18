@@ -10,7 +10,7 @@ func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine
 	api := router.Group("/api") 
 	{
 		ExampleRoutes(api)
-		StudentRoute(api)
+		StudentRoutes(api, services.StudentService)
 		FacultyRoutes(api, services.FacultyService)
 		CourseRoutes(api, services.CourseService)
 		ProgramRoutes(api, services.ProgramService)
@@ -20,6 +20,7 @@ func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine
 		InstructorRoutes(api, services.InstructorService)
 		ClassRegisterRoutes(api, services.ClassRegisterService)
 		PaymentRoutes(api, services.PaymentService)
+    TARoute(api, services.TAService)
 	}
 	return router
 }

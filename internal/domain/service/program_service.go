@@ -42,6 +42,19 @@ func (ps *ProgramService) GetProgramByID(id string) (*model.Program, error) {
 	return program, nil
 }
 
+type GetProgramByFacultyIDField struct {
+	ID 		 	uint   `example:"1"`
+	ProgramName string `example:"Regular"`
+}
+
+func (ps *ProgramService) GetProgramByFacultyID(faculty_id string) ([]GetProgramByFacultyIDField, error) {
+	var program []GetProgramByFacultyIDField
+	if err := ps.db.Model(&model.Program{}).Where("faculty_id = ?", faculty_id).Find(&program).Error; err != nil {
+		return nil, err
+	}
+	return program, nil
+}
+
 func (ps *ProgramService) UpdateProgramByID(context *gin.Context, id string) error {
 	program := model.Program{}
 	
