@@ -143,9 +143,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/semester": {
+        "/class/semester-year": {
             "get": {
-                "description": "get class search by semester",
+                "description": "get class search by semester \u0026 year",
                 "consumes": [
                     "application/json"
                 ],
@@ -155,23 +155,30 @@ const docTemplate = `{
                 "tags": [
                     "Class"
                 ],
-                "summary": "GetClassBySemester",
+                "summary": "GetClassBySemesterAndYear",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "1, 2, ...",
+                        "description": "1, 2, 3, ...",
                         "name": "semester",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "..., 2021, 2022, 2023, ...",
+                        "name": "year",
                         "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "array of class_id",
+                        "description": "object GetClassBySemesterAndYearField",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "integer"
+                                "$ref": "#/definitions/service.GetClassBySemesterAndYearField"
                             }
                         }
                     },
@@ -1607,10 +1614,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Nontawat"
                 },
-                "id": {
-                    "type": "integer",
-                    "example": 64070501093
-                },
                 "lname": {
                     "type": "string",
                     "example": "Kunlayawuttipong"
@@ -1622,6 +1625,48 @@ const docTemplate = `{
                 "year": {
                     "type": "integer",
                     "example": 2021
+                }
+            }
+        },
+        "service.GetClassBySemesterAndYearField": {
+            "type": "object",
+            "properties": {
+                "course": {
+                    "type": "object",
+                    "properties": {
+                        "courseCode": {
+                            "type": "string",
+                            "example": "CPE313"
+                        },
+                        "courseName": {
+                            "type": "string",
+                            "example": "signals and linear systems"
+                        },
+                        "id": {
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "semester": {
+                            "type": "integer",
+                            "example": 2
+                        },
+                        "year": {
+                            "type": "integer",
+                            "example": 2021
+                        }
+                    }
+                },
+                "courseID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "section": {
+                    "type": "string",
+                    "example": "A"
                 }
             }
         },

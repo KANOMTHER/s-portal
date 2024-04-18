@@ -41,12 +41,33 @@ func (cs *ClassService) GetClassByCourseID(course_id string) ([]model.Class, err
 	return class, nil
 }
 
-func (cs *ClassService) GetClassBySemester(semester string) ([]uint, error) {
-	var class_id []uint
-	if err := cs.db.Model(&model.Class{}).Joins("inner join Courses on Classes.course_id = Courses.ID ").Distinct("Classes.ID").Order("Classes.ID ASC").Where("semester = ?", semester).Pluck("Classes.ID", &class_id).Error; err != nil {
+type GetClassBySemesterAndYearField struct {
+	ID 	uint `example:"1"`
+	Section     string `example:"A"`
+	CourseID	uint `example:"1"`
+	Course	struct {
+		ID			uint `example:"1"`
+		CourseCode  string `example:"CPE313"`
+		CourseName  string `example:"signals and linear systems"`
+		Semester	int `example:"2"`
+		Year		int `example:"2021"`
+	}
+}
+
+func (cs *ClassService) GetClassBySemesterAndYear(semester string, year string) ([]GetClassBySemesterAndYearField, error) {
+	var classData []GetClassBySemesterAndYearField
+	if err := cs.db.
+	Model(&model.Class{}).Debug().
+	InnerJoins("Course").
+	Distinct("classes.ID").
+	Select("classes.ID AS ID, classes.section AS Section, classes.course_id AS CourseID").
+	Order("classes.ID ASC").
+	Where("Course.semester = ? AND Course.year = ?", semester, year).
+	Find(&classData).Error; err != nil {
 		return nil, err
 	}
-	return class_id, nil
+
+	return classData, nil
 }
 
 func (cs *ClassService) DeleteClassByID(id string) error {

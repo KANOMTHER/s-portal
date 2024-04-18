@@ -101,18 +101,20 @@ func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 	})
 }
 
-//	@Summary		GetClassBySemester
-//	@Description	get class search by semester
+//	@Summary		GetClassBySemesterAndYear
+//	@Description	get class search by semester & year
 //	@Tags			Class
 //	@Accept			json
 //	@Produce		json
-//	@Param			semester	query		string	true	"1, 2, ..."
-//	@Success		200			{array}		uint	"array of class_id"
-//	@Failure		404			{object}	string	"some error message here (from err.Error())"
-//	@Router			/class/semester [GET]
-func (h *ClassHandler) GetClassBySemester(context *gin.Context) {
+//	@Param			semester	query		string									true	"1, 2, 3, ..."
+//	@Param			year		query		string									true	"..., 2021, 2022, 2023, ..."
+//	@Success		200			{array}		service.GetClassBySemesterAndYearField	"object GetClassBySemesterAndYearField"
+//	@Failure		404			{object}	string									"some error message here (from err.Error())"
+//	@Router			/class/semester-year [GET]
+func (h *ClassHandler) GetClassBySemesterAndYear(context *gin.Context) {
 	semester := context.Query("semester")
-	class, err := h.classService.GetClassBySemester(semester)
+	year := context.Query("year")
+	class, err := h.classService.GetClassBySemesterAndYear(semester, year)
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{

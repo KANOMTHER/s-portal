@@ -190,9 +190,6 @@ definitions:
       fname:
         example: Nontawat
         type: string
-      id:
-        example: 64070501093
-        type: integer
       lname:
         example: Kunlayawuttipong
         type: string
@@ -202,6 +199,36 @@ definitions:
       year:
         example: 2021
         type: integer
+    type: object
+  service.GetClassBySemesterAndYearField:
+    properties:
+      course:
+        properties:
+          courseCode:
+            example: CPE313
+            type: string
+          courseName:
+            example: signals and linear systems
+            type: string
+          id:
+            example: 1
+            type: integer
+          semester:
+            example: 2
+            type: integer
+          year:
+            example: 2021
+            type: integer
+        type: object
+      courseID:
+        example: 1
+        type: integer
+      id:
+        example: 1
+        type: integer
+      section:
+        example: A
+        type: string
     type: object
   service.GetProgramByFacultyIDField:
     properties:
@@ -402,31 +429,36 @@ paths:
       summary: DeleteClassByID
       tags:
       - Class
-  /class/semester:
+  /class/semester-year:
     get:
       consumes:
       - application/json
-      description: get class search by semester
+      description: get class search by semester & year
       parameters:
-      - description: 1, 2, ...
+      - description: 1, 2, 3, ...
         in: query
         name: semester
+        required: true
+        type: string
+      - description: '..., 2021, 2022, 2023, ...'
+        in: query
+        name: year
         required: true
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: array of class_id
+          description: object GetClassBySemesterAndYearField
           schema:
             items:
-              type: integer
+              $ref: '#/definitions/service.GetClassBySemesterAndYearField'
             type: array
         "404":
           description: some error message here (from err.Error())
           schema:
             type: string
-      summary: GetClassBySemester
+      summary: GetClassBySemesterAndYear
       tags:
       - Class
   /course:
