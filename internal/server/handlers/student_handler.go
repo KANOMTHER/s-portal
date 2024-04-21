@@ -175,3 +175,19 @@ func (h *StudentHandler) IsTA(context *gin.Context) {
 		"message": ta_id,
 	})
 }
+
+func (h *StudentHandler) GetStudentSchedule(context *gin.Context) {
+	schedule, err := h.studentService.GetStudentSchedule(context)
+	if err != nil {
+		// Handle error
+		context.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// Return success message
+	context.JSON(200, gin.H{
+		"message": schedule,
+	})
+}
