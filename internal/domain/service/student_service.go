@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+
 	"strconv"
 	"time"
 
@@ -13,6 +13,12 @@ import (
 
 type StudentService struct {
 	db *gorm.DB
+}
+
+func NewStudentService(db *gorm.DB) *StudentService {
+	return &StudentService{
+		db: db,
+	}
 }
 
 type CreateStudentFields struct {
@@ -27,83 +33,15 @@ type CreateStudentFields struct {
 	AdvisorID uint      `example:"1"`
 }
 
-func NewStudentService(db *gorm.DB) *StudentService {
-	return &StudentService{
-		db: db,
-	}
-}
+func (ss *StudentService) CreateStudent(student *CreateStudentFields) (int, error) {
+	Age := &AgingHandler{student: student}
+	Pop := &PopulationHandler{db: ss.db, student: student}
+	Regis := &DatabaseHandler{db: ss.db, student: student}
 
-func (ss *StudentService) createNewStudentId(student *CreateStudentFields) (*uint, error) {
-	/*
-		64 0705010 93
-		----------------
-		64 		year
-		0705010 program_prefix
-		093 	max_id + 1
-	*/
+	Age.SetNext(Pop)
+	Pop.SetNext(Regis)
 
-	// year = 64 0000000 00
-	year := (student.Year - 1957) * 1000000000
-
-	// program = 0705010
-	var program_prefix string
-	if err := ss.db.Model(&model.Program{}).Where("ID = ?", student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
-		return nil, err
-	}
-	program, err := strconv.ParseUint(program_prefix, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-
-	// mask := 64 0705010 00
-	// max_mask := 64 0705011 99
-	mask := uint(year) + uint(program*100)
-	max_mask := mask + 199
-
-	var max_id *uint
-	if err := ss.db.Model(&model.Student{}).
-		Where("ID > ? AND ID < ?", mask, max_mask).
-		Select("MAX(id)").
-		Scan(&max_id).
-		Error; err != nil {
-		return nil, err
-	}
-
-	// if this is the first student of the program, assign the mask
-	if max_id == nil {
-		max_id = &mask
-	}
-
-	// create new id for new student (max+1)
-	new_id := *max_id + 1
-	return &new_id, nil
-}
-
-func (ss *StudentService) CreateStudent(student *CreateStudentFields) error {
-	var err error
-	newID, err := ss.createNewStudentId(student)
-	if err != nil {
-		return err
-	}
-	student.ID = *newID
-	student.Entered = time.Now()
-	// change year to academic year
-	student.Year = 1
-
-	// create new student
-	if result := ss.db.Where("ID = ?", student.ID).FirstOrCreate(&model.Student{}, &student); result.Error != nil {
-		if result.RowsAffected == 0 {
-			return fmt.Errorf("unable to create student because this program is full %v,\n error msg: %v", student.ID, result.Error.Error())
-		}
-		return result.Error
-	}
-
-	user := model.User{ID: student.ID, PWD: strconv.FormatUint(uint64(student.ID), 10), Role: "student"}
-	if	err := ss.db.Create(&user).Error; err != nil {
-		return err
-	}
-
-	return nil
+	return Age.HandleRequest()
 }
 
 func (ss *StudentService) GetDistinctYears() ([]uint, error) {

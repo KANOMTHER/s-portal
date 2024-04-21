@@ -3,7 +3,6 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 
-	// "s-portal/internal/domain/model"
 	"s-portal/internal/domain/service"
 )
 
@@ -17,15 +16,15 @@ func NewStudentHandler(studentService *service.StudentService) *StudentHandler {
 	}
 }
 
-//	@Summary		CreateStudent
-//	@Description	create a new student
-//	@Tags			Student
-//	@Accept			json
-//	@Produce		json
-//	@Param			CreateStudentFields	body		service.CreateStudentFields	true	"CreateStudentFields object"
-//	@Success		200					{object}	string						"Student created successfully"
-//	@Failure		400					{object}	string						"some error message here (from err.Error())"
-//	@Router			/student [POST]
+// @Summary		CreateStudent
+// @Description	create a new student
+// @Tags			Student
+// @Accept			json
+// @Produce		json
+// @Param			CreateStudentFields	body		service.CreateStudentFields	true	"CreateStudentFields object"
+// @Success		200					{object}	string						"Student created successfully"
+// @Failure		400					{object}	string						"some error message here (from err.Error())"
+// @Router			/student [POST]
 func (h *StudentHandler) CreateStudent(context *gin.Context) {
 	student := service.CreateStudentFields{}
 
@@ -37,29 +36,29 @@ func (h *StudentHandler) CreateStudent(context *gin.Context) {
 		return
 	}
 
-	err := h.studentService.CreateStudent(&student)
+	status, err := h.studentService.CreateStudent(&student)
 	if err != nil {
 		// Handle error
-		context.JSON(400, gin.H{
+		context.JSON(status, gin.H{
 			"message": err.Error(),
 		})
 		return
 	}
 
 	// Return success message
-	context.JSON(200, gin.H{
+	context.JSON(status, gin.H{
 		"message": "Student created successfully",
 	})
 }
 
-//	@Summary		GetDistinctYears
-//	@Description	get a distinct year of student
-//	@Tags			Student
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{array}		uint	"Array of distinct year in dedscending order"
-//	@Failure		404	{object}	string	"some error message here (from err.Error())"
-//	@Router			/student/year [GET]
+// @Summary		GetDistinctYears
+// @Description	get a distinct year of student
+// @Tags			Student
+// @Accept			json
+// @Produce		json
+// @Success		200	{array}		uint	"Array of distinct year in dedscending order"
+// @Failure		404	{object}	string	"some error message here (from err.Error())"
+// @Router			/student/year [GET]
 func (h *StudentHandler) GetDistinctYears(context *gin.Context) {
 	distinct_year, err := h.studentService.GetDistinctYears()
 	if err != nil {
@@ -67,7 +66,7 @@ func (h *StudentHandler) GetDistinctYears(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -75,15 +74,15 @@ func (h *StudentHandler) GetDistinctYears(context *gin.Context) {
 	})
 }
 
-//	@Summary		GetStudentsByYear
-//	@Description	get a student by year
-//	@Tags			Student
-//	@Accept			json
-//	@Produce		json
-//	@Param			year	path		string	true	"64, 65, 66, 67, ..."
-//	@Success		200		{array}		uint	"Array of student's year [64, 65, 66, 67, ...]"
-//	@Failure		404		{object}	string	"some error message here (from err.Error())"
-//	@Router			/student/getByYear [GET]
+// @Summary		GetStudentsByYear
+// @Description	get a student by year
+// @Tags			Student
+// @Accept			json
+// @Produce		json
+// @Param			year	path		string	true	"64, 65, 66, 67, ..."
+// @Success		200		{array}		uint	"Array of student's year [64, 65, 66, 67, ...]"
+// @Failure		404		{object}	string	"some error message here (from err.Error())"
+// @Router			/student/getByYear [GET]
 func (h *StudentHandler) GetStudentsIDByYear(context *gin.Context) {
 	year := context.Param("year")
 	distinct_year, err := h.studentService.GetStudentsIDByYear(year)
@@ -92,7 +91,7 @@ func (h *StudentHandler) GetStudentsIDByYear(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -100,15 +99,15 @@ func (h *StudentHandler) GetStudentsIDByYear(context *gin.Context) {
 	})
 }
 
-//	@Summary		GetStudentByID
-//	@Description	get a student by id
-//	@Tags			Student
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	path		string	true	"student id"
-//	@Success		200	{object}	model.Student
-//	@Failure		404	{object}	string
-//	@Router			/student/{id} [GET]
+// @Summary		GetStudentByID
+// @Description	get a student by id
+// @Tags			Student
+// @Accept			json
+// @Produce		json
+// @Param			id	path		string	true	"student id"
+// @Success		200	{object}	model.Student
+// @Failure		404	{object}	string
+// @Router			/student/{id} [GET]
 func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 	id := context.Param("id")
 	student, err := h.studentService.GetStudentByID(id)
@@ -117,7 +116,7 @@ func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -125,16 +124,16 @@ func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 	})
 }
 
-//	@Summary		UpdateStudentByID
-//	@Description	update a student by id
-//	@Tags			Student
-//	@Accept			json
-//	@Produce		json
-//	@Param			id				path		string						true	"student id"
-//	@Param			updatedField	body		service.UpdateStudentFields	true	"UpdateStudentFields object"
-//	@Success		200				{object}	string						"Student updated successfully"
-//	@Failure		400				{object}	string						"some error message here (from err.Error())"
-//	@Router			/student/{id} [PUT]
+// @Summary		UpdateStudentByID
+// @Description	update a student by id
+// @Tags			Student
+// @Accept			json
+// @Produce		json
+// @Param			id				path		string						true	"student id"
+// @Param			updatedField	body		service.UpdateStudentFields	true	"UpdateStudentFields object"
+// @Success		200				{object}	string						"Student updated successfully"
+// @Failure		400				{object}	string						"some error message here (from err.Error())"
+// @Router			/student/{id} [PUT]
 func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.studentService.UpdateStudentByID(context, id)
@@ -143,7 +142,7 @@ func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
 		context.JSON(400, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return success message
 	context.JSON(200, gin.H{
@@ -151,15 +150,15 @@ func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
 	})
 }
 
-//	@Summary		IsTA
-//	@Description	check if a student is a TA
-//	@Tags			Student
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	path		string	true	"student id"
-//	@Success		200	{object}	uint	"TA id or null value if not TA"
-//	@Failure		404	{object}	string	"some error message here (from err.Error())"
-//	@Router			/student/is-ta/{id} [GET]
+// @Summary		IsTA
+// @Description	check if a student is a TA
+// @Tags			Student
+// @Accept			json
+// @Produce		json
+// @Param			id	path		string	true	"student id"
+// @Success		200	{object}	uint	"TA id or null value if not TA"
+// @Failure		404	{object}	string	"some error message here (from err.Error())"
+// @Router			/student/is-ta/{id} [GET]
 func (h *StudentHandler) IsTA(context *gin.Context) {
 	id := context.Param("id")
 	ta_id, err := h.studentService.IsTA(id)
@@ -168,7 +167,7 @@ func (h *StudentHandler) IsTA(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
