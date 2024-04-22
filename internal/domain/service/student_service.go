@@ -80,10 +80,10 @@ func (ss *StudentService) getMaxStudentId(student *CreateStudentFields, db *gorm
 func (ss *StudentService) CreateStudent(student *CreateStudentFields) (int, error) {
 	Age := &AgingHandler{student: student}
 	Pop := &PopulationHandler{db: ss.db, student: student}
-	Regis := &DatabaseHandler{db: ss.db, student: student}
+	Create := &CreateStudentHandler{db: ss.db, student: student}
 
 	Age.SetNext(Pop)
-	Pop.SetNext(Regis)
+	Pop.SetNext(Create)
 
 	return Age.HandleRequest()
 }

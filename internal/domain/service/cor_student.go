@@ -92,14 +92,14 @@ func (ph *PopulationHandler) HandleRequest() (untyped int, err error) {
 }
 
 // ------------------------------------------------------------
-// DatabaseHandler handles student registration.
-type DatabaseHandler struct {
+// CreateStudentHandler handles student registration.
+type CreateStudentHandler struct {
 	BaseHandler
 	db      *gorm.DB
 	student *CreateStudentFields
 }
 
-func (rh *DatabaseHandler) createNewStudentRecord() (untyped int, err error) {
+func (rh *CreateStudentHandler) createNewStudentRecord() (untyped int, err error) {
 	// add in student table
 	if result := rh.db.FirstOrCreate(&model.Student{}, &rh.student); result.Error != nil {
 		return http.StatusBadRequest, result.Error
@@ -113,7 +113,7 @@ func (rh *DatabaseHandler) createNewStudentRecord() (untyped int, err error) {
 	return http.StatusOK, nil
 }
 
-func (rh *DatabaseHandler) HandleRequest() (untyped int, err error) {
+func (rh *CreateStudentHandler) HandleRequest() (untyped int, err error) {
 	ss := NewStudentService(rh.db)
 	maxID, err := ss.getMaxStudentId(rh.student, rh.db)
 	if err != nil {
