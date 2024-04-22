@@ -69,33 +69,18 @@ type PopulationHandler struct {
 }
 
 func (ph *PopulationHandler) HandleRequest() (untyped int, err error) {
-	// year = 64 0000000 00
-	year := (ph.student.Year - 1957) * 1000000000
-	// program = 0705010
-	var program_prefix string
-	if err := ph.db.Model(&model.Program{}).Where("ID = ?", ph.student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
-		return http.StatusBadRequest, err
-	}
-	program, err := strconv.ParseUint(program_prefix, 10, 64)
+	ss := NewStudentService(ph.db)
+	max_id, err := ss.getMaxStudentId(ph.student, ph.db)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
-	// mask := 64 0705010 00
-	// max_mask := 64 0705011 99
-	RANGE_PROGRAM := uint(199)
-	mask := uint(year) + uint(program*100)
-	max_mask := mask + RANGE_PROGRAM
-	var max_id *uint
-	if err := ph.db.Model(&model.Student{}).
-		Where("ID > ? AND ID <= ?", mask, max_mask).
-		Select("MAX(id)").
-		Scan(&max_id).
-		Error; err != nil {
-		return http.StatusInternalServerError, err
-	}
-
+	// 64 0705010 93
+	// order = max_id % 100 // order = 93
+	// mask = max_id - order // mask = 64 0705010 00
+	mask := *max_id - (*max_id % 100)
+	new_id := *max_id + 1
 	MAX_STUDENT := uint(199)
-	if (*max_id - (mask + 1) + 1) >= MAX_STUDENT {
+	if (new_id - (mask + 1) + 1) > MAX_STUDENT {
 		return http.StatusBadRequest, fmt.Errorf("program is full")
 	}
 
@@ -114,53 +99,6 @@ type DatabaseHandler struct {
 	student *CreateStudentFields
 }
 
-func (rh *DatabaseHandler) createNewStudentId() (*uint, error) {
-	/*
-		64 0705010 93
-		----------------
-		64 		year
-		0705010 program_prefix
-		093 	max_id + 1
-	*/
-
-	// year = 64 0000000 00
-	year := (rh.student.Year - 1957) * 1000000000
-
-	// program = 0705010
-	var program_prefix string
-	if err := rh.db.Model(&model.Program{}).Where("ID = ?", rh.student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
-		return nil, err
-	}
-	program, err := strconv.ParseUint(program_prefix, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-
-	// mask := 64 0705010 00
-	// max_mask := 64 0705011 99
-	RANGE_PROGRAM := uint(199)
-	mask := uint(year) + uint(program*100)
-	max_mask := mask + RANGE_PROGRAM
-
-	var max_id *uint
-	if err := rh.db.Model(&model.Student{}).
-		Where("ID > ? AND ID < ?", mask, max_mask).
-		Select("MAX(id)").
-		Scan(&max_id).
-		Error; err != nil {
-		return nil, err
-	}
-
-	// if this is the first student of the program, assign the mask
-	if max_id == nil {
-		max_id = &mask
-	}
-
-	// create new id for new student (max+1)
-	new_id := *max_id + 1
-	return &new_id, nil
-}
-
 func (rh *DatabaseHandler) createNewStudentRecord() (untyped int, err error) {
 	// add in student table
 	if result := rh.db.FirstOrCreate(&model.Student{}, &rh.student); result.Error != nil {
@@ -176,13 +114,13 @@ func (rh *DatabaseHandler) createNewStudentRecord() (untyped int, err error) {
 }
 
 func (rh *DatabaseHandler) HandleRequest() (untyped int, err error) {
-
-	newID, err := rh.createNewStudentId()
+	ss := NewStudentService(rh.db)
+	maxID, err := ss.getMaxStudentId(rh.student, rh.db)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
 
-	rh.student.ID = *newID
+	rh.student.ID = *maxID + 1
 	rh.student.Entered = time.Now()
 	rh.student.Year = 1 // change year to academic year
 
