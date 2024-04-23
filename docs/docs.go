@@ -688,6 +688,199 @@ const docTemplate = `{
                 }
             }
         },
+        "/instructor": {
+            "get": {
+                "description": "get all instructors",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "GetAllInstructors",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Instructor"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No instructors found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new instructor",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "CreateInstructor",
+                "parameters": [
+                    {
+                        "description": "Instructor object",
+                        "name": "instructor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Instructor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/instructor/delete/{id}": {
+            "delete": {
+                "description": "delete a instructor by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "DeleteInstructorByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "instructor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/instructor/update/{id}": {
+            "put": {
+                "description": "update a instructor by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "UpdateInstructorByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Instructor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Instructor object",
+                        "name": "Instructor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Instructor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/instructor/{id}": {
+            "get": {
+                "description": "get a instructor by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "GetInstructorByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "instructor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor object",
+                        "schema": {
+                            "$ref": "#/definitions/model.Instructor"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/professor": {
             "get": {
                 "description": "get all professors",
@@ -1616,6 +1809,29 @@ const docTemplate = `{
                 "major": {
                     "type": "string",
                     "example": "Engineering"
+                }
+            }
+        },
+        "model.Instructor": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "$ref": "#/definitions/model.Class"
+                },
+                "classID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "professor": {
+                    "$ref": "#/definitions/model.Professor"
+                },
+                "professorID": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },

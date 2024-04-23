@@ -1,12 +1,12 @@
 package service
 
 import (
-    "fmt"
+	"fmt"
 
-    "github.com/gin-gonic/gin"
-    "gorm.io/gorm"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 
-    "s-portal/internal/domain/model"
+	"s-portal/internal/domain/model"
 )
 
 type InstructorService struct {
@@ -36,7 +36,10 @@ func (is *InstructorService) CreateInstructor(instructor *model.Instructor) erro
 
 func (is *InstructorService) GetInstructorByID(id string) (*model.Instructor, error) {
     var instructor *model.Instructor
-    if err := is.db.Preload("Faculty").First(&instructor, id).Error; err != nil {
+    if err := is.db.
+    Preload("Professor.Faculty").
+    Preload("Class.Course").
+    First(&instructor, id).Error; err != nil {
         return nil, err
     }
     return instructor, nil
