@@ -17,6 +17,14 @@ func NewProfessorHandler(professorService *service.ProfessorService) *ProfessorH
 	}
 }
 
+//	@Summary		GetAllProfessors
+//	@Description	get all professors
+//	@Tags			Professor
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		service.ProfessorProfile
+//	@Failure		404	{object}	string	"No professors found"
+//	@Router			/professor [GET]
 func (h *ProfessorHandler) GetAllProfessors(context *gin.Context) {
 	professors, err := h.professorService.GetAllProfessors()
 	if err != nil {
@@ -31,6 +39,15 @@ func (h *ProfessorHandler) GetAllProfessors(context *gin.Context) {
 	})
 }
 
+//	@Summary		CreateProfessor
+//	@Description	create a new professor
+//	@Tags			Professor
+//	@Accept			json
+//	@Produce		json
+//	@Param			professor	body		model.Professor	true	"Professor object"
+//	@Success		200			{object}	string			"Professor created successfully"
+//	@Failure		400			{object}	string			"some error message here (from err.Error())"
+//	@Router			/professor [POST]
 func (h *ProfessorHandler) CreateProfessor(context *gin.Context) {
 	professor := model.Professor{}
 
@@ -56,6 +73,15 @@ func (h *ProfessorHandler) CreateProfessor(context *gin.Context) {
 	})
 }
 
+//	@Summary		GetProfessorByID
+//	@Description	get a program by id
+//	@Tags			Professor
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string						true	"professor id"
+//	@Success		200	{object}	service.ProfessorProfile	"ProfessorProfile object"
+//	@Failure		404	{object}	string						"some error message here (from err.Error())"
+//	@Router			/professor/{id} [GET]
 func (h *ProfessorHandler) GetProfessorByID(context *gin.Context) {
 	id := context.Param("id")
 	professor, err := h.professorService.GetProfessorByID(id)
@@ -88,6 +114,16 @@ func (h *ProfessorHandler) GetProfessorScheduleByID(context *gin.Context) {
 	})
 }
 
+//	@Summary		UpdateProfessorByID
+//	@Description	update a professor by id
+//	@Tags			Professor
+//	@Accept			json
+//	@Produce		json
+//	@Param			id			path		string			true	"professor id"
+//	@Param			Professor	body		model.Professor	true	"Program object"
+//	@Success		200			{object}	string			"Professor updated successfully"
+//	@Failure		404			{object}	string			"some error message here (from err.Error())"
+//	@Router			/professor/update/{id} [PUT]
 func (h *ProfessorHandler) UpdateProfessorByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.professorService.UpdateProfessorByID(context, id)
@@ -104,6 +140,15 @@ func (h *ProfessorHandler) UpdateProfessorByID(context *gin.Context) {
 	})
 }
 
+//	@Summary		DeleteProfessorByID
+//	@Description	delete a professor by id
+//	@Tags			Professor
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"professor id"
+//	@Success		200	{object}	string	"Professor deleted successfully"
+//	@Failure		404	{object}	string	"some error message here (from err.Error())"
+//	@Router			/professor/delete/{id} [DELETE]
 func (h *ProfessorHandler) DeleteProfessorByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.professorService.DeleteProfessorByID(id)

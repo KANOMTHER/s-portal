@@ -21,17 +21,17 @@ func NewProfessorService(db *gorm.DB) *ProfessorService {
 }
 
 type ProfessorProfile struct {
-	ID        uint
-	FName     string
-	LName     string
-	Email     string
-	Phone     string
-	Position  string
-	FacultyID uint
+	ID        uint `example:"1"`
+	FName     string `example:"John"`
+	LName     string `example:"Doe"`
+	Email     string `example:"Juwan98@example.net"`
+	Phone     string `example:"744-512-3072"`
+	Position  string `example:"Professor"`
+	FacultyID uint `example:"1"`
 	Faculty   struct {
-		ID         uint
-		Major      string
-		Department string
+		ID         uint `example:"1"`
+		Major      string `example:"Software"`
+		Department string `example:"Engineering"`
 	}
 }
 

@@ -682,6 +682,199 @@
                 }
             }
         },
+        "/professor": {
+            "get": {
+                "description": "get all professors",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professor"
+                ],
+                "summary": "GetAllProfessors",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.ProfessorProfile"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No professors found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new professor",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professor"
+                ],
+                "summary": "CreateProfessor",
+                "parameters": [
+                    {
+                        "description": "Professor object",
+                        "name": "professor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Professor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Professor created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/professor/delete/{id}": {
+            "delete": {
+                "description": "delete a professor by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professor"
+                ],
+                "summary": "DeleteProfessorByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "professor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Professor deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/professor/update/{id}": {
+            "put": {
+                "description": "update a professor by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professor"
+                ],
+                "summary": "UpdateProfessorByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "professor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Program object",
+                        "name": "Professor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Professor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Professor updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/professor/{id}": {
+            "get": {
+                "description": "get a program by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professor"
+                ],
+                "summary": "GetProfessorByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "professor id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ProfessorProfile object",
+                        "schema": {
+                            "$ref": "#/definitions/service.ProfessorProfile"
+                        }
+                    },
+                    "404": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/program": {
             "get": {
                 "description": "get all programs",
@@ -1423,38 +1616,36 @@
         "model.Professor": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Juwan98@example.net"
                 },
                 "faculty": {
                     "$ref": "#/definitions/model.Faculty"
                 },
                 "facultyID": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "fname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "John"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "lname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Doe"
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "744-512-3072"
                 },
                 "position": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Professor"
                 }
             }
         },
@@ -1724,6 +1915,56 @@
                 "startTime": {
                     "type": "string",
                     "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "service.ProfessorProfile": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "Juwan98@example.net"
+                },
+                "faculty": {
+                    "type": "object",
+                    "properties": {
+                        "department": {
+                            "type": "string",
+                            "example": "Engineering"
+                        },
+                        "id": {
+                            "type": "integer",
+                            "example": 1
+                        },
+                        "major": {
+                            "type": "string",
+                            "example": "Software"
+                        }
+                    }
+                },
+                "facultyID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "744-512-3072"
+                },
+                "position": {
+                    "type": "string",
+                    "example": "Professor"
                 }
             }
         },

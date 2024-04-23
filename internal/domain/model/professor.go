@@ -5,14 +5,14 @@ import (
 )
 
 type Professor struct {
-	gorm.Model
-	ID            uint `gorm:"primaryKey"`
-	FName         string
-	LName         string
-	Email 		  string
-	Phone         string
-	Position      string
-	FacultyID     uint
+	gorm.Model `swaggerignore:"true"`
+	ID            uint `gorm:"primaryKey" example:"1"`
+	FName         string `example:"John"`
+	LName         string `example:"Doe"`
+	Email 		  string `example:"Juwan98@example.net"`
+	Phone         string `example:"744-512-3072"`
+	Position      string `example:"Professor"`
+	FacultyID     uint `example:"1"`
 	Faculty       Faculty
 }
 
