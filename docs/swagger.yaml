@@ -201,24 +201,6 @@ definitions:
         example: "2021-08-01T08:00:00Z"
         type: string
     type: object
-  model.UpdateStudentFields:
-    properties:
-      email:
-        example: example@hotmail.com
-        type: string
-      fname:
-        example: Nontawat
-        type: string
-      graduated:
-        example: "2024-04-16T00:00:00Z"
-        type: string
-      lname:
-        example: Kunlayawuttipong
-        type: string
-      phone:
-        example: "0812345678"
-        type: string
-    type: object
   service.GetClassBySemesterAndYearField:
     properties:
       course:
@@ -290,6 +272,24 @@ definitions:
         type: string
       startTime:
         example: "2021-08-01T08:00:00Z"
+        type: string
+    type: object
+  service.UpdateStudentFields:
+    properties:
+      email:
+        example: example@hotmail.com
+        type: string
+      fname:
+        example: Nontawat
+        type: string
+      graduated:
+        example: "2024-04-16T00:00:00Z"
+        type: string
+      lname:
+        example: Kunlayawuttipong
+        type: string
+      phone:
+        example: "0812345678"
         type: string
     type: object
   time.Weekday:
@@ -1037,7 +1037,7 @@ paths:
         name: updatedField
         required: true
         schema:
-          $ref: '#/definitions/model.UpdateStudentFields'
+          $ref: '#/definitions/service.UpdateStudentFields'
       produces:
       - application/json
       responses:

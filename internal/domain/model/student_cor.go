@@ -27,6 +27,18 @@ func (h *BaseHandler) SetNext(handler Handler) {
 	h.nextHandler = handler
 }
 
+type CreateStudentFields struct {
+	ID        uint      `swaggerignore:"true"`
+	ProgramID uint      `example:"1" binding:"required"`
+	Degree    string    `example:"Bachelor"`
+	Year      int       `example:"2021"`
+	FName     string    `example:"Nontawat"`
+	LName     string    `example:"Kunlayawuttipong"`
+	DOB       time.Time `example:"2002-12-18T00:00:00Z" binding:"required"`
+	Entered   time.Time `swaggerignore:"true"`
+	AdvisorID uint      `example:"1" binding:"required"`
+}
+
 // ------------------------------------------------------------
 // AgingHandler handles Student registration.
 

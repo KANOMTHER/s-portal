@@ -131,7 +131,7 @@ func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Param			id				path		string						true	"student id"
-// @Param			updatedField	body		model.UpdateStudentFields	true	"UpdateStudentFields object"
+// @Param			updatedField	body		service.UpdateStudentFields	true	"UpdateStudentFields object"
 // @Success		200				{object}	string						"Student updated successfully"
 // @Failure		400				{object}	string						"some error message here (from err.Error())"
 // @Router			/student/update/{id} [PUT]

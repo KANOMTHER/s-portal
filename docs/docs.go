@@ -1068,7 +1068,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UpdateStudentFields"
+                            "$ref": "#/definitions/service.UpdateStudentFields"
                         }
                     }
                 ],
@@ -1631,31 +1631,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UpdateStudentFields": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "example@hotmail.com"
-                },
-                "fname": {
-                    "type": "string",
-                    "example": "Nontawat"
-                },
-                "graduated": {
-                    "type": "string",
-                    "example": "2024-04-16T00:00:00Z"
-                },
-                "lname": {
-                    "type": "string",
-                    "example": "Kunlayawuttipong"
-                },
-                "phone": {
-                    "type": "string",
-                    "example": "0812345678"
-                }
-            }
-        },
         "service.GetClassBySemesterAndYearField": {
             "type": "object",
             "properties": {
@@ -1758,6 +1733,31 @@ const docTemplate = `{
                 "startTime": {
                     "type": "string",
                     "example": "2021-08-01T08:00:00Z"
+                }
+            }
+        },
+        "service.UpdateStudentFields": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "example@hotmail.com"
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "Nontawat"
+                },
+                "graduated": {
+                    "type": "string",
+                    "example": "2024-04-16T00:00:00Z"
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Kunlayawuttipong"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0812345678"
                 }
             }
         },

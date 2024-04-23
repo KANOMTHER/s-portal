@@ -2,6 +2,7 @@ package service
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -57,8 +58,16 @@ func (ss *StudentService) GetStudentByID(id string) (*model.Student, error) {
 	return student, nil
 }
 
+type UpdateStudentFields struct {
+	FName     string     `example:"Nontawat"`
+	LName     string     `example:"Kunlayawuttipong"`
+	Graduated *time.Time `example:"2024-04-16T00:00:00Z"`
+	Email     string     `example:"example@hotmail.com"`
+	Phone     string     `example:"0812345678"`
+}
+
 func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string) error {
-	student := model.UpdateStudentFields{}
+	student := UpdateStudentFields{}
 	if err := ss.db.First(&model.Student{}, id).Error; err != nil {
 		return err
 	}
