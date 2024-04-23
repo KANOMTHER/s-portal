@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"s-portal/internal/domain/service"
+	"s-portal/internal/domain/model"
 )
 
 type StudentHandler struct {
@@ -21,12 +22,12 @@ func NewStudentHandler(studentService *service.StudentService) *StudentHandler {
 // @Tags			Student
 // @Accept			json
 // @Produce		json
-// @Param			CreateStudentFields	body		service.CreateStudentFields	true	"CreateStudentFields object"
+// @Param			CreateStudentFields	body		model.CreateStudentFields	true	"CreateStudentFields object"
 // @Success		200					{object}	string						"Student created successfully"
 // @Failure		400					{object}	string						"some error message here (from err.Error())"
 // @Router			/student [POST]
 func (h *StudentHandler) CreateStudent(context *gin.Context) {
-	student := service.CreateStudentFields{}
+	student := model.CreateStudentFields{}
 
 	if err := context.ShouldBindJSON(&student); err != nil {
 		// Handle error
@@ -130,10 +131,10 @@ func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Param			id				path		string						true	"student id"
-// @Param			updatedField	body		service.UpdateStudentFields	true	"UpdateStudentFields object"
+// @Param			updatedField	body		model.UpdateStudentFields	true	"UpdateStudentFields object"
 // @Success		200				{object}	string						"Student updated successfully"
 // @Failure		400				{object}	string						"some error message here (from err.Error())"
-// @Router			/student/{id} [PUT]
+// @Router			/student/update/{id} [PUT]
 func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.studentService.UpdateStudentByID(context, id)

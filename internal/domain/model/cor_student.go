@@ -1,13 +1,12 @@
-package service
+package model
 
 import (
 	"fmt"
+
 	"strconv"
 	"time"
 
 	"net/http"
-
-	"s-portal/internal/domain/model"
 
 	"gorm.io/gorm"
 )
@@ -29,10 +28,11 @@ func (h *BaseHandler) SetNext(handler Handler) {
 }
 
 // ------------------------------------------------------------
-// AgingHandler handles student registration.
+// AgingHandler handles Student registration.
+
 type AgingHandler struct {
 	BaseHandler
-	student *CreateStudentFields
+	Student *CreateStudentFields
 }
 
 func (ah *AgingHandler) calculateAge(dob time.Time) int {
@@ -49,8 +49,8 @@ func (ah *AgingHandler) calculateAge(dob time.Time) int {
 
 func (ah *AgingHandler) HandleRequest() (untyped int, err error) {
 
-	if ah.calculateAge(ah.student.DOB) < 10 {
-		return http.StatusBadRequest, fmt.Errorf("student must be at least 10 years old")
+	if ah.calculateAge(ah.Student.DOB) < 10 {
+		return http.StatusBadRequest, fmt.Errorf("Student must be at least 10 years old")
 	}
 
 	// Call the next handler in the chain.
@@ -61,16 +61,15 @@ func (ah *AgingHandler) HandleRequest() (untyped int, err error) {
 }
 
 // ------------------------------------------------------------
-// PopulationHandler handles student registration.
+// PopulationHandler handles Student registration.
 type PopulationHandler struct {
 	BaseHandler
-	db      *gorm.DB
-	student *CreateStudentFields
+	Db      *gorm.DB
+	Student *CreateStudentFields
 }
 
 func (ph *PopulationHandler) HandleRequest() (untyped int, err error) {
-	ss := NewStudentService(ph.db)
-	max_id, err := ss.getMaxStudentId(ph.student, ph.db)
+	max_id, err := getMaxStudentId(ph.Student, ph.Db)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
@@ -92,37 +91,36 @@ func (ph *PopulationHandler) HandleRequest() (untyped int, err error) {
 }
 
 // ------------------------------------------------------------
-// CreateStudentHandler handles student registration.
+// CreateStudentHandler handles Student registration.
 type CreateStudentHandler struct {
 	BaseHandler
-	db      *gorm.DB
-	student *CreateStudentFields
+	Db      *gorm.DB
+	Student *CreateStudentFields
 }
 
 func (rh *CreateStudentHandler) createNewStudentRecord() (untyped int, err error) {
-	// add in student table
-	if result := rh.db.FirstOrCreate(&model.Student{}, &rh.student); result.Error != nil {
+	// add in Student table
+	if result := rh.Db.FirstOrCreate(&Student{}, &rh.Student); result.Error != nil {
 		return http.StatusBadRequest, result.Error
 	}
 
 	// add in user table
-	user := model.User{ID: rh.student.ID, PWD: strconv.FormatUint(uint64(rh.student.ID), 10), Role: "student"}
-	if err := rh.db.Create(&user).Error; err != nil {
+	user := User{ID: rh.Student.ID, PWD: strconv.FormatUint(uint64(rh.Student.ID), 10), Role: "Student"}
+	if err := rh.Db.Create(&user).Error; err != nil {
 		return http.StatusBadRequest, err
 	}
 	return http.StatusOK, nil
 }
 
 func (rh *CreateStudentHandler) HandleRequest() (untyped int, err error) {
-	ss := NewStudentService(rh.db)
-	maxID, err := ss.getMaxStudentId(rh.student, rh.db)
+	maxID, err := getMaxStudentId(rh.Student, rh.Db)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
 
-	rh.student.ID = *maxID + 1
-	rh.student.Entered = time.Now()
-	rh.student.Year = 1 // change year to academic year
+	rh.Student.ID = *maxID + 1
+	rh.Student.Entered = time.Now()
+	rh.Student.Year = 1 // change year to academic year
 
 	status, err := rh.createNewStudentRecord()
 	if err != nil {
@@ -135,4 +133,48 @@ func (rh *CreateStudentHandler) HandleRequest() (untyped int, err error) {
 	}
 
 	return status, nil
+}
+
+func getMaxStudentId(student *CreateStudentFields, Db *gorm.DB) (*uint, error) {
+	/*
+		64 0705010 93
+		----------------
+		64 		year
+		0705010 program_prefix
+		093 	max_id + 1
+	*/
+
+	// year = 64 0000000 00
+	year := (student.Year - 1957) * 1000000000
+
+	// program = 0705010
+	var program_prefix string
+	if err := Db.Model(&Program{}).Where("ID = ?", student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
+		return nil, err
+	}
+	program, err := strconv.ParseUint(program_prefix, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	// mask := 64 0705010 00
+	// max_mask := 64 0705011 99
+	RANGE_PROGRAM := uint(199)
+	mask := uint(year) + uint(program*100)
+	max_mask := mask + RANGE_PROGRAM
+
+	var max_id *uint
+	if err := Db.Model(&Student{}).
+		Where("ID > ? AND ID < ?", mask, max_mask).
+		Select("MAX(id)").
+		Scan(&max_id).
+		Error; err != nil {
+		return nil, err
+	}
+
+	// if this is the first Student of the program, assign the mask
+	if max_id == nil {
+		max_id = &mask
+	}
+	return max_id, nil
 }

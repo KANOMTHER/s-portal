@@ -1,9 +1,7 @@
 package service
 
 import (
-
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -21,66 +19,10 @@ func NewStudentService(db *gorm.DB) *StudentService {
 	}
 }
 
-type CreateStudentFields struct {
-	ID        uint      `swaggerignore:"true"`
-	ProgramID uint      `example:"1"`
-	Degree    string    `example:"Bachelor"`
-	Year      int       `example:"2021"`
-	FName     string    `example:"Nontawat"`
-	LName     string    `example:"Kunlayawuttipong"`
-	DOB       time.Time `example:"2002-12-18T00:00:00Z"`
-	Entered   time.Time `example:"2024-04-16T00:00:00Z"`
-	AdvisorID uint      `example:"1"`
-}
-
-func (ss *StudentService) getMaxStudentId(student *CreateStudentFields, db *gorm.DB) (*uint, error) {
-	/*
-		64 0705010 93
-		----------------
-		64 		year
-		0705010 program_prefix
-		093 	max_id + 1
-	*/
-
-	// year = 64 0000000 00
-	year := (student.Year - 1957) * 1000000000
-
-	// program = 0705010
-	var program_prefix string
-	if err := db.Model(&model.Program{}).Where("ID = ?", student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
-		return nil, err
-	}
-	program, err := strconv.ParseUint(program_prefix, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-
-	// mask := 64 0705010 00
-	// max_mask := 64 0705011 99
-	RANGE_PROGRAM := uint(199)
-	mask := uint(year) + uint(program*100)
-	max_mask := mask + RANGE_PROGRAM
-
-	var max_id *uint
-	if err := db.Model(&model.Student{}).
-		Where("ID > ? AND ID < ?", mask, max_mask).
-		Select("MAX(id)").
-		Scan(&max_id).
-		Error; err != nil {
-		return nil, err
-	}
-
-	// if this is the first student of the program, assign the mask
-	if max_id == nil {
-		max_id = &mask
-	}
-	return max_id, nil
-}
-
-func (ss *StudentService) CreateStudent(student *CreateStudentFields) (int, error) {
-	Age := &AgingHandler{student: student}
-	Pop := &PopulationHandler{db: ss.db, student: student}
-	Create := &CreateStudentHandler{db: ss.db, student: student}
+func (ss *StudentService) CreateStudent(student *model.CreateStudentFields) (int, error) {
+	Age := &model.AgingHandler{Student: student}
+	Pop := &model.PopulationHandler{Db: ss.db, Student: student}
+	Create := &model.CreateStudentHandler{Db: ss.db, Student: student}
 
 	Age.SetNext(Pop)
 	Pop.SetNext(Create)
@@ -115,16 +57,8 @@ func (ss *StudentService) GetStudentByID(id string) (*model.Student, error) {
 	return student, nil
 }
 
-type UpdateStudentFields struct {
-	FName     string     `example:"Nontawat"`
-	LName     string     `example:"Kunlayawuttipong"`
-	Graduated *time.Time `example:"2024-04-16T00:00:00Z"`
-	Email     string     `example:"example@hotmail.com"`
-	Phone     string     `example:"0812345678"`
-}
-
 func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string) error {
-	student := UpdateStudentFields{}
+	student := model.UpdateStudentFields{}
 	if err := ss.db.First(&model.Student{}, id).Error; err != nil {
 		return err
 	}
@@ -185,4 +119,3 @@ func (ss *StudentService) GetStudentSchedule(context *gin.Context) ([]GetTimetab
 
 	return student_timeTable, nil
 }
-

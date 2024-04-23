@@ -942,7 +942,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/service.CreateStudentFields"
+                            "$ref": "#/definitions/model.CreateStudentFields"
                         }
                     }
                 ],
@@ -1041,6 +1041,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/student/update/{id}": {
+            "put": {
+                "description": "update a student by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "UpdateStudentByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "student id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateStudentFields object",
+                        "name": "updatedField",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateStudentFields"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/student/year": {
             "get": {
                 "description": "get a distinct year of student",
@@ -1104,51 +1151,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update a student by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Student"
-                ],
-                "summary": "UpdateStudentByID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "student id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "UpdateStudentFields object",
-                        "name": "updatedField",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/service.UpdateStudentFields"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Student updated successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "some error message here (from err.Error())",
                         "schema": {
                             "type": "string"
                         }
@@ -1409,6 +1411,44 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateStudentFields": {
+            "type": "object",
+            "required": [
+                "advisorID",
+                "dob",
+                "programID"
+            ],
+            "properties": {
+                "advisorID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "degree": {
+                    "type": "string",
+                    "example": "Bachelor"
+                },
+                "dob": {
+                    "type": "string",
+                    "example": "2002-12-18T00:00:00Z"
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "Nontawat"
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Kunlayawuttipong"
+                },
+                "programID": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "year": {
+                    "type": "integer",
+                    "example": 2021
+                }
+            }
+        },
         "model.Faculty": {
             "type": "object",
             "properties": {
@@ -1591,40 +1631,28 @@ const docTemplate = `{
                 }
             }
         },
-        "service.CreateStudentFields": {
+        "model.UpdateStudentFields": {
             "type": "object",
             "properties": {
-                "advisorID": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "degree": {
+                "email": {
                     "type": "string",
-                    "example": "Bachelor"
-                },
-                "dob": {
-                    "type": "string",
-                    "example": "2002-12-18T00:00:00Z"
-                },
-                "entered": {
-                    "type": "string",
-                    "example": "2024-04-16T00:00:00Z"
+                    "example": "example@hotmail.com"
                 },
                 "fname": {
                     "type": "string",
                     "example": "Nontawat"
                 },
+                "graduated": {
+                    "type": "string",
+                    "example": "2024-04-16T00:00:00Z"
+                },
                 "lname": {
                     "type": "string",
                     "example": "Kunlayawuttipong"
                 },
-                "programID": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "year": {
-                    "type": "integer",
-                    "example": 2021
+                "phone": {
+                    "type": "string",
+                    "example": "0812345678"
                 }
             }
         },
@@ -1730,31 +1758,6 @@ const docTemplate = `{
                 "startTime": {
                     "type": "string",
                     "example": "2021-08-01T08:00:00Z"
-                }
-            }
-        },
-        "service.UpdateStudentFields": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "example@hotmail.com"
-                },
-                "fname": {
-                    "type": "string",
-                    "example": "Nontawat"
-                },
-                "graduated": {
-                    "type": "string",
-                    "example": "2024-04-16T00:00:00Z"
-                },
-                "lname": {
-                    "type": "string",
-                    "example": "Kunlayawuttipong"
-                },
-                "phone": {
-                    "type": "string",
-                    "example": "0812345678"
                 }
             }
         },
