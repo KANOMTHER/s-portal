@@ -50,6 +50,34 @@ definitions:
         example: 3
         type: integer
     type: object
+  model.CreateStudentFields:
+    properties:
+      advisorID:
+        example: 1
+        type: integer
+      degree:
+        example: Bachelor
+        type: string
+      dob:
+        example: "2002-12-18T00:00:00Z"
+        type: string
+      fname:
+        example: Nontawat
+        type: string
+      lname:
+        example: Kunlayawuttipong
+        type: string
+      programID:
+        example: 1
+        type: integer
+      year:
+        example: 2021
+        type: integer
+    required:
+    - advisorID
+    - dob
+    - programID
+    type: object
   model.Faculty:
     properties:
       department:
@@ -189,33 +217,6 @@ definitions:
       startTime:
         example: "2021-08-01T08:00:00Z"
         type: string
-    type: object
-  service.CreateStudentFields:
-    properties:
-      advisorID:
-        example: 1
-        type: integer
-      degree:
-        example: Bachelor
-        type: string
-      dob:
-        example: "2002-12-18T00:00:00Z"
-        type: string
-      entered:
-        example: "2024-04-16T00:00:00Z"
-        type: string
-      fname:
-        example: Nontawat
-        type: string
-      lname:
-        example: Kunlayawuttipong
-        type: string
-      programID:
-        example: 1
-        type: integer
-      year:
-        example: 2021
-        type: integer
     type: object
   service.GetClassBySemesterAndYearField:
     properties:
@@ -1235,7 +1236,7 @@ paths:
         name: CreateStudentFields
         required: true
         schema:
-          $ref: '#/definitions/service.CreateStudentFields'
+          $ref: '#/definitions/model.CreateStudentFields'
       produces:
       - application/json
       responses:
@@ -1273,36 +1274,6 @@ paths:
           schema:
             type: string
       summary: GetStudentByID
-      tags:
-      - Student
-    put:
-      consumes:
-      - application/json
-      description: update a student by id
-      parameters:
-      - description: student id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: UpdateStudentFields object
-        in: body
-        name: updatedField
-        required: true
-        schema:
-          $ref: '#/definitions/service.UpdateStudentFields'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Student updated successfully
-          schema:
-            type: string
-        "400":
-          description: some error message here (from err.Error())
-          schema:
-            type: string
-      summary: UpdateStudentByID
       tags:
       - Student
   /student/getByYear:
@@ -1355,6 +1326,37 @@ paths:
           schema:
             type: string
       summary: IsTA
+      tags:
+      - Student
+  /student/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a student by id
+      parameters:
+      - description: student id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: UpdateStudentFields object
+        in: body
+        name: updatedField
+        required: true
+        schema:
+          $ref: '#/definitions/service.UpdateStudentFields'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student updated successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateStudentByID
       tags:
       - Student
   /student/year:
