@@ -45,7 +45,8 @@ func (ts *TimeTableService) GetTimetableByClassID(class_id string) ([]GetTimetab
 	}
 
 	if(timetables == nil){
-		return nil, fmt.Errorf("no timetable found for the class")
+		var not_found = make([]GetTimetableByClassIDField, 0)
+		return not_found, nil
 	}
 
 	return timetables, nil
