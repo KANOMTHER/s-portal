@@ -1,12 +1,19 @@
 # s-portal
 A backend of website using Gin framework.
 
-## To create local database
+##  Starting a self-contained compose
+```sh
+docker compose up --build
+```
+
+---
+
+## Create a local database
 ```bash
 docker compose --env-file ".env.local" -f "db.local.compose.yml" up -d --build
 ```
 
-## To develope our backend
+## Starting the backend server
 - Create .env.local file and fill it. You could see the example from .env.example
 - Simply start devcontainer (Don't forget to install Docker)
 - Run dev command
