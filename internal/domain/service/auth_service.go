@@ -15,6 +15,7 @@ const SessionTokenAllowedCharacter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOP
 
 type AuthUser struct {
 	UserId uint `json:"id"`
+	Role   string `json:"role"`
 }
 
 type AuthService struct {
@@ -61,6 +62,7 @@ func (m *AuthService) ValidateUser(userId uint, password string) (*AuthUser, err
 
 	return &AuthUser{
 		UserId: userId,
+		Role:   user.Role,
 	}, nil
 }
 
