@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"s-portal/internal/domain/service"
 	"s-portal/internal/server/handlers"
+
+	"github.com/gin-gonic/gin"
 )
 
 func AuthRoutes(route *gin.RouterGroup, service *service.AuthService) {
@@ -11,7 +12,7 @@ func AuthRoutes(route *gin.RouterGroup, service *service.AuthService) {
 
 	auth := route.Group("/auth")
 	{
-		auth.GET("/", authHandler.Status)
+		auth.GET("", authHandler.Status)
 		auth.POST("/login", authHandler.Login)
 		auth.POST("/logout", authHandler.Logout)
 	}
