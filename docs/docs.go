@@ -1427,7 +1427,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/student/update/{id}": {
+        "/student/update-admin/{id}": {
             "put": {
                 "description": "update a student by id",
                 "consumes": [
@@ -1439,7 +1439,7 @@ const docTemplate = `{
                 "tags": [
                     "Student"
                 ],
-                "summary": "UpdateStudentByID",
+                "summary": "UpdateStudentByID_ADMIN",
                 "parameters": [
                     {
                         "type": "string",
@@ -1449,12 +1449,59 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "UpdateStudentFields object",
+                        "description": "UpdateStudentFields_ADMIN object",
                         "name": "updatedField",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/service.UpdateStudentFields"
+                            "$ref": "#/definitions/service.UpdateStudentFields_ADMIN"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "some error message here (from err.Error())",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/update-student/{id}": {
+            "put": {
+                "description": "update a student by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Student"
+                ],
+                "summary": "UpdateStudentFields_STUDENT",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "student id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateStudentFields_STUDENT object",
+                        "name": "updatedField",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.UpdateStudentFields_STUDENT"
                         }
                     }
                 ],
@@ -2193,7 +2240,7 @@ const docTemplate = `{
                 }
             }
         },
-        "service.UpdateStudentFields": {
+        "service.UpdateStudentFields_ADMIN": {
             "type": "object",
             "properties": {
                 "email": {
@@ -2211,6 +2258,19 @@ const docTemplate = `{
                 "lname": {
                     "type": "string",
                     "example": "Kunlayawuttipong"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0812345678"
+                }
+            }
+        },
+        "service.UpdateStudentFields_STUDENT": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "example@hotmail.com"
                 },
                 "phone": {
                     "type": "string",
