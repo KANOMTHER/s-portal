@@ -2,11 +2,13 @@ package service
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"log"
 	"math/rand"
+	"net/http"
 	"s-portal/internal/domain/model"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 const SessionKey = "session"
@@ -70,6 +72,7 @@ func (m *AuthService) SetContextUser(ctx *gin.Context, user AuthUser) error {
 	token := m.GenerateToken()
 	host := ctx.Request.Host
 	log.Println("Host", host)
+	ctx.SetSameSite(http.SameSiteLaxMode)
 	ctx.SetCookie(SessionKey, token, 60*60*24*30 /* 30 days */, "/", host, false, true)
 	m.Sessions[token] = user
 	return nil
