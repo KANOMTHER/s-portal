@@ -31,6 +31,13 @@ func (is *InstructorService) CreateInstructor(instructor *model.Instructor) erro
     if err := is.db.Create(&instructor).Error; err != nil {
         return err
     }
+        
+    teacherUser := model.GetUserBuilder("teacher")
+    director := model.NewUserDirector(teacherUser)
+    user := director.Construct(instructor.ID)
+    if err := is.db.Create(&user).Error; err != nil {
+        return err
+    }
     return nil
 }
 
