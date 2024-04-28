@@ -218,6 +218,24 @@ definitions:
         example: "2021-08-01T08:00:00Z"
         type: string
     type: object
+  model.UpdateStudentFields:
+    properties:
+      email:
+        example: example@hotmail.com
+        type: string
+      fname:
+        example: Nontawat
+        type: string
+      graduated:
+        example: "2024-04-16T00:00:00Z"
+        type: string
+      lname:
+        example: Kunlayawuttipong
+        type: string
+      phone:
+        example: "0812345678"
+        type: string
+    type: object
   service.GetClassBySemesterAndYearField:
     properties:
       course:
@@ -325,33 +343,6 @@ definitions:
         type: string
       position:
         example: Professor
-        type: string
-    type: object
-  service.UpdateStudentFields_ADMIN:
-    properties:
-      email:
-        example: example@hotmail.com
-        type: string
-      fname:
-        example: Nontawat
-        type: string
-      graduated:
-        example: "2024-04-16T00:00:00Z"
-        type: string
-      lname:
-        example: Kunlayawuttipong
-        type: string
-      phone:
-        example: "0812345678"
-        type: string
-    type: object
-  service.UpdateStudentFields_STUDENT:
-    properties:
-      email:
-        example: example@hotmail.com
-        type: string
-      phone:
-        example: "0812345678"
         type: string
     type: object
   time.Weekday:
@@ -1337,23 +1328,24 @@ paths:
       summary: IsTA
       tags:
       - Student
-  /student/update-admin/{id}:
+  /student/update/{id}:
     put:
       consumes:
       - application/json
-      description: update a student by id
+      description: update a student by id depending on the user role
       parameters:
       - description: student id
         in: path
         name: id
         required: true
         type: string
-      - description: UpdateStudentFields_ADMIN object
+      - description: admin can change FName, LName, Graduated, Email, Phone; student
+          can change FName, LName, Email, Phone
         in: body
         name: updatedField
         required: true
         schema:
-          $ref: '#/definitions/service.UpdateStudentFields_ADMIN'
+          $ref: '#/definitions/model.UpdateStudentFields'
       produces:
       - application/json
       responses:
@@ -1365,38 +1357,7 @@ paths:
           description: some error message here (from err.Error())
           schema:
             type: string
-      summary: UpdateStudentByID_ADMIN
-      tags:
-      - Student
-  /student/update-student/{id}:
-    put:
-      consumes:
-      - application/json
-      description: update a student by id
-      parameters:
-      - description: student id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: UpdateStudentFields_STUDENT object
-        in: body
-        name: updatedField
-        required: true
-        schema:
-          $ref: '#/definitions/service.UpdateStudentFields_STUDENT'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Student updated successfully
-          schema:
-            type: string
-        "400":
-          description: some error message here (from err.Error())
-          schema:
-            type: string
-      summary: UpdateStudentFields_STUDENT
+      summary: UpdateStudentFields
       tags:
       - Student
   /student/year:

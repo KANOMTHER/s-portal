@@ -9,11 +9,13 @@ import (
 
 type StudentHandler struct {
 	studentService *service.StudentService
+	authService *service.AuthService
 }
 
-func NewStudentHandler(studentService *service.StudentService) *StudentHandler {
+func NewStudentHandler(studentService *service.StudentService, authService *service.AuthService) *StudentHandler {
 	return &StudentHandler{
 		studentService: studentService,
+		authService: authService,
 	}
 }
 
@@ -125,54 +127,28 @@ func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 	})
 }
 
-//	@Summary		UpdateStudentByID_ADMIN
-//	@Description	update a student by id
+//	@Summary		UpdateStudentFields
+//	@Description	update a student by id depending on the user role
 //	@Tags			Student
 //	@Accept			json
 //	@Produce		json
-//	@Param			id				path		string								true	"student id"
-//	@Param			updatedField	body		service.UpdateStudentFields_ADMIN	true	"UpdateStudentFields_ADMIN object"
-//	@Success		200				{object}	string								"Student updated successfully"
-//	@Failure		400				{object}	string								"some error message here (from err.Error())"
-//	@Router			/student/update-admin/{id} [PUT]
-func (h *StudentHandler) UpdateStudentByID_ADMIN(context *gin.Context) {
+//	@Param			id				path		string						true	"student id"
+//	@Param			updatedField	body		model.UpdateStudentFields	true	"admin can change FName, LName, Graduated, Email, Phone; student can change FName, LName, Email, Phone"
+//	@Success		200				{object}	string						"Student updated successfully"
+//	@Failure		400				{object}	string						"some error message here (from err.Error())"
+//	@Router			/student/update/{id} [PUT]
+func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
 	id := context.Param("id")
-	err := h.studentService.UpdateStudentByID_ADMIN(context, id)
+	status, err := h.studentService.UpdateStudentByID(context, id, h.authService)
 	if err != nil {
 		// Handle error
-		context.JSON(400, gin.H{
+		context.JSON(status, gin.H{
 			"message": err.Error(),
 		})
 		return
 	}
-	// Return success message
-	context.JSON(200, gin.H{
-		"message": "Student updated successfully",
-	})
-}
-
-//	@Summary		UpdateStudentFields_STUDENT
-//	@Description	update a student by id
-//	@Tags			Student
-//	@Accept			json
-//	@Produce		json
-//	@Param			id				path		string								true	"student id"
-//	@Param			updatedField	body		service.UpdateStudentFields_STUDENT	true	"UpdateStudentFields_STUDENT object"
-//	@Success		200				{object}	string								"Student updated successfully"
-//	@Failure		400				{object}	string								"some error message here (from err.Error())"
-//	@Router			/student/update-student/{id} [PUT]
-func (h *StudentHandler) UpdateStudentFields_STUDENT(context *gin.Context) {
-	id := context.Param("id")
-	err := h.studentService.UpdateStudentFields_STUDENT(context, id)
-	if err != nil {
-		// Handle error
-		context.JSON(400, gin.H{
-			"message": err.Error(),
-		})
-		return
-	}
-	// Return success message
-	context.JSON(200, gin.H{
+	// // Return success message
+	context.JSON(status, gin.H{
 		"message": "Student updated successfully",
 	})
 }

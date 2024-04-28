@@ -1,8 +1,9 @@
 package service
 
 import (
+	"fmt"
 	"strconv"
-	"time"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -60,62 +61,35 @@ func (ss *StudentService) GetStudentByID(id string) (*model.Student, error) {
 	return student, nil
 }
 
-type UpdateStudentFields_ADMIN struct {
-	FName     string     `example:"Nontawat"`
-	LName     string     `example:"Kunlayawuttipong"`
-	Graduated *time.Time `example:"2024-04-16T00:00:00Z"`
-	Email     string     `example:"example@hotmail.com"`
-	Phone     string     `example:"0812345678"`
-}
-
-func (ss *StudentService) UpdateStudentByID_ADMIN(context *gin.Context, id string) error {
-	student := UpdateStudentFields_ADMIN{}
-	if err := ss.db.Model(&model.Student{}).First(&student, id).Error; err != nil {
-		return err
-	}
-		
-	if err := context.ShouldBindJSON(&student); err != nil {
-		return err
+func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string, authSer *AuthService) (untyped int, err error) {
+	user, err := authSer.GetContextUser(context)
+	if err != nil {
+		return http.StatusInternalServerError, err
 	}
 
-	if err := ss.db.Model(&model.Student{}).
-		Where("ID = ?", id).
-		Updates(map[string]interface{}{
-			"FName":     student.FName,
-			"LName":     student.LName,
-			"Graduated": student.Graduated,
-			"Email":     student.Email,
-			"Phone":     student.Phone,
-		}).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-type UpdateStudentFields_STUDENT struct {
-	Email     string     `example:"example@hotmail.com"`
-	Phone     string     `example:"0812345678"`
-}
-
-func (ss *StudentService) UpdateStudentFields_STUDENT(context *gin.Context, id string) error {
-	student := UpdateStudentFields_STUDENT{}
-	if err := ss.db.Model(&model.Student{}).First(&student, id).Error; err != nil {
-		return err
-	}
-		
-	if err := context.ShouldBindJSON(&student); err != nil {
-		return err
+	if user == nil {
+		return http.StatusNotFound, nil
 	}
 
-	if err := ss.db.Model(&model.Student{}).
-		Where("ID = ?", id).
-		Updates(map[string]interface{}{
-			"Email":     student.Email,
-			"Phone":     student.Phone,
-		}).Error; err != nil {
-		return err
+	// Create the context
+	updateContext  := &model.UpdateContext{}
+
+	// Set the strategy based on the user role	
+	if user.Role == "Admin" {
+		updateContext .SetStrategy(&model.AdminUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
+	}else if user.Role == "student" {
+		updateContext .SetStrategy(&model.StudentUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
 	}
-	return nil
+
+	// Delegate the update operation to the selected strategy
+	status := 0
+	if status, err := updateContext.UpdateStudent(context, id); err != nil {
+        fmt.Println("Error updating student:", err)
+        return status, err
+    }
+
+	return status, nil
+
 }
 
 func (ss *StudentService) IsTA(id string) (*uint, error) {

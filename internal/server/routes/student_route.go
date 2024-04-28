@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func StudentRoutes(route *gin.RouterGroup, service *service.StudentService) {
-	studentHandler := handlers.NewStudentHandler(service)
+func StudentRoutes(route *gin.RouterGroup, service *service.StudentService, authService *service.AuthService) {
+	studentHandler := handlers.NewStudentHandler(service, authService)
 
 	student := route.Group("/student")
 	{
@@ -16,8 +16,7 @@ func StudentRoutes(route *gin.RouterGroup, service *service.StudentService) {
 		student.GET("/:id", studentHandler.GetStudentByID)
 		student.GET("/year", studentHandler.GetDistinctYears)
 		student.GET("/year/:year", studentHandler.GetStudentsIDByYear)
-		student.PUT("/update-admin/:id", studentHandler.UpdateStudentByID_ADMIN)
-		student.PUT("/update-student/:id", studentHandler.UpdateStudentFields_STUDENT)
+		student.PUT("/update/:id", studentHandler.UpdateStudentByID)
 		student.GET("/is-ta/:id", studentHandler.IsTA)
 		student.POST("/schedule", studentHandler.GetStudentSchedule)
 	}
