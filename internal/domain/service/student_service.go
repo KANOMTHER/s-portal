@@ -68,10 +68,10 @@ type UpdateStudentFields struct {
 
 func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string) error {
 	student := UpdateStudentFields{}
-	if err := ss.db.First(&model.Student{}, id).Error; err != nil {
-		return err
-	}
-
+	if err := ss.db.Model(&model.Student{}).First(&student, id).Error; err != nil {
+			return err
+		}
+		
 	if err := context.ShouldBindJSON(&student); err != nil {
 		return err
 	}
