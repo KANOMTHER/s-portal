@@ -1427,9 +1427,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/student/update-admin/{id}": {
+        "/student/update/{id}": {
             "put": {
-                "description": "update a student by id",
+                "description": "update a student by id depending on the user role",
                 "consumes": [
                     "application/json"
                 ],
@@ -1439,7 +1439,7 @@ const docTemplate = `{
                 "tags": [
                     "Student"
                 ],
-                "summary": "UpdateStudentByID_ADMIN",
+                "summary": "UpdateStudentFields",
                 "parameters": [
                     {
                         "type": "string",
@@ -1449,59 +1449,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "UpdateStudentFields_ADMIN object",
+                        "description": "admin can change FName, LName, Graduated, Email, Phone; student can change FName, LName, Email, Phone",
                         "name": "updatedField",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/service.UpdateStudentFields_ADMIN"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Student updated successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "some error message here (from err.Error())",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/student/update-student/{id}": {
-            "put": {
-                "description": "update a student by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Student"
-                ],
-                "summary": "UpdateStudentFields_STUDENT",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "student id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "UpdateStudentFields_STUDENT object",
-                        "name": "updatedField",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/service.UpdateStudentFields_STUDENT"
+                            "$ref": "#/definitions/model.UpdateStudentFields"
                         }
                     }
                 ],
@@ -2085,6 +2038,31 @@ const docTemplate = `{
                 }
             }
         },
+        "model.UpdateStudentFields": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "example@hotmail.com"
+                },
+                "fname": {
+                    "type": "string",
+                    "example": "Nontawat"
+                },
+                "graduated": {
+                    "type": "string",
+                    "example": "2024-04-16T00:00:00Z"
+                },
+                "lname": {
+                    "type": "string",
+                    "example": "Kunlayawuttipong"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0812345678"
+                }
+            }
+        },
         "service.GetClassBySemesterAndYearField": {
             "type": "object",
             "properties": {
@@ -2237,44 +2215,6 @@ const docTemplate = `{
                 "position": {
                     "type": "string",
                     "example": "Professor"
-                }
-            }
-        },
-        "service.UpdateStudentFields_ADMIN": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "example@hotmail.com"
-                },
-                "fname": {
-                    "type": "string",
-                    "example": "Nontawat"
-                },
-                "graduated": {
-                    "type": "string",
-                    "example": "2024-04-16T00:00:00Z"
-                },
-                "lname": {
-                    "type": "string",
-                    "example": "Kunlayawuttipong"
-                },
-                "phone": {
-                    "type": "string",
-                    "example": "0812345678"
-                }
-            }
-        },
-        "service.UpdateStudentFields_STUDENT": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "example@hotmail.com"
-                },
-                "phone": {
-                    "type": "string",
-                    "example": "0812345678"
                 }
             }
         },
