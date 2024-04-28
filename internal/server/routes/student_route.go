@@ -16,7 +16,8 @@ func StudentRoutes(route *gin.RouterGroup, service *service.StudentService) {
 		student.GET("/:id", studentHandler.GetStudentByID)
 		student.GET("/year", studentHandler.GetDistinctYears)
 		student.GET("/year/:year", studentHandler.GetStudentsIDByYear)
-		student.PUT("/update/:id", studentHandler.UpdateStudentByID)
+		student.PUT("/update-admin/:id", studentHandler.UpdateStudentByID_ADMIN)
+		student.PUT("/update-student/:id", studentHandler.UpdateStudentFields_STUDENT)
 		student.GET("/is-ta/:id", studentHandler.IsTA)
 		student.POST("/schedule", studentHandler.GetStudentSchedule)
 	}
