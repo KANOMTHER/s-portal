@@ -14,7 +14,7 @@ func TimeTableRoutes(route *gin.RouterGroup, service *service.TimeTableService) 
 	{
 		timeTable.GET("/class", timeTableHandler.GetTimetableByClassID)
 		timeTable.GET("/count", timeTableHandler.CountTimeTable)
-		timeTable.POST("/", timeTableHandler.CreateTimeTable)
+		timeTable.POST("", timeTableHandler.CreateTimeTable)
 		timeTable.DELETE("/delete/:id", timeTableHandler.DeleteTimeTableByID)
 	}
 }

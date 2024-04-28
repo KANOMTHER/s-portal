@@ -12,9 +12,9 @@ func InstructorRoutes(route *gin.RouterGroup, service *service.InstructorService
 
     instructor := route.Group("/instructor")
     {
-        instructor.GET("/", instructorHandler.GetAllInstructors)
+        instructor.GET("", instructorHandler.GetAllInstructors)
         instructor.GET("/:id", instructorHandler.GetInstructorByID)
-        instructor.POST("/", instructorHandler.CreateInstructor)
+        instructor.POST("", instructorHandler.CreateInstructor)
         instructor.PUT("/update/:id", instructorHandler.UpdateInstructorByID)
         instructor.DELETE("/delete/:id", instructorHandler.DeleteInstructorByID)
     }

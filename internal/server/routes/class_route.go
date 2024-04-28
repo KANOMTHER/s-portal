@@ -15,7 +15,7 @@ func ClassRoutes(route *gin.RouterGroup, service *service.ClassService) {
 		class.GET("/:id", classHandler.GetClassByID)
 		class.GET("/course", classHandler.GetClassByCourseID)
 		class.GET("/semester-year", classHandler.GetClassBySemesterAndYear)
-		class.POST("/", classHandler.CreateClass)
+		class.POST("", classHandler.CreateClass)
 		class.DELETE("/delete/:id", classHandler.DeleteClassByID)
 	}
 }
