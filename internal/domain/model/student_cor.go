@@ -61,8 +61,44 @@ func (ah *AgingHandler) calculateAge(dob time.Time) int {
 
 func (ah *AgingHandler) HandleRequest() (untyped int, err error) {
 
-	if ah.calculateAge(ah.Student.DOB) < 10 {
-		return http.StatusBadRequest, fmt.Errorf("Student must be at least 10 years old")
+	age := ah.calculateAge(ah.Student.DOB)
+	// Validate the DOB syntax
+	if ah.Student.DOB.IsZero() || ah.Student.DOB.After(time.Now()) {
+		return http.StatusBadRequest, fmt.Errorf("invalid date of birth")
+	}
+	// Check if the Student is at least 10 years old.
+	if age < 10 {
+		return http.StatusBadRequest, fmt.Errorf("student must be at least 10 years old")
+	}
+	// Check if the Student is at most 122 years old.
+	if age > 122 {
+		return http.StatusBadRequest, fmt.Errorf("doesn't seem like a valid age, please check again. (current age: %d)", age)
+	}
+
+	// Call the next handler in the chain.
+	if ah.nextHandler != nil {
+		return ah.nextHandler.HandleRequest()
+	}
+	return http.StatusOK, nil
+}
+
+// ------------------------------------------------------------
+// AdvisorHandler handles Student registration.
+
+type AdvisorHandler struct {
+	BaseHandler
+	Db      *gorm.DB
+	Student *CreateStudentFields
+}
+
+func (ah *AdvisorHandler) HandleRequest() (untyped int, err error) {
+	// Check if the Advisor exists.
+	var count int64
+	if err := ah.Db.Model(&Professor{}).Where("ID = ?", ah.Student.AdvisorID).Count(&count).Error; err != nil {
+		return http.StatusBadRequest, err
+	}
+	if count == 0 {
+		return http.StatusBadRequest, fmt.Errorf("advisor not found")
 	}
 
 	// Call the next handler in the chain.
@@ -164,6 +200,11 @@ func getMaxStudentId(student *CreateStudentFields, Db *gorm.DB) (*uint, error) {
 	if err := Db.Model(&Program{}).Where("ID = ?", student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
 		return nil, err
 	}
+
+	if program_prefix == "" {
+		return nil, fmt.Errorf("program not found")
+	}
+
 	program, err := strconv.ParseUint(program_prefix, 10, 64)
 	if err != nil {
 		return nil, err
