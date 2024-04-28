@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"s-portal/docs"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -49,17 +50,22 @@ func main() {
 	// Initialize service
 	services := service.NewService(database)
 
-	// CORS
-	corsConfig := cors.DefaultConfig()
-	// !! warning: for local development only 
-	corsConfig.AllowOrigins = []string{"http://localhost:5173"}
-	corsConfig.AllowCredentials = true
-	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Set-Cookie"}
-	
-
 	// Initialize routes
 	router := gin.Default()
-	router.Use(cors.New(corsConfig))
+
+	corsOrigin := os.Getenv("CORS")
+
+	if corsOrigin != "" {
+		fmt.Println("Using CORS: " + corsOrigin)
+		// CORS
+		corsConfig := cors.DefaultConfig()
+		// !! warning: for local development only
+		corsConfig.AllowOrigins = []string{corsOrigin}
+		corsConfig.AllowCredentials = true
+		corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Set-Cookie"}
+		router.Use(cors.New(corsConfig))
+	}
+
 	router = routes.InitializeRoutes(router, services)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
