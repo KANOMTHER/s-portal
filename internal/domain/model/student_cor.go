@@ -40,10 +40,63 @@ type CreateStudentFields struct {
 }
 
 // ------------------------------------------------------------
+type BaseStudentFunc struct {
+}
+
+func (bsf *BaseStudentFunc) getMaxStudentId(student *CreateStudentFields, Db *gorm.DB) (*uint, error) {
+	/*
+		64 0705010 93
+		----------------
+		64 		year
+		0705010 program_prefix
+		093 	max_id + 1
+	*/
+
+	// year = 64 0000000 00
+	year := (student.Year - 1957) * 1000000000
+
+	// program = 0705010
+	var program_prefix string
+	if err := Db.Model(&Program{}).Where("ID = ?", student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
+		return nil, err
+	}
+
+	if program_prefix == "" {
+		return nil, fmt.Errorf("program not found")
+	}
+
+	program, err := strconv.ParseUint(program_prefix, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	// mask := 64 0705010 00
+	// max_mask := 64 0705011 99
+	RANGE_PROGRAM := uint(199)
+	mask := uint(year) + uint(program*100)
+	max_mask := mask + RANGE_PROGRAM
+
+	var max_id *uint
+	if err := Db.Model(&Student{}).
+		Where("ID > ? AND ID < ?", mask, max_mask).
+		Select("MAX(id)").
+		Scan(&max_id).
+		Error; err != nil {
+		return nil, err
+	}
+
+	// if this is the first Student of the program, assign the mask
+	if max_id == nil {
+		max_id = &mask
+	}
+	return max_id, nil
+}
+
 // AgingHandler handles Student registration.
 
 type AgingHandler struct {
 	BaseHandler
+	BaseStudentFunc
 	Student *CreateStudentFields
 }
 
@@ -112,12 +165,13 @@ func (ah *AdvisorHandler) HandleRequest() (untyped int, err error) {
 // PopulationHandler handles Student registration.
 type PopulationHandler struct {
 	BaseHandler
+	BaseStudentFunc
 	Db      *gorm.DB
 	Student *CreateStudentFields
 }
 
 func (ph *PopulationHandler) HandleRequest() (untyped int, err error) {
-	max_id, err := getMaxStudentId(ph.Student, ph.Db)
+	max_id, err := ph.getMaxStudentId(ph.Student, ph.Db)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
@@ -142,6 +196,7 @@ func (ph *PopulationHandler) HandleRequest() (untyped int, err error) {
 // CreateStudentHandler handles Student registration.
 type CreateStudentHandler struct {
 	BaseHandler
+	BaseStudentFunc
 	Db      *gorm.DB
 	Student *CreateStudentFields
 }
@@ -161,7 +216,7 @@ func (rh *CreateStudentHandler) createNewStudentRecord() (untyped int, err error
 }
 
 func (rh *CreateStudentHandler) HandleRequest() (untyped int, err error) {
-	maxID, err := getMaxStudentId(rh.Student, rh.Db)
+	maxID, err := rh.getMaxStudentId(rh.Student, rh.Db)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
@@ -181,53 +236,4 @@ func (rh *CreateStudentHandler) HandleRequest() (untyped int, err error) {
 	}
 
 	return status, nil
-}
-
-func getMaxStudentId(student *CreateStudentFields, Db *gorm.DB) (*uint, error) {
-	/*
-		64 0705010 93
-		----------------
-		64 		year
-		0705010 program_prefix
-		093 	max_id + 1
-	*/
-
-	// year = 64 0000000 00
-	year := (student.Year - 1957) * 1000000000
-
-	// program = 0705010
-	var program_prefix string
-	if err := Db.Model(&Program{}).Where("ID = ?", student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
-		return nil, err
-	}
-
-	if program_prefix == "" {
-		return nil, fmt.Errorf("program not found")
-	}
-
-	program, err := strconv.ParseUint(program_prefix, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-
-	// mask := 64 0705010 00
-	// max_mask := 64 0705011 99
-	RANGE_PROGRAM := uint(199)
-	mask := uint(year) + uint(program*100)
-	max_mask := mask + RANGE_PROGRAM
-
-	var max_id *uint
-	if err := Db.Model(&Student{}).
-		Where("ID > ? AND ID < ?", mask, max_mask).
-		Select("MAX(id)").
-		Scan(&max_id).
-		Error; err != nil {
-		return nil, err
-	}
-
-	// if this is the first Student of the program, assign the mask
-	if max_id == nil {
-		max_id = &mask
-	}
-	return max_id, nil
 }
