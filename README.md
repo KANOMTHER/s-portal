@@ -1,6 +1,10 @@
 # s-portal
 A backend of website using Gin framework.
 
+## Present design pattern
+Please follow this [link](https://www.youtube.com/watch?v=tI7x-21c1BY) to access our presentation.  
+Thank you for your attention.
+
 ##  Starting a self-contained compose
 ```sh
 docker compose up --build
