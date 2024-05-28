@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"strconv"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -72,21 +72,21 @@ func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string, aut
 	}
 
 	// Create the context
-	updateContext  := &model.UpdateContext{}
+	updateContext := &model.UpdateContext{}
 
-	// Set the strategy based on the user role	
+	// Set the strategy based on the user role
 	if user.Role == "Admin" {
-		updateContext .SetStrategy(&model.AdminUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
-	}else if user.Role == "student" {
-		updateContext .SetStrategy(&model.StudentUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
+		updateContext.SetStrategy(&model.AdminUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
+	} else if user.Role == "student" {
+		updateContext.SetStrategy(&model.StudentUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
 	}
 
 	// Delegate the update operation to the selected strategy
 	status := 0
 	if status, err := updateContext.UpdateStudent(context, id); err != nil {
-        fmt.Println("Error updating student:", err)
-        return status, err
-    }
+		fmt.Println("Error updating student:", err)
+		return status, err
+	}
 
 	return status, nil
 
@@ -104,29 +104,4 @@ func (ss *StudentService) IsTA(id string) (*uint, error) {
 	}
 
 	return ID, nil
-}
-
-func (ss *StudentService) GetStudentSchedule(context *gin.Context) ([]GetTimetableByClassIDField, error) {
-	ps := NewClassRegisterService(ss.db)
-	ts := NewTimeTableService(ss.db)
-
-	register_classes, retErr := ps.GetRegisterClassByID(context)
-	if retErr != nil {
-		return nil, retErr
-	}
-
-	student_timeTable := []GetTimetableByClassIDField{}
-
-	for i := 0; i < len(register_classes); i++ {
-		class_timetable, retErr := ts.GetTimetableByClassID(strconv.FormatUint(uint64(register_classes[i].ClassID), 10))
-		if retErr != nil {
-			return nil, retErr
-		}
-
-		for j := 0; j < len(class_timetable); j++ {
-			student_timeTable = append(student_timeTable, class_timetable[j])
-		}
-	}
-
-	return student_timeTable, nil
 }
