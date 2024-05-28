@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
+	"s-portal/internal/domain/model"
 
 	"gorm.io/gorm"
-
-	"s-portal/internal/domain/model"
+	// "s-portal/internal/domain/model"
 )
 
 type ClassService struct {
@@ -42,28 +42,28 @@ func (cs *ClassService) GetClassByCourseID(course_id string) ([]model.Class, err
 }
 
 type GetClassBySemesterAndYearField struct {
-	ID 	uint `example:"1"`
-	Section     string `example:"A"`
-	CourseID	uint `example:"1"`
-	Course	struct {
-		ID			uint `example:"1"`
-		CourseCode  string `example:"CPE313"`
-		CourseName  string `example:"signals and linear systems"`
-		Semester	int `example:"2"`
-		Year		int `example:"2021"`
+	ID       uint   `example:"1"`
+	Section  string `example:"A"`
+	CourseID uint   `example:"1"`
+	Course   struct {
+		ID         uint   `example:"1"`
+		CourseCode string `example:"CPE313"`
+		CourseName string `example:"signals and linear systems"`
+		Semester   int    `example:"2"`
+		Year       int    `example:"2021"`
 	}
 }
 
 func (cs *ClassService) GetClassBySemesterAndYear(semester string, year string) ([]GetClassBySemesterAndYearField, error) {
 	var classData []GetClassBySemesterAndYearField
 	if err := cs.db.
-	Model(&model.Class{}).Debug().
-	InnerJoins("Course").
-	Distinct("classes.ID").
-	Select("classes.ID AS ID, classes.section AS Section, classes.course_id AS CourseID").
-	Order("classes.ID ASC").
-	Where("Course.semester = ? AND Course.year = ?", semester, year).
-	Find(&classData).Error; err != nil {
+		Model(&model.Class{}).Debug().
+		InnerJoins("Course").
+		Distinct("classes.ID").
+		Select("classes.ID AS ID, classes.section AS Section, classes.course_id AS CourseID").
+		Order("classes.ID ASC").
+		Where("Course.semester = ? AND Course.year = ?", semester, year).
+		Find(&classData).Error; err != nil {
 		return nil, err
 	}
 

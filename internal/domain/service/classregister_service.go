@@ -143,3 +143,13 @@ func (cr *ClassRegisterService) DeleteRegisterClass(context *gin.Context) error 
 	
 	return nil
 }
+
+func (ps *PaymentService) FindClassIDWithExistsCourse(payment_id uint) uint {
+	var studentID model.Payment
+
+	if err := ps.db.Model(model.Payment{}).Where("ID = ?", payment_id).First(&studentID).Error; err != nil {
+		return 0
+	}
+
+	return studentID.StudentID
+}
