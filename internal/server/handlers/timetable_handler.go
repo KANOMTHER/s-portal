@@ -58,6 +58,22 @@ func (h *TimeTableHandler) GetStudentTimetable(context *gin.Context) {
 	})
 }
 
+func (h *TimeTableHandler) GetTATimetable(context *gin.Context) {
+	timetables, err := h.timeTableService.GetTATimetable(context)
+	
+	if err != nil {
+		// Handle error
+		context.JSON(404, gin.H{
+			"message err": err.Error(),
+		})
+		return;
+	}
+	// Return programs
+	context.JSON(200, gin.H{
+		"message": timetables,
+	})
+}
+
 // @Summary		CreateTimeTable
 // @Description	create a new timetable
 // @Tags			Timetable

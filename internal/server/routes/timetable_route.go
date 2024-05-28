@@ -14,6 +14,7 @@ func TimeTableRoutes(route *gin.RouterGroup, service *service.TimeTableService) 
 	{
 		timeTable.GET("/class", timeTableHandler.GetTimetableByClassID)
 		timeTable.POST("/student", timeTableHandler.GetStudentTimetable)
+		timeTable.POST("/ta", timeTableHandler.GetTATimetable)
 		timeTable.GET("/count", timeTableHandler.CountTimeTable)
 		timeTable.POST("", timeTableHandler.CreateTimeTable)
 		timeTable.DELETE("/delete/:id", timeTableHandler.DeleteTimeTableByID)
