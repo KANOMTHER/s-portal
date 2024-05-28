@@ -41,8 +41,7 @@ func (a *AdminBuilder) setID(id uint) {
 
 func (a *AdminBuilder) setPWD() {
 	// Admin's password is the same as the ID
-	authDecorator := AuthDecorator{User: &a.user}
-	authDecorator.SetPassword(strconv.FormatUint(uint64(a.user.ID), 10))
+	a.user.SetPassword(strconv.FormatUint(uint64(a.user.ID), 10))
 }
 
 func (a *AdminBuilder) setRole() {
@@ -72,8 +71,7 @@ func (s *StudentBuilder) setID(id uint) {
 
 func (s *StudentBuilder) setPWD() {
 	// Student's password is the same as the ID
-	authDecorator := AuthDecorator{User: &s.user}
-	authDecorator.SetPassword(strconv.FormatUint(uint64(s.user.ID), 10))
+	s.user.SetPassword(strconv.FormatUint(uint64(s.user.ID), 10))
 }
 
 func (s *StudentBuilder) setRole() {
@@ -101,8 +99,7 @@ func (t *TeacherBuilder) setID(id uint) {
 }
 func (t *TeacherBuilder) setPWD() {
 	// Teacher's password is the same as the ID
-	authDecorator := AuthDecorator{User: &t.user}
-	authDecorator.SetPassword(strconv.FormatUint(uint64(t.user.ID), 10))
+	t.user.SetPassword(strconv.FormatUint(uint64(t.user.ID), 10))
 }
 func (t *TeacherBuilder) setRole() {
 	t.user.Role = "teacher"
