@@ -3,7 +3,14 @@ package model
 import (
 	"github.com/alexedwards/argon2id"
 	"gorm.io/gorm"
+	"strconv"
 )
+
+const RoleAdmin = "admin"
+
+const RoleStudent = "student"
+
+const RoleTeacher = "teacher"
 
 type User struct {
 	gorm.Model
@@ -26,4 +33,16 @@ func (u *User) SetPassword(password string) error {
 
 	u.PWD = hash
 	return nil
+}
+
+func NewUser(id uint, role string) *User {
+	user := &User{
+		ID:   id,
+		Role: role,
+	}
+	err := user.SetPassword(strconv.FormatUint(uint64(id), 10))
+	if err != nil {
+		panic(err)
+	}
+	return user
 }

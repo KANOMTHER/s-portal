@@ -208,9 +208,7 @@ func (rh *CreateStudentHandler) createNewStudentRecord() (untyped int, err error
 	}
 
 	// add in user table
-	studentUser := GetUserBuilder("student")
-	director := NewUserDirector(studentUser)
-	user := director.Construct(rh.Student.ID)
+	user := NewUser(rh.Student.ID, RoleStudent)
 	if err := rh.Db.Create(&user).Error; err != nil {
 		return http.StatusBadRequest, err
 	}
