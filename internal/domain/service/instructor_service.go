@@ -10,73 +10,69 @@ import (
 )
 
 type InstructorService struct {
-    db *gorm.DB
+	db *gorm.DB
 }
 
 func NewInstructorService(db *gorm.DB) *InstructorService {
-    return &InstructorService{
-        db: db,
-    }
+	return &InstructorService{
+		db: db,
+	}
 }
 
 func (is *InstructorService) GetAllInstructors() ([]model.Instructor, error) {
-    var Instructors []model.Instructor
-    if err := is.db.Find(&Instructors).Error; err != nil {
-        return nil, err
-    }
-    return Instructors, nil
+	var Instructors []model.Instructor
+	if err := is.db.Find(&Instructors).Error; err != nil {
+		return nil, err
+	}
+	return Instructors, nil
 }
 
 func (is *InstructorService) CreateInstructor(instructor *model.Instructor) error {
-    if err := is.db.Create(&instructor).Error; err != nil {
-        return err
-    }
-        
-    teacherUser := model.GetUserBuilder("teacher")
-    director := model.NewUserDirector(teacherUser)
-    user := director.Construct(instructor.ID)
-    if err := is.db.Create(&user).Error; err != nil {
-        return err
-    }
-    return nil
+	if err := is.db.Create(&instructor).Error; err != nil {
+		return err
+	}
+
+	user := model.NewUser(instructor.ID, model.RoleTeacher)
+	if err := is.db.Create(&user).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (is *InstructorService) GetInstructorByID(id string) (*model.Instructor, error) {
-    var instructor *model.Instructor
-    if err := is.db.
-    Preload("Professor.Faculty").
-    Preload("Class.Course").
-    First(&instructor, id).Error; err != nil {
-        return nil, err
-    }
-    return instructor, nil
+	var instructor *model.Instructor
+	if err := is.db.
+		Preload("Professor.Faculty").
+		Preload("Class.Course").
+		First(&instructor, id).Error; err != nil {
+		return nil, err
+	}
+	return instructor, nil
 }
 
 func (is *InstructorService) UpdateInstructorByID(context *gin.Context, id string) error {
-    instructor := model.Instructor{}
-    
+	instructor := model.Instructor{}
 
-    if err := is.db.First(&instructor, id).Error; err != nil {
-        return err
-    }
+	if err := is.db.First(&instructor, id).Error; err != nil {
+		return err
+	}
 
-    if err := context.ShouldBindJSON(&instructor); err != nil {
-        return err
-    }
+	if err := context.ShouldBindJSON(&instructor); err != nil {
+		return err
+	}
 
-    if err := is.db.Save(&instructor).Error; err != nil {
-        return err
-    }
+	if err := is.db.Save(&instructor).Error; err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func (is *InstructorService) DeleteInstructorByID(id string) error {
-    instructor := model.Instructor{}
-    if result := is.db.Delete(&instructor, id); result.RowsAffected < 1 {
-        return fmt.Errorf("were not able to delete the instructor")
-    }
+	instructor := model.Instructor{}
+	if result := is.db.Delete(&instructor, id); result.RowsAffected < 1 {
+		return fmt.Errorf("were not able to delete the instructor")
+	}
 
-    return nil
+	return nil
 }
-  

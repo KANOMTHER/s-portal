@@ -51,8 +51,7 @@ func (m *AuthService) ValidateUser(userId uint, password string) (*AuthUser, err
 		return nil, fmt.Errorf("invalid user %d", userId)
 	}
 
-	authDecorator := model.AuthDecorator{User: &user}
-	valid, err := authDecorator.Validate(password)
+	valid, err := user.Validate(password)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to validate password %w", err)

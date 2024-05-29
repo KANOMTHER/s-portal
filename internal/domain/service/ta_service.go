@@ -51,8 +51,7 @@ func (ts *TAService) CreateTA(context *gin.Context) error {
 	var existingTA model.TA
 	if err := ts.db.Where(&ta).First(&existingTA).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			factory := model.StaffFactory{}
-			ta := factory.CreateAssistance(ta.ClassID, ta.StudentID)
+			ta := model.NewTA(ta.ClassID, ta.StudentID)
 			if err := ts.db.Create(&ta).Error; err != nil {
 				return err
 			}
