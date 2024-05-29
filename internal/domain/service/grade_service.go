@@ -30,7 +30,7 @@ func (g *GradeService) InitialGradeMultiple(year uint, semester uint) error {
 
 	gradeHub := model.GradeHub{}
 	for i := 0; i < len(class_payments); i++ {
-		newGrade := gradeHub.GradeFromRegisterAdapter(class_payments[i].ClassID, class_payments[i].StudentID, 0)
+		newGrade := gradeHub.GradeFromRegisterAdapter(class_payments[i].ClassID, class_payments[i].StudentID, -1)
 		if err := g.db.Where(newGrade).FirstOrCreate(&newGrade).Error; err != nil {
 			return err
 		}
@@ -55,5 +55,9 @@ func (g *GradeService) EditGradeMultiple(grade []model.Grade) error {
 			return err
 		}
 	}
+	return nil
+}
+
+func (g *GradeService) GetGradeByStudentID(student model.Student) ([]model.Grade) {
 	return nil
 }
