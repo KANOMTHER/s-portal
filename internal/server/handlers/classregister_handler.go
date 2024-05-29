@@ -32,6 +32,11 @@ func NewClassRegisterHandler(classRegisterService *service.ClassRegisterService,
  */
 
 func (h *ClassRegisterHandler) GetRegisterClassByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	class_register, err := h.classRegisterService.GetRegisterClassByID(context)
 
 	if err != nil {
@@ -47,6 +52,11 @@ func (h *ClassRegisterHandler) GetRegisterClassByID(context *gin.Context) {
 }
 
 func (h *ClassRegisterHandler) CreateRegisterClass(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	err := h.classRegisterService.CreateRegisterClass(context)
 
 	if err != nil {
@@ -62,6 +72,11 @@ func (h *ClassRegisterHandler) CreateRegisterClass(context *gin.Context) {
 }
 
 func (h *ClassRegisterHandler) UpdateRegisterClass(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	err := h.classRegisterService.UpdateRegisterClass(context)
 
 	if err != nil {
@@ -77,6 +92,11 @@ func (h *ClassRegisterHandler) UpdateRegisterClass(context *gin.Context) {
 }
 
 func (h *ClassRegisterHandler) DeleteRegisterClass(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	err := h.classRegisterService.DeleteRegisterClass(context)
 
 	if err != nil {

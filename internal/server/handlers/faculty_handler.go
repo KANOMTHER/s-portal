@@ -28,6 +28,11 @@ func NewFacultyHandler(facultyService *service.FacultyService, authService *serv
 // @Failure		404	{object}	string			"No faculties found"
 // @Router			/faculty [GET]
 func (h *FacultyHandler) GetAllFaculties(c *gin.Context) {
+	if !h.authService.AssertPermission(c) {
+		c.Status(401)
+		return
+	}
+
 	faculties, err := h.facultyService.GetAllFaculties()
 	if err != nil {
 		// Handle error
@@ -51,6 +56,11 @@ func (h *FacultyHandler) GetAllFaculties(c *gin.Context) {
 // @Failure		400		{object}	string			"some error message here (from err.Error())"
 // @Router			/faculty [POST]
 func (h *FacultyHandler) CreateFaculty(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	faculty := model.Faculty{}
 
 	if err := context.ShouldBindJSON(&faculty); err != nil {
@@ -85,6 +95,11 @@ func (h *FacultyHandler) CreateFaculty(context *gin.Context) {
 // @Failure		404	{object}	string	"Faculty not found"
 // @Router			/faculty/{id} [GET]
 func (h *FacultyHandler) GetFacultyByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	faculty, err := h.facultyService.GetFacultyByID(id)
 	if err != nil {
@@ -111,6 +126,11 @@ func (h *FacultyHandler) GetFacultyByID(context *gin.Context) {
 // @Failure		400		{object}	string			"some error message here (from err.Error())"
 // @Router			/faculty/update/{id} [PUT]
 func (h *FacultyHandler) UpdateFacultyByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.facultyService.UpdateFacultyByID(context, id)
 	if err != nil {
@@ -136,6 +156,11 @@ func (h *FacultyHandler) UpdateFacultyByID(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/faculty/delete/{id} [DELETE]
 func (h *FacultyHandler) DeleteFacultyByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.facultyService.DeleteFacultyByID(id)
 	if err != nil {

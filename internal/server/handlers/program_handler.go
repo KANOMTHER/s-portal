@@ -28,6 +28,11 @@ func NewProgramHandler(programService *service.ProgramService, authService *serv
 // @Failure		404	{object}	string
 // @Router			/program [GET]
 func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	programs, err := h.programService.GetAllPrograms()
 	if err != nil {
 		// Handle error
@@ -51,6 +56,11 @@ func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 // @Failure		400		{object}	string
 // @Router			/program [POST]
 func (h *ProgramHandler) CreateProgram(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	program := model.Program{}
 
 	if err := context.ShouldBindJSON(&program); err != nil {
@@ -85,6 +95,11 @@ func (h *ProgramHandler) CreateProgram(context *gin.Context) {
 // @Failure		404	{object}	string
 // @Router			/program/{id} [GET]
 func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	program, err := h.programService.GetProgramByID(id)
 	if err != nil {
@@ -110,6 +125,11 @@ func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 // @Failure		404			{object}	string
 // @Router			/program/faculty [GET]
 func (h *ProgramHandler) GetProgramByFacultyID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	fauclty_id := context.Query("faculty_id")
 	program, err := h.programService.GetProgramByFacultyID(fauclty_id)
 	if err != nil {
@@ -136,6 +156,11 @@ func (h *ProgramHandler) GetProgramByFacultyID(context *gin.Context) {
 // @Failure		404		{object}	string
 // @Router			/program/update/{id} [PUT]
 func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.programService.UpdateProgramByID(context, id)
 	if err != nil {
@@ -161,6 +186,11 @@ func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
 // @Failure		404	{object}	string
 // @Router			/program/delete/{id} [DELETE]
 func (h *ProgramHandler) DeleteProgramByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.programService.DeleteProgramByID(id)
 	if err != nil {
