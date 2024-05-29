@@ -1,11 +1,13 @@
 package model
 
-type gradeHub interface {
+type GradeInterface interface {
 	GradeFromRegisterAdapter() Grade
 	GradeStrategy() Grade
 }
 
-type GradeHub struct{}
+type GradeHub struct {
+	gh GradeInterface
+}
 
 func (f *GradeHub) GradeFromRegisterAdapter(classID uint, studentID uint, grade float32) Grade {
 	return Grade{

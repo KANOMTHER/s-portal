@@ -16,7 +16,7 @@ const SessionTokenLen = 32
 const SessionTokenAllowedCharacter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"
 
 type AuthUser struct {
-	UserId uint `json:"id"`
+	UserId uint   `json:"id"`
 	Role   string `json:"role"`
 }
 
