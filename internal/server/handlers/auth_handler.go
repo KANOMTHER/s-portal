@@ -1,8 +1,9 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
 	"s-portal/internal/domain/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type AuthHandler struct {
@@ -53,6 +54,11 @@ func (h *AuthHandler) Login(context *gin.Context) {
 		context.JSON(500, gin.H{
 			"message": err.Error(),
 		})
+		return
+	}
+
+	if user == nil {
+		context.JSON(401, gin.H{})
 		return
 	}
 

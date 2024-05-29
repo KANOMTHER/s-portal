@@ -25,6 +25,26 @@ type UpdateStrategy interface {
 	UpdateStudent(context *gin.Context, id string) (untyped int, err error)
 }
 
+type StrategyRegistry struct {
+	strategies map[string]UpdateStrategy
+}
+
+func NewStrategyRegistry() *StrategyRegistry {
+	return &StrategyRegistry{strategies: make(map[string]UpdateStrategy)}
+}
+
+func (sr *StrategyRegistry) Register(role string, strategy UpdateStrategy) {
+	sr.strategies[role] = strategy
+}
+
+func (sr *StrategyRegistry) GetStrategy(role string) (UpdateStrategy, error) {
+	strategy, exists := sr.strategies[role]
+	if !exists {
+		return nil, fmt.Errorf("no strategy found for your role")
+	}
+	return strategy, nil
+}
+
 // ------------------------------
 
 // UpdateContext defines the context for selecting the appropriate update strategy.
@@ -108,7 +128,7 @@ type StudentUpdateStrategy struct {
 
 // UpdateStudent updates the student record with the provided fields.
 func (ss *StudentUpdateStrategy) UpdateStudent(context *gin.Context, id string) (untyped int, err error) {
-	
+
 	// Update student data
 	student, status, err := ss.UpdateStudentData(context, id)
 	if err != nil {

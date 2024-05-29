@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -12,12 +12,35 @@ import (
 )
 
 type StudentService struct {
-	db *gorm.DB
+	db               *gorm.DB
+	strategyRegistry *model.StrategyRegistry
 }
 
 func NewStudentService(db *gorm.DB) *StudentService {
+	registry := model.NewStrategyRegistry()
+	var roles []model.User
+	if err := db.Distinct("role").Find(&roles).Error; err != nil {
+		fmt.Println("Error getting roles while creating student service:", err)
+		return nil
+	}
+
+	// Register strategies for each role
+	for _, role := range roles {
+		switch role.Role {
+		case "Admin":
+			registry.Register(role.Role, &model.AdminUpdateStrategy{StudentData: model.StudentData{Db: db}})
+		case "student":
+			registry.Register(role.Role, &model.StudentUpdateStrategy{StudentData: model.StudentData{Db: db}})
+		// Add more cases as needed for different roles
+
+		default:
+			fmt.Println("No strategy defined for your role")
+		}
+	}
+
 	return &StudentService{
-		db: db,
+		db:               db,
+		strategyRegistry: registry,
 	}
 }
 
@@ -71,15 +94,15 @@ func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string, aut
 		return http.StatusNotFound, nil
 	}
 
-	// Create the context
-	updateContext := &model.UpdateContext{}
-
-	// Set the strategy based on the user role
-	if user.Role == "Admin" {
-		updateContext.SetStrategy(&model.AdminUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
-	} else if user.Role == "student" {
-		updateContext.SetStrategy(&model.StudentUpdateStrategy{StudentData: model.StudentData{Db: ss.db}})
+	// Get the appropriate strategy from the registry
+	strategy, err := ss.strategyRegistry.GetStrategy(user.Role)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
+
+	// Create the context with the strategy
+	updateContext := &model.UpdateContext{}
+	updateContext.SetStrategy(strategy)
 
 	// Delegate the update operation to the selected strategy
 	status := 0
@@ -89,7 +112,6 @@ func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string, aut
 	}
 
 	return status, nil
-
 }
 
 func (ss *StudentService) IsTA(id string) (*uint, error) {
