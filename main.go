@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"s-portal/docs"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -12,6 +13,7 @@ import (
 	"s-portal/internal/server/routes"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 )
 
 //	@title			Swagger Example API
@@ -50,6 +52,20 @@ func main() {
 
 	// Initialize routes
 	router := gin.Default()
+
+	corsOrigin := os.Getenv("CORS")
+
+	if corsOrigin != "" {
+		fmt.Println("Using CORS: " + corsOrigin)
+		// CORS
+		corsConfig := cors.DefaultConfig()
+		// !! warning: for local development only
+		corsConfig.AllowOrigins = []string{corsOrigin}
+		corsConfig.AllowCredentials = true
+		corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Set-Cookie"}
+		router.Use(cors.New(corsConfig))
+	}
+
 	router = routes.InitializeRoutes(router, services)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -50,6 +50,34 @@ definitions:
         example: 3
         type: integer
     type: object
+  model.CreateStudentFields:
+    properties:
+      advisorID:
+        example: 1
+        type: integer
+      degree:
+        example: Bachelor
+        type: string
+      dob:
+        example: "2002-12-18T00:00:00Z"
+        type: string
+      fname:
+        example: Nontawat
+        type: string
+      lname:
+        example: Kunlayawuttipong
+        type: string
+      programID:
+        example: 1
+        type: integer
+      year:
+        example: 2021
+        type: integer
+    required:
+    - advisorID
+    - dob
+    - programID
+    type: object
   model.Faculty:
     properties:
       department:
@@ -62,29 +90,46 @@ definitions:
         example: Engineering
         type: string
     type: object
+  model.Instructor:
+    properties:
+      class:
+        $ref: '#/definitions/model.Class'
+      classID:
+        example: 1
+        type: integer
+      id:
+        example: 1
+        type: integer
+      professor:
+        $ref: '#/definitions/model.Professor'
+      professorID:
+        example: 1
+        type: integer
+    type: object
   model.Professor:
     properties:
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
       email:
+        example: Juwan98@example.net
         type: string
       faculty:
         $ref: '#/definitions/model.Faculty'
       facultyID:
+        example: 1
         type: integer
       fname:
+        example: John
         type: string
       id:
+        example: 1
         type: integer
       lname:
+        example: Doe
         type: string
       phone:
+        example: 744-512-3072
         type: string
       position:
-        type: string
-      updatedAt:
+        example: Professor
         type: string
     type: object
   model.Program:
@@ -173,32 +218,23 @@ definitions:
         example: "2021-08-01T08:00:00Z"
         type: string
     type: object
-  service.CreateStudentFields:
+  model.UpdateStudentFields:
     properties:
-      advisorID:
-        example: 1
-        type: integer
-      degree:
-        example: Bachelor
-        type: string
-      dob:
-        example: "2002-12-18T00:00:00Z"
-        type: string
-      entered:
-        example: "2024-04-16T00:00:00Z"
+      email:
+        example: example@hotmail.com
         type: string
       fname:
         example: Nontawat
         type: string
+      graduated:
+        example: "2024-04-16T00:00:00Z"
+        type: string
       lname:
         example: Kunlayawuttipong
         type: string
-      programID:
-        example: 1
-        type: integer
-      year:
-        example: 2021
-        type: integer
+      phone:
+        example: "0812345678"
+        type: string
     type: object
   service.GetClassBySemesterAndYearField:
     properties:
@@ -273,22 +309,40 @@ definitions:
         example: "2021-08-01T08:00:00Z"
         type: string
     type: object
-  service.UpdateStudentFields:
+  service.ProfessorProfile:
     properties:
       email:
-        example: example@hotmail.com
+        example: Juwan98@example.net
         type: string
+      faculty:
+        properties:
+          department:
+            example: Engineering
+            type: string
+          id:
+            example: 1
+            type: integer
+          major:
+            example: Software
+            type: string
+        type: object
+      facultyID:
+        example: 1
+        type: integer
       fname:
-        example: Nontawat
+        example: John
         type: string
-      graduated:
-        example: "2024-04-16T00:00:00Z"
-        type: string
+      id:
+        example: 1
+        type: integer
       lname:
-        example: Kunlayawuttipong
+        example: Doe
         type: string
       phone:
-        example: "0812345678"
+        example: 744-512-3072
+        type: string
+      position:
+        example: Professor
         type: string
     type: object
   time.Weekday:
@@ -763,6 +817,260 @@ paths:
       summary: UpdateFacultyByID
       tags:
       - Faculty
+  /instructor:
+    get:
+      consumes:
+      - application/json
+      description: get all instructors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Instructor'
+            type: array
+        "404":
+          description: No instructors found
+          schema:
+            type: string
+      summary: GetAllInstructors
+      tags:
+      - Instructor
+    post:
+      consumes:
+      - application/json
+      description: create a new instructor
+      parameters:
+      - description: Instructor object
+        in: body
+        name: instructor
+        required: true
+        schema:
+          $ref: '#/definitions/model.Instructor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Instructor created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateInstructor
+      tags:
+      - Instructor
+  /instructor/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a instructor by id
+      parameters:
+      - description: instructor id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Instructor object
+          schema:
+            $ref: '#/definitions/model.Instructor'
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetInstructorByID
+      tags:
+      - Instructor
+  /instructor/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a instructor by id
+      parameters:
+      - description: instructor id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Instructor deleted successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: DeleteInstructorByID
+      tags:
+      - Instructor
+  /instructor/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a instructor by id
+      parameters:
+      - description: Instructor id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Instructor object
+        in: body
+        name: Instructor
+        required: true
+        schema:
+          $ref: '#/definitions/model.Instructor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Instructor updated successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateInstructorByID
+      tags:
+      - Instructor
+  /professor:
+    get:
+      consumes:
+      - application/json
+      description: get all professors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/service.ProfessorProfile'
+            type: array
+        "404":
+          description: No professors found
+          schema:
+            type: string
+      summary: GetAllProfessors
+      tags:
+      - Professor
+    post:
+      consumes:
+      - application/json
+      description: create a new professor
+      parameters:
+      - description: Professor object
+        in: body
+        name: professor
+        required: true
+        schema:
+          $ref: '#/definitions/model.Professor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Professor created successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: CreateProfessor
+      tags:
+      - Professor
+  /professor/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get a program by id
+      parameters:
+      - description: professor id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ProfessorProfile object
+          schema:
+            $ref: '#/definitions/service.ProfessorProfile'
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: GetProfessorByID
+      tags:
+      - Professor
+  /professor/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a professor by id
+      parameters:
+      - description: professor id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Professor deleted successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: DeleteProfessorByID
+      tags:
+      - Professor
+  /professor/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a professor by id
+      parameters:
+      - description: professor id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Program object
+        in: body
+        name: Professor
+        required: true
+        schema:
+          $ref: '#/definitions/model.Professor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Professor updated successfully
+          schema:
+            type: string
+        "404":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateProfessorByID
+      tags:
+      - Professor
   /program:
     get:
       consumes:
@@ -928,7 +1236,7 @@ paths:
         name: CreateStudentFields
         required: true
         schema:
-          $ref: '#/definitions/service.CreateStudentFields'
+          $ref: '#/definitions/model.CreateStudentFields'
       produces:
       - application/json
       responses:
@@ -966,36 +1274,6 @@ paths:
           schema:
             type: string
       summary: GetStudentByID
-      tags:
-      - Student
-    put:
-      consumes:
-      - application/json
-      description: update a student by id
-      parameters:
-      - description: student id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: UpdateStudentFields object
-        in: body
-        name: updatedField
-        required: true
-        schema:
-          $ref: '#/definitions/service.UpdateStudentFields'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Student updated successfully
-          schema:
-            type: string
-        "400":
-          description: some error message here (from err.Error())
-          schema:
-            type: string
-      summary: UpdateStudentByID
       tags:
       - Student
   /student/getByYear:
@@ -1048,6 +1326,38 @@ paths:
           schema:
             type: string
       summary: IsTA
+      tags:
+      - Student
+  /student/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update a student by id depending on the user role
+      parameters:
+      - description: student id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: admin can change FName, LName, Graduated, Email, Phone; student
+          can change FName, LName, Email, Phone
+        in: body
+        name: updatedField
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateStudentFields'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student updated successfully
+          schema:
+            type: string
+        "400":
+          description: some error message here (from err.Error())
+          schema:
+            type: string
+      summary: UpdateStudentFields
       tags:
       - Student
   /student/year:

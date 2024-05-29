@@ -7,12 +7,12 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func StudentRoutes(route *gin.RouterGroup, service *service.StudentService) {
-	studentHandler := handlers.NewStudentHandler(service)
+func StudentRoutes(route *gin.RouterGroup, service *service.StudentService, authService *service.AuthService) {
+	studentHandler := handlers.NewStudentHandler(service, authService)
 
 	student := route.Group("/student")
 	{
-		student.POST("/", studentHandler.CreateStudent)
+		student.POST("", studentHandler.CreateStudent)
 		student.GET("/:id", studentHandler.GetStudentByID)
 		student.GET("/year", studentHandler.GetDistinctYears)
 		student.GET("/year/:year", studentHandler.GetStudentsIDByYear)

@@ -2,8 +2,7 @@ package service
 
 import (
 	"fmt"
-	"strconv"
-	"time"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -12,98 +11,49 @@ import (
 )
 
 type StudentService struct {
-	db *gorm.DB
-}
-
-type CreateStudentFields struct {
-	ID        uint      `swaggerignore:"true"`
-	ProgramID uint      `example:"1"`
-	Degree    string    `example:"Bachelor"`
-	Year      int       `example:"2021"`
-	FName     string    `example:"Nontawat"`
-	LName     string    `example:"Kunlayawuttipong"`
-	DOB       time.Time `example:"2002-12-18T00:00:00Z"`
-	Entered   time.Time `example:"2024-04-16T00:00:00Z"`
-	AdvisorID uint      `example:"1"`
+	db               *gorm.DB
+	strategyRegistry *model.StrategyRegistry
 }
 
 func NewStudentService(db *gorm.DB) *StudentService {
-	return &StudentService{
-		db: db,
-	}
-}
-
-func (ss *StudentService) createNewStudentId(student *CreateStudentFields) (*uint, error) {
-	/*
-		64 0705010 93
-		----------------
-		64 		year
-		0705010 program_prefix
-		093 	max_id + 1
-	*/
-
-	// year = 64 0000000 00
-	year := (student.Year - 1957) * 1000000000
-
-	// program = 0705010
-	var program_prefix string
-	if err := ss.db.Model(&model.Program{}).Where("ID = ?", student.ProgramID).Pluck("Prefix", &program_prefix).Error; err != nil {
-		return nil, err
-	}
-	program, err := strconv.ParseUint(program_prefix, 10, 64)
-	if err != nil {
-		return nil, err
+	registry := model.NewStrategyRegistry()
+	var roles []model.User
+	if err := db.Distinct("role").Find(&roles).Error; err != nil {
+		fmt.Println("Error getting roles while creating student service:", err)
+		return nil
 	}
 
-	// mask := 64 0705010 00
-	// max_mask := 64 0705011 99
-	mask := uint(year) + uint(program*100)
-	max_mask := mask + 199
+	// Register strategies for each role
+	for _, role := range roles {
+		switch role.Role {
+		case "Admin":
+			registry.Register(role.Role, &model.AdminUpdateStrategy{StudentData: model.StudentData{Db: db}})
+		case "student":
+			registry.Register(role.Role, &model.StudentUpdateStrategy{StudentData: model.StudentData{Db: db}})
+		// Add more cases as needed for different roles
 
-	var max_id *uint
-	if err := ss.db.Model(&model.Student{}).
-		Where("ID > ? AND ID < ?", mask, max_mask).
-		Select("MAX(id)").
-		Scan(&max_id).
-		Error; err != nil {
-		return nil, err
-	}
-
-	// if this is the first student of the program, assign the mask
-	if max_id == nil {
-		max_id = &mask
-	}
-
-	// create new id for new student (max+1)
-	new_id := *max_id + 1
-	return &new_id, nil
-}
-
-func (ss *StudentService) CreateStudent(student *CreateStudentFields) error {
-	var err error
-	newID, err := ss.createNewStudentId(student)
-	if err != nil {
-		return err
-	}
-	student.ID = *newID
-	student.Entered = time.Now()
-	// change year to academic year
-	student.Year = 1
-
-	// create new student
-	if result := ss.db.Where("ID = ?", student.ID).FirstOrCreate(&model.Student{}, &student); result.Error != nil {
-		if result.RowsAffected == 0 {
-			return fmt.Errorf("unable to create student because this program is full %v,\n error msg: %v", student.ID, result.Error.Error())
+		default:
+			fmt.Println("No strategy defined for your role")
 		}
-		return result.Error
 	}
 
-	user := model.User{ID: student.ID, PWD: strconv.FormatUint(uint64(student.ID), 10), Role: "student"}
-	if	err := ss.db.Create(&user).Error; err != nil {
-		return err
+	return &StudentService{
+		db:               db,
+		strategyRegistry: registry,
 	}
+}
 
-	return nil
+func (ss *StudentService) CreateStudent(student *model.CreateStudentFields) (int, error) {
+	Age := &model.AgingHandler{Student: student}
+	Advior := &model.AdvisorHandler{Db: ss.db, Student: student}
+	Pop := &model.PopulationHandler{Db: ss.db, Student: student}
+	Create := &model.CreateStudentHandler{Db: ss.db, Student: student}
+
+	Age.SetNext(Advior)
+	Advior.SetNext(Pop)
+	Pop.SetNext(Create)
+
+	return Age.HandleRequest()
 }
 
 func (ss *StudentService) GetDistinctYears() ([]uint, error) {
@@ -133,36 +83,34 @@ func (ss *StudentService) GetStudentByID(id string) (*model.Student, error) {
 	return student, nil
 }
 
-type UpdateStudentFields struct {
-	FName     string     `example:"Nontawat"`
-	LName     string     `example:"Kunlayawuttipong"`
-	Graduated *time.Time `example:"2024-04-16T00:00:00Z"`
-	Email     string     `example:"example@hotmail.com"`
-	Phone     string     `example:"0812345678"`
-}
-
-func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string) error {
-	student := UpdateStudentFields{}
-	if err := ss.db.First(&model.Student{}, id).Error; err != nil {
-		return err
+func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string, authSer *AuthService) (untyped int, err error) {
+	user, err := authSer.GetContextUser(context)
+	if err != nil {
+		return http.StatusInternalServerError, err
 	}
 
-	if err := context.ShouldBindJSON(&student); err != nil {
-		return err
+	if user == nil {
+		return http.StatusNotFound, nil
 	}
 
-	if err := ss.db.Model(&model.Student{}).
-		Where("ID = ?", id).
-		Updates(map[string]interface{}{
-			"FName":     student.FName,
-			"LName":     student.LName,
-			"Graduated": student.Graduated,
-			"Email":     student.Email,
-			"Phone":     student.Phone,
-		}).Error; err != nil {
-		return err
+	// Get the appropriate strategy from the registry
+	strategy, err := ss.strategyRegistry.GetStrategy(user.Role)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
-	return nil
+
+	// Create the context with the strategy
+	updateContext := &model.UpdateContext{}
+	updateContext.SetStrategy(strategy)
+
+	// Delegate the update operation to the selected strategy
+	status := 0
+	if status, err := updateContext.UpdateStudent(context, id); err != nil {
+		fmt.Println("Error updating student:", err)
+		return status, err
+	}
+
+	return status, nil
 }
 
 func (ss *StudentService) IsTA(id string) (*uint, error) {

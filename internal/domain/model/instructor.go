@@ -5,10 +5,10 @@ import (
 )
 
 type Instructor struct {
-	gorm.Model
-	ID uint `gorm:"primaryKey"`
-	ClassID    uint
+	gorm.Model `swaggerignore:"true"`
+	ID uint `gorm:"primaryKey" example:"1"`
+	ClassID    uint `example:"1"`
 	Class      Class
-	ProfessorID uint
+	ProfessorID uint `example:"1"`
 	Professor  Professor
 }

@@ -5,7 +5,7 @@ import (
 )
 
 func ExampleRoutes(route *gin.RouterGroup) {
-	route.GET("/", func(ctx *gin.Context) {
+	route.GET("", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
 			"message": "Welcome to s-portal backend",
 		})
