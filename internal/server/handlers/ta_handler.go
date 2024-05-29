@@ -19,13 +19,13 @@ func NewTAHandler(TAService *service.TAService) *TAHandler {
 
 func (h *TAHandler) GetClassTA(context *gin.Context) {
 	ta, err := h.TAService.GetTA(context)
-	
+
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
 			"message err": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -35,13 +35,13 @@ func (h *TAHandler) GetClassTA(context *gin.Context) {
 
 func (h *TAHandler) GetClassTAByClassID(context *gin.Context) {
 	ta, err := h.TAService.GetTAByClassID(context)
-	
+
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
 			"message err": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -51,13 +51,13 @@ func (h *TAHandler) GetClassTAByClassID(context *gin.Context) {
 
 func (h *TAHandler) CreateClassTA(context *gin.Context) {
 	err := h.TAService.CreateTA(context)
-	
+
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
 			"message err": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -67,13 +67,13 @@ func (h *TAHandler) CreateClassTA(context *gin.Context) {
 
 func (h *TAHandler) UpdateClassTA(context *gin.Context) {
 	err := h.TAService.UpdateTA(context)
-	
+
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
 			"message err": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -83,13 +83,13 @@ func (h *TAHandler) UpdateClassTA(context *gin.Context) {
 
 func (h *TAHandler) DeleteClassTA(context *gin.Context) {
 	err := h.TAService.DeleteTA(context)
-	
+
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
 			"message err": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{

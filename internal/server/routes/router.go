@@ -20,9 +20,9 @@ func InitializeRoutes(router *gin.Engine, services *service.Service) *gin.Engine
 		InstructorRoutes(api, services.InstructorService)
 		ClassRegisterRoutes(api, services.ClassRegisterService)
 		PaymentRoutes(api, services.PaymentService)
-    TARoute(api, services.TAService)
+		TARoute(api, services.TAService)
 		AuthRoutes(api, services.AuthService)
-    GradeRoutes(api, services.GradeService)
+		GradeRoutes(api, services.GradeService)
 	}
 	return router
 }
