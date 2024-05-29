@@ -45,12 +45,12 @@ func NewStudentService(db *gorm.DB) *StudentService {
 
 func (ss *StudentService) CreateStudent(student *model.CreateStudentFields) (int, error) {
 	Age := &model.AgingHandler{Student: student}
-	Advior := &model.AdvisorHandler{Db: ss.db, Student: student}
+	Advisor := &model.AdvisorHandler{Db: ss.db, Student: student}
 	Pop := &model.PopulationHandler{Db: ss.db, Student: student}
 	Create := &model.CreateStudentHandler{Db: ss.db, Student: student}
 
-	Age.SetNext(Advior)
-	Advior.SetNext(Pop)
+	Age.SetNext(Advisor)
+	Advisor.SetNext(Pop)
 	Pop.SetNext(Create)
 
 	return Age.HandleRequest()
