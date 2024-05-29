@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func GradeRoutes(route *gin.RouterGroup, service *service.GradeService) {
-	GradeHandler := handlers.NewGradeHandler(service)
+func GradeRoutes(route *gin.RouterGroup, service *service.GradeService, authService *service.AuthService) {
+	GradeHandler := handlers.NewGradeHandler(service, authService)
 
 	grade := route.Group("/grade")
 	{

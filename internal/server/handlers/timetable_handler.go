@@ -9,11 +9,13 @@ import (
 
 type TimeTableHandler struct {
 	timeTableService *service.TimeTableService
+	authService      *service.AuthService
 }
 
-func NewTimeTableHandler(timeTableService *service.TimeTableService) *TimeTableHandler {
+func NewTimeTableHandler(timeTableService *service.TimeTableService, authService *service.AuthService) *TimeTableHandler {
 	return &TimeTableHandler{
 		timeTableService: timeTableService,
+		authService:      authService,
 	}
 }
 
@@ -60,13 +62,13 @@ func (h *TimeTableHandler) GetStudentTimetable(context *gin.Context) {
 
 func (h *TimeTableHandler) GetTATimetable(context *gin.Context) {
 	timetables, err := h.timeTableService.GetTATimetable(context)
-	
+
 	if err != nil {
 		// Handle error
 		context.JSON(404, gin.H{
 			"message err": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{

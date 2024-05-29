@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func ClassRoutes(route *gin.RouterGroup, service *service.ClassService) {
-	classHandler := handlers.NewClassHandler(service)
+func ClassRoutes(route *gin.RouterGroup, service *service.ClassService, authService *service.AuthService) {
+	classHandler := handlers.NewClassHandler(service, authService)
 
 	class := route.Group("/class")
 	{

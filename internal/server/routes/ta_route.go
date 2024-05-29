@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func TARoute(route *gin.RouterGroup, service *service.TAService) {
-	taHandler := handlers.NewTAHandler(service)
+func TARoute(route *gin.RouterGroup, service *service.TAService, authService *service.AuthService) {
+	taHandler := handlers.NewTAHandler(service, authService)
 
 	students := route.Group("/ta")
 	{

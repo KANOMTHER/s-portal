@@ -10,11 +10,13 @@ import (
 
 type ClassRegisterHandler struct {
 	classRegisterService *service.ClassRegisterService
+	authService          *service.AuthService
 }
 
-func NewClassRegisterHandler(classRegisterService *service.ClassRegisterService) *ClassRegisterHandler {
+func NewClassRegisterHandler(classRegisterService *service.ClassRegisterService, authService *service.AuthService) *ClassRegisterHandler {
 	return &ClassRegisterHandler{
 		classRegisterService: classRegisterService,
+		authService:          authService,
 	}
 }
 
@@ -32,7 +34,7 @@ func NewClassRegisterHandler(classRegisterService *service.ClassRegisterService)
 func (h *ClassRegisterHandler) GetRegisterClassByID(context *gin.Context) {
 	class_register, err := h.classRegisterService.GetRegisterClassByID(context)
 
-	if err!=nil {
+	if err != nil {
 		context.JSON(400, gin.H{
 			"message err": err.Error(),
 		})
@@ -47,7 +49,7 @@ func (h *ClassRegisterHandler) GetRegisterClassByID(context *gin.Context) {
 func (h *ClassRegisterHandler) CreateRegisterClass(context *gin.Context) {
 	err := h.classRegisterService.CreateRegisterClass(context)
 
-	if err!=nil {
+	if err != nil {
 		context.JSON(400, gin.H{
 			"message err": err.Error(),
 		})
@@ -62,7 +64,7 @@ func (h *ClassRegisterHandler) CreateRegisterClass(context *gin.Context) {
 func (h *ClassRegisterHandler) UpdateRegisterClass(context *gin.Context) {
 	err := h.classRegisterService.UpdateRegisterClass(context)
 
-	if err!=nil {
+	if err != nil {
 		context.JSON(400, gin.H{
 			"message err": err.Error(),
 		})
@@ -77,7 +79,7 @@ func (h *ClassRegisterHandler) UpdateRegisterClass(context *gin.Context) {
 func (h *ClassRegisterHandler) DeleteRegisterClass(context *gin.Context) {
 	err := h.classRegisterService.DeleteRegisterClass(context)
 
-	if err!=nil {
+	if err != nil {
 		context.JSON(400, gin.H{
 			"message err": err.Error(),
 		})

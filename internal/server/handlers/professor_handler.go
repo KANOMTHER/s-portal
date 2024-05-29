@@ -9,11 +9,13 @@ import (
 
 type ProfessorHandler struct {
 	professorService *service.ProfessorService
+	authService      *service.AuthService
 }
 
-func NewProfessorHandler(professorService *service.ProfessorService) *ProfessorHandler {
+func NewProfessorHandler(professorService *service.ProfessorService, authService *service.AuthService) *ProfessorHandler {
 	return &ProfessorHandler{
 		professorService: professorService,
+		authService:      authService,
 	}
 }
 

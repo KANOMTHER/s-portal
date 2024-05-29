@@ -9,22 +9,24 @@ import (
 
 type ProgramHandler struct {
 	programService *service.ProgramService
+	authService    *service.AuthService
 }
 
-func NewProgramHandler(programService *service.ProgramService) *ProgramHandler {
+func NewProgramHandler(programService *service.ProgramService, authService *service.AuthService) *ProgramHandler {
 	return &ProgramHandler{
 		programService: programService,
+		authService:    authService,
 	}
 }
 
-//	@Summary		GetAllPrograms
-//	@Description	get all programs
-//	@Tags			Program
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{array}		model.Program
-//	@Failure		404	{object}	string
-//	@Router			/program [GET]
+// @Summary		GetAllPrograms
+// @Description	get all programs
+// @Tags			Program
+// @Accept			json
+// @Produce		json
+// @Success		200	{array}		model.Program
+// @Failure		404	{object}	string
+// @Router			/program [GET]
 func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 	programs, err := h.programService.GetAllPrograms()
 	if err != nil {
@@ -39,15 +41,15 @@ func (h *ProgramHandler) GetAllPrograms(context *gin.Context) {
 	})
 }
 
-//	@Summary		CreateProgram
-//	@Description	create a new program
-//	@Tags			Program
-//	@Accept			json
-//	@Produce		json
-//	@Param			program	body		model.Program	true	"Program object"
-//	@Success		200		{object}	string
-//	@Failure		400		{object}	string
-//	@Router			/program [POST]
+// @Summary		CreateProgram
+// @Description	create a new program
+// @Tags			Program
+// @Accept			json
+// @Produce		json
+// @Param			program	body		model.Program	true	"Program object"
+// @Success		200		{object}	string
+// @Failure		400		{object}	string
+// @Router			/program [POST]
 func (h *ProgramHandler) CreateProgram(context *gin.Context) {
 	program := model.Program{}
 
@@ -73,15 +75,15 @@ func (h *ProgramHandler) CreateProgram(context *gin.Context) {
 	})
 }
 
-//	@Summary		GetProgramByID
-//	@Description	get a program by id
-//	@Tags			Program
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	path		string	true	"program id"
-//	@Success		200	{object}	model.Program
-//	@Failure		404	{object}	string
-//	@Router			/program/{id} [GET]
+// @Summary		GetProgramByID
+// @Description	get a program by id
+// @Tags			Program
+// @Accept			json
+// @Produce		json
+// @Param			id	path		string	true	"program id"
+// @Success		200	{object}	model.Program
+// @Failure		404	{object}	string
+// @Router			/program/{id} [GET]
 func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 	id := context.Param("id")
 	program, err := h.programService.GetProgramByID(id)
@@ -90,7 +92,7 @@ func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -98,15 +100,15 @@ func (h *ProgramHandler) GetProgramByID(context *gin.Context) {
 	})
 }
 
-//	@Summary		GetProgramByFacultyID
-//	@Description	get a program by faculty_id
-//	@Tags			Program
-//	@Accept			json
-//	@Produce		json
-//	@Param			faculty_id	query		string	true	"faculty id"
-//	@Success		200			{array}		service.GetProgramByFacultyIDField
-//	@Failure		404			{object}	string
-//	@Router			/program/faculty [GET]
+// @Summary		GetProgramByFacultyID
+// @Description	get a program by faculty_id
+// @Tags			Program
+// @Accept			json
+// @Produce		json
+// @Param			faculty_id	query		string	true	"faculty id"
+// @Success		200			{array}		service.GetProgramByFacultyIDField
+// @Failure		404			{object}	string
+// @Router			/program/faculty [GET]
 func (h *ProgramHandler) GetProgramByFacultyID(context *gin.Context) {
 	fauclty_id := context.Query("faculty_id")
 	program, err := h.programService.GetProgramByFacultyID(fauclty_id)
@@ -115,7 +117,7 @@ func (h *ProgramHandler) GetProgramByFacultyID(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return programs
 	context.JSON(200, gin.H{
@@ -123,16 +125,16 @@ func (h *ProgramHandler) GetProgramByFacultyID(context *gin.Context) {
 	})
 }
 
-//	@Summary		UpdateProgramByID
-//	@Description	update a program by id
-//	@Tags			Program
-//	@Accept			json
-//	@Produce		json
-//	@Param			id		path		string			true	"program id"
-//	@Param			Program	body		model.Program	true	"Program object"
-//	@Success		200		{object}	string
-//	@Failure		404		{object}	string
-//	@Router			/program/update/{id} [PUT]
+// @Summary		UpdateProgramByID
+// @Description	update a program by id
+// @Tags			Program
+// @Accept			json
+// @Produce		json
+// @Param			id		path		string			true	"program id"
+// @Param			Program	body		model.Program	true	"Program object"
+// @Success		200		{object}	string
+// @Failure		404		{object}	string
+// @Router			/program/update/{id} [PUT]
 func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.programService.UpdateProgramByID(context, id)
@@ -141,7 +143,7 @@ func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return success message
 	context.JSON(200, gin.H{
@@ -149,15 +151,15 @@ func (h *ProgramHandler) UpdateProgramByID(context *gin.Context) {
 	})
 }
 
-//	@Summary		DeleteProgramByID
-//	@Description	delete a program by id
-//	@Tags			Program
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	path		string	true	"program id"
-//	@Success		200	{object}	string
-//	@Failure		404	{object}	string
-//	@Router			/program/delete/{id} [DELETE]
+// @Summary		DeleteProgramByID
+// @Description	delete a program by id
+// @Tags			Program
+// @Accept			json
+// @Produce		json
+// @Param			id	path		string	true	"program id"
+// @Success		200	{object}	string
+// @Failure		404	{object}	string
+// @Router			/program/delete/{id} [DELETE]
 func (h *ProgramHandler) DeleteProgramByID(context *gin.Context) {
 	id := context.Param("id")
 	err := h.programService.DeleteProgramByID(id)
@@ -166,7 +168,7 @@ func (h *ProgramHandler) DeleteProgramByID(context *gin.Context) {
 		context.JSON(404, gin.H{
 			"message": err.Error(),
 		})
-		return;
+		return
 	}
 	// Return success message
 	context.JSON(200, gin.H{
