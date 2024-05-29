@@ -28,6 +28,11 @@ func NewProfessorHandler(professorService *service.ProfessorService, authService
 // @Failure		404	{object}	string	"No professors found"
 // @Router			/professor [GET]
 func (h *ProfessorHandler) GetAllProfessors(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	professors, err := h.professorService.GetAllProfessors()
 	if err != nil {
 		// Handle error
@@ -51,6 +56,11 @@ func (h *ProfessorHandler) GetAllProfessors(context *gin.Context) {
 // @Failure		400			{object}	string			"some error message here (from err.Error())"
 // @Router			/professor [POST]
 func (h *ProfessorHandler) CreateProfessor(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	professor := model.Professor{}
 
 	if err := context.ShouldBindJSON(&professor); err != nil {
@@ -85,6 +95,11 @@ func (h *ProfessorHandler) CreateProfessor(context *gin.Context) {
 // @Failure		404	{object}	string						"some error message here (from err.Error())"
 // @Router			/professor/{id} [GET]
 func (h *ProfessorHandler) GetProfessorByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	professor, err := h.professorService.GetProfessorByID(id)
 	if err != nil {
@@ -111,6 +126,11 @@ func (h *ProfessorHandler) GetProfessorByID(context *gin.Context) {
 // @Failure		404			{object}	string			"some error message here (from err.Error())"
 // @Router			/professor/update/{id} [PUT]
 func (h *ProfessorHandler) UpdateProfessorByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.professorService.UpdateProfessorByID(context, id)
 	if err != nil {
@@ -136,6 +156,11 @@ func (h *ProfessorHandler) UpdateProfessorByID(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/professor/delete/{id} [DELETE]
 func (h *ProfessorHandler) DeleteProfessorByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.professorService.DeleteProfessorByID(id)
 	if err != nil {

@@ -102,11 +102,19 @@ func (m *AuthService) UnsetContextUser(ctx *gin.Context) error {
 	return nil
 }
 
-func (m *AuthService) AssertRole(ctx *gin.Context, role ...string) bool {
+func (m *AuthService) AssertPermission(ctx *gin.Context, role ...string) bool {
 	user, err := m.GetContextUser(ctx)
 	if err != nil {
 		log.Println("failed asserting role", err)
 		return false
+	}
+
+	if user == nil {
+		return false
+	}
+
+	if len(role) == 0 {
+		return true
 	}
 
 	for _, s := range role {

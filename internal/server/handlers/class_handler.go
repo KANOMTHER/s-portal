@@ -29,6 +29,11 @@ func NewClassHandler(classService *service.ClassService, authService *service.Au
 // @Failure		400		{object}	string		"some error message here (from err.Error())"
 // @Router			/class [POST]
 func (h *ClassHandler) CreateClass(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	class := model.Class{}
 
 	if err := context.ShouldBindJSON(&class); err != nil {
@@ -63,6 +68,11 @@ func (h *ClassHandler) CreateClass(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/class/{id} [GET]
 func (h *ClassHandler) GetClassByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	class, err := h.classService.GetClassByID(id)
 	if err != nil {
@@ -88,6 +98,11 @@ func (h *ClassHandler) GetClassByID(context *gin.Context) {
 // @Failure		404			{object}	string	"some error message here (from err.Error())"
 // @Router			/class/course [GET]
 func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	course_id := context.Query("course_id")
 	class, err := h.classService.GetClassByCourseID(course_id)
 	if err != nil {
@@ -114,6 +129,11 @@ func (h *ClassHandler) GetClassByCourseID(context *gin.Context) {
 // @Failure		404			{object}	string									"some error message here (from err.Error())"
 // @Router			/class/semester-year [GET]
 func (h *ClassHandler) GetClassBySemesterAndYear(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	semester := context.Query("semester")
 	year := context.Query("year")
 	class, err := h.classService.GetClassBySemesterAndYear(semester, year)
@@ -140,6 +160,11 @@ func (h *ClassHandler) GetClassBySemesterAndYear(context *gin.Context) {
 // @Failure		404	{object}	string	"were not able to delete the class"
 // @Router			/class/delete/{id} [DELETE]
 func (h *ClassHandler) DeleteClassByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.classService.DeleteClassByID(id)
 	if err != nil {

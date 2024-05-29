@@ -28,6 +28,11 @@ func NewCourseHandler(courseService *service.CourseService, authService *service
 // @Failure		404	{object}	string
 // @Router			/course [GET]
 func (h *CourseHandler) GetAllCourses(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	courses, err := h.courseService.GetAllCourses()
 	if err != nil {
 		// Handle error
@@ -51,6 +56,11 @@ func (h *CourseHandler) GetAllCourses(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/course/semester [GET]
 func (h *CourseHandler) GetAllDistinctSemester(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	semesters, err := h.courseService.GetAllDistinctSemester()
 	if err != nil {
 		// Handle error
@@ -75,6 +85,11 @@ func (h *CourseHandler) GetAllDistinctSemester(context *gin.Context) {
 // @Failure		404			{object}	string								"some error message here (from err.Error())"
 // @Router			/course/section [GET]
 func (h *CourseHandler) GetSectionByClassID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	classID := context.Query("class_id")
 	sections, err := h.courseService.GetSectionByClassID(classID)
 	if err != nil {
@@ -100,6 +115,11 @@ func (h *CourseHandler) GetSectionByClassID(context *gin.Context) {
 // @Failure		400		{object}	string			"some error message here (from err.Error())"
 // @Router			/course [POST]
 func (h *CourseHandler) CreateCourse(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	course := model.Course{}
 
 	if err := context.ShouldBindJSON(&course); err != nil {
@@ -134,6 +154,11 @@ func (h *CourseHandler) CreateCourse(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/course/{id} [GET]
 func (h *CourseHandler) GetCourseByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	course, err := h.courseService.GetCourseByID(id)
 	if err != nil {
@@ -160,6 +185,11 @@ func (h *CourseHandler) GetCourseByID(context *gin.Context) {
 // @Failure		404		{object}	string			"some error message here (from err.Error())"
 // @Router			/course/update/{id} [PUT]
 func (h *CourseHandler) UpdateCourseByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.courseService.UpdateCourseByID(context, id)
 	if err != nil {
@@ -185,6 +215,11 @@ func (h *CourseHandler) UpdateCourseByID(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/course/delete/{id} [DELETE]
 func (h *CourseHandler) DeleteCourseByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.courseService.DeleteCourseByID(id)
 	if err != nil {
@@ -201,6 +236,11 @@ func (h *CourseHandler) DeleteCourseByID(context *gin.Context) {
 }
 
 func (h *CourseHandler) GetCourseBySemesterAndYear(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	semester := context.Query("semester")
 	year := context.Query("year")
 

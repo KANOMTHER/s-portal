@@ -23,6 +23,11 @@ func NewGradeHandler(gradeService *service.GradeService, authService *service.Au
 }
 
 func (g *GradeHandler) InitialAll(context *gin.Context) {
+	if !g.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	type sem_year struct {
 		Semester uint `json:"semester"`
 		Year     uint `json:"year"`
@@ -51,6 +56,11 @@ func (g *GradeHandler) InitialAll(context *gin.Context) {
 }
 
 func (g *GradeHandler) GetStudentFromClassID(context *gin.Context) {
+	if !g.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	classID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
@@ -74,6 +84,11 @@ func (g *GradeHandler) GetStudentFromClassID(context *gin.Context) {
 }
 
 func (g *GradeHandler) EditGradeMultiple(context *gin.Context) {
+	if !g.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	classID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {

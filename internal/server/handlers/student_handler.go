@@ -29,6 +29,11 @@ func NewStudentHandler(studentService *service.StudentService, authService *serv
 // @Failure		400					{object}	string						"some error message here (from err.Error())"
 // @Router			/student [POST]
 func (h *StudentHandler) CreateStudent(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	student := model.CreateStudentFields{}
 
 	if err := context.ShouldBindJSON(&student); err != nil {
@@ -63,6 +68,11 @@ func (h *StudentHandler) CreateStudent(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/student/year [GET]
 func (h *StudentHandler) GetDistinctYears(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	distinct_year, err := h.studentService.GetDistinctYears()
 	if err != nil {
 		// Handle error
@@ -87,6 +97,11 @@ func (h *StudentHandler) GetDistinctYears(context *gin.Context) {
 // @Failure		404		{object}	string	"some error message here (from err.Error())"
 // @Router			/student/getByYear [GET]
 func (h *StudentHandler) GetStudentsIDByYear(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	year := context.Param("year")
 	distinct_year, err := h.studentService.GetStudentsIDByYear(year)
 	if err != nil {
@@ -112,6 +127,11 @@ func (h *StudentHandler) GetStudentsIDByYear(context *gin.Context) {
 // @Failure		404	{object}	string
 // @Router			/student/{id} [GET]
 func (h *StudentHandler) GetStudentByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	student, err := h.studentService.GetStudentByID(id)
 	if err != nil {
@@ -138,6 +158,11 @@ func (h *StudentHandler) GetStudentByID(context *gin.Context) {
 // @Failure		400				{object}	string						"some error message here (from err.Error())"
 // @Router			/student/update/{id} [PUT]
 func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	status, err := h.studentService.UpdateStudentByID(context, id, h.authService)
 	if err != nil {
@@ -163,6 +188,11 @@ func (h *StudentHandler) UpdateStudentByID(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/student/is-ta/{id} [GET]
 func (h *StudentHandler) IsTA(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	ta_id, err := h.studentService.IsTA(id)
 	if err != nil {

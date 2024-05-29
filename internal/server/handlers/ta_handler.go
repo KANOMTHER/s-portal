@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-
 	// "s-portal/internal/domain/model"
 	"s-portal/internal/domain/service"
 )
@@ -20,6 +19,11 @@ func NewTAHandler(TAService *service.TAService, authService *service.AuthService
 }
 
 func (h *TAHandler) GetClassTA(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	ta, err := h.TAService.GetTA(context)
 
 	if err != nil {
@@ -36,6 +40,11 @@ func (h *TAHandler) GetClassTA(context *gin.Context) {
 }
 
 func (h *TAHandler) GetClassTAByClassID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	ta, err := h.TAService.GetTAByClassID(context)
 
 	if err != nil {
@@ -52,6 +61,11 @@ func (h *TAHandler) GetClassTAByClassID(context *gin.Context) {
 }
 
 func (h *TAHandler) CreateClassTA(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	err := h.TAService.CreateTA(context)
 
 	if err != nil {
@@ -68,6 +82,11 @@ func (h *TAHandler) CreateClassTA(context *gin.Context) {
 }
 
 func (h *TAHandler) UpdateClassTA(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	err := h.TAService.UpdateTA(context)
 
 	if err != nil {
@@ -84,6 +103,11 @@ func (h *TAHandler) UpdateClassTA(context *gin.Context) {
 }
 
 func (h *TAHandler) DeleteClassTA(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	err := h.TAService.DeleteTA(context)
 
 	if err != nil {

@@ -21,6 +21,11 @@ func NewPaymentHandler(paymentService *service.PaymentService, authService *serv
 }
 
 func (h *PaymentHandler) Dummy(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	context.JSON(200, gin.H{
 		"message": "",
 	})

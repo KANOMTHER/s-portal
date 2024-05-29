@@ -28,6 +28,11 @@ func NewInstructorHandler(instructorService *service.InstructorService, authServ
 // @Failure		404	{object}	string	"No instructors found"
 // @Router			/instructor [GET]
 func (h *InstructorHandler) GetAllInstructors(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	instructors, err := h.instructorService.GetAllInstructors()
 	if err != nil {
 		// Handle error
@@ -51,6 +56,11 @@ func (h *InstructorHandler) GetAllInstructors(context *gin.Context) {
 // @Failure		400			{object}	string				"some error message here (from err.Error())"
 // @Router			/instructor [POST]
 func (h *InstructorHandler) CreateInstructor(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	instructor := model.Instructor{}
 
 	if err := context.ShouldBindJSON(&instructor); err != nil {
@@ -85,6 +95,11 @@ func (h *InstructorHandler) CreateInstructor(context *gin.Context) {
 // @Failure		404	{object}	string				"some error message here (from err.Error())"
 // @Router			/instructor/{id} [GET]
 func (h *InstructorHandler) GetInstructorByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	instructor, err := h.instructorService.GetInstructorByID(id)
 	if err != nil {
@@ -111,6 +126,11 @@ func (h *InstructorHandler) GetInstructorByID(context *gin.Context) {
 // @Failure		404			{object}	string				"some error message here (from err.Error())"
 // @Router			/instructor/update/{id} [PUT]
 func (h *InstructorHandler) UpdateInstructorByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.instructorService.UpdateInstructorByID(context, id)
 	if err != nil {
@@ -136,6 +156,11 @@ func (h *InstructorHandler) UpdateInstructorByID(context *gin.Context) {
 // @Failure		404	{object}	string	"some error message here (from err.Error())"
 // @Router			/instructor/delete/{id} [DELETE]
 func (h *InstructorHandler) DeleteInstructorByID(context *gin.Context) {
+	if !h.authService.AssertPermission(context) {
+		context.Status(401)
+		return
+	}
+
 	id := context.Param("id")
 	err := h.instructorService.DeleteInstructorByID(id)
 	if err != nil {
