@@ -47,6 +47,10 @@ func (ps *ProfessorService) CreateProfessor(professor *model.Professor) error {
 	if err := ps.db.Create(&professor).Error; err != nil {
 		return err
 	}
+	user := model.NewUser(professor.ID, model.RoleTeacher)
+	if err := ps.db.Create(&user).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
