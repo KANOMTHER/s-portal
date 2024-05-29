@@ -26,9 +26,9 @@ func NewStudentService(db *gorm.DB) *StudentService {
 	// Register strategies for each role
 	for _, role := range roles {
 		switch role.Role {
-		case "Admin":
+		case model.RoleAdmin:
 			registry.Register(role.Role, &model.AdminUpdateStrategy{StudentData: model.StudentData{Db: db}})
-		case "student":
+		case model.RoleStudent:
 			registry.Register(role.Role, &model.StudentUpdateStrategy{StudentData: model.StudentData{Db: db}})
 		// Add more cases as needed for different roles
 
