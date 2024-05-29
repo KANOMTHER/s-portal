@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func ClassRegisterRoutes(route *gin.RouterGroup, service *service.ClassRegisterService) {
-	classRegisterHandler := handlers.NewClassRegisterHandler(service)
+func ClassRegisterRoutes(route *gin.RouterGroup, service *service.ClassRegisterService, authService *service.AuthService) {
+	classRegisterHandler := handlers.NewClassRegisterHandler(service, authService)
 
 	class := route.Group("/register")
 	{

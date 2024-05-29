@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func PaymentRoutes(route *gin.RouterGroup, service *service.PaymentService) {
-	PaymentHandler := handlers.NewPaymentHandler(service)
+func PaymentRoutes(route *gin.RouterGroup, service *service.PaymentService, authService *service.AuthService) {
+	PaymentHandler := handlers.NewPaymentHandler(service, authService)
 
 	payment := route.Group("/payment")
 	{

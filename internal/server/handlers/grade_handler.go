@@ -12,11 +12,13 @@ import (
 
 type GradeHandler struct {
 	gradeService *service.GradeService
+	authService  *service.AuthService
 }
 
-func NewGradeHandler(gradeService *service.GradeService) *GradeHandler {
+func NewGradeHandler(gradeService *service.GradeService, authService *service.AuthService) *GradeHandler {
 	return &GradeHandler{
 		gradeService: gradeService,
+		authService:  authService,
 	}
 }
 

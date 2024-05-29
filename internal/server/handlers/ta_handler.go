@@ -8,12 +8,14 @@ import (
 )
 
 type TAHandler struct {
-	TAService *service.TAService
+	TAService   *service.TAService
+	authService *service.AuthService
 }
 
-func NewTAHandler(TAService *service.TAService) *TAHandler {
+func NewTAHandler(TAService *service.TAService, authService *service.AuthService) *TAHandler {
 	return &TAHandler{
-		TAService: TAService,
+		TAService:   TAService,
+		authService: authService,
 	}
 }
 

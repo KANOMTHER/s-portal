@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func FacultyRoutes(route *gin.RouterGroup, service *service.FacultyService) {
-	facultyHandler := handlers.NewFacultyHandler(service)
+func FacultyRoutes(route *gin.RouterGroup, service *service.FacultyService, authService *service.AuthService) {
+	facultyHandler := handlers.NewFacultyHandler(service, authService)
 
 	faculty := route.Group("/faculty")
 	{

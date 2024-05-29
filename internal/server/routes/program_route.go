@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func ProgramRoutes(route *gin.RouterGroup, service *service.ProgramService) {
-	programHandler := handlers.NewProgramHandler(service)
+func ProgramRoutes(route *gin.RouterGroup, service *service.ProgramService, authService *service.AuthService) {
+	programHandler := handlers.NewProgramHandler(service, authService)
 
 	program := route.Group("/program")
 	{

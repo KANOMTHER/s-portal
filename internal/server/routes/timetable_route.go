@@ -7,8 +7,8 @@ import (
 	"s-portal/internal/server/handlers"
 )
 
-func TimeTableRoutes(route *gin.RouterGroup, service *service.TimeTableService) {
-	timeTableHandler := handlers.NewTimeTableHandler(service)
+func TimeTableRoutes(route *gin.RouterGroup, service *service.TimeTableService, authService *service.AuthService) {
+	timeTableHandler := handlers.NewTimeTableHandler(service, authService)
 
 	timeTable := route.Group("/timetable")
 	{
