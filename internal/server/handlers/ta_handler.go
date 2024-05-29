@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"s-portal/internal/domain/model"
+
 	// "s-portal/internal/domain/model"
 	"s-portal/internal/domain/service"
 )
@@ -61,7 +63,7 @@ func (h *TAHandler) GetClassTAByClassID(context *gin.Context) {
 }
 
 func (h *TAHandler) CreateClassTA(context *gin.Context) {
-	if !h.authService.AssertPermission(context) {
+	if !h.authService.AssertPermission(context, model.RoleTeacher, model.RoleAdmin) {
 		context.Status(401)
 		return
 	}
@@ -82,7 +84,7 @@ func (h *TAHandler) CreateClassTA(context *gin.Context) {
 }
 
 func (h *TAHandler) UpdateClassTA(context *gin.Context) {
-	if !h.authService.AssertPermission(context) {
+	if !h.authService.AssertPermission(context, model.RoleTeacher, model.RoleAdmin) {
 		context.Status(401)
 		return
 	}
@@ -103,7 +105,7 @@ func (h *TAHandler) UpdateClassTA(context *gin.Context) {
 }
 
 func (h *TAHandler) DeleteClassTA(context *gin.Context) {
-	if !h.authService.AssertPermission(context) {
+	if !h.authService.AssertPermission(context, model.RoleTeacher, model.RoleAdmin) {
 		context.Status(401)
 		return
 	}
