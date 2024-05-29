@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -104,40 +103,4 @@ func (ts *TAService) DeleteTA(context *gin.Context) error {
 	}
 	
 	return nil
-}
-
-func (ts *TAService) SchedualTA(context *gin.Context) ([]GetTimetableByClassIDField ,error) {
-	payment := model.Payment{}
-
-	if err := context.ShouldBindJSON(&payment); err != nil {
-        return nil, err
-    }
-
-	existPaymentID := model.Payment{}
-	if err := ts.db.Model(model.Payment{}).Where(&payment).First(&existPaymentID).Error; err != nil {
-		return nil, err
-    }
-
-	// get class id
-	var classID []uint64
- 	if err := ts.db.Model(model.ClassRegister{}).Where("payment_id = ?", existPaymentID.ID).Select("id").Find(&classID).Error ; err!=nil {
-		return nil, err
-	}
-
-	// get time
-	ts_service := NewTimeTableService(ts.db)
-	ta_timeTable := []GetTimetableByClassIDField{}
-
-	for i := 0; i < len(classID); i++ {
-		class_timetable, retErr := ts_service.GetTimetableByClassID(strconv.FormatUint(classID[i], 10))
-		if retErr != nil {
-			return nil, retErr
-		}
-
-		for j := 0; j < len(class_timetable); j++ {
-			ta_timeTable = append(ta_timeTable, class_timetable[j])
-		}
-	}
-
-	return ta_timeTable, nil
 }

@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -112,7 +111,6 @@ func (ss *StudentService) UpdateStudentByID(context *gin.Context, id string, aut
 	}
 
 	return status, nil
-
 }
 
 func (ss *StudentService) IsTA(id string) (*uint, error) {
@@ -127,29 +125,4 @@ func (ss *StudentService) IsTA(id string) (*uint, error) {
 	}
 
 	return ID, nil
-}
-
-func (ss *StudentService) GetStudentSchedule(context *gin.Context) ([]GetTimetableByClassIDField, error) {
-	ps := NewClassRegisterService(ss.db)
-	ts := NewTimeTableService(ss.db)
-
-	register_classes, retErr := ps.GetRegisterClassByID(context)
-	if retErr != nil {
-		return nil, retErr
-	}
-
-	student_timeTable := []GetTimetableByClassIDField{}
-
-	for i := 0; i < len(register_classes); i++ {
-		class_timetable, retErr := ts.GetTimetableByClassID(strconv.FormatUint(uint64(register_classes[i].ClassID), 10))
-		if retErr != nil {
-			return nil, retErr
-		}
-
-		for j := 0; j < len(class_timetable); j++ {
-			student_timeTable = append(student_timeTable, class_timetable[j])
-		}
-	}
-
-	return student_timeTable, nil
 }

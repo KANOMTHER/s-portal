@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -21,15 +20,15 @@ func NewProfessorService(db *gorm.DB) *ProfessorService {
 }
 
 type ProfessorProfile struct {
-	ID        uint `example:"1"`
+	ID        uint   `example:"1"`
 	FName     string `example:"John"`
 	LName     string `example:"Doe"`
 	Email     string `example:"Juwan98@example.net"`
 	Phone     string `example:"744-512-3072"`
 	Position  string `example:"Professor"`
-	FacultyID uint `example:"1"`
+	FacultyID uint   `example:"1"`
 	Faculty   struct {
-		ID         uint `example:"1"`
+		ID         uint   `example:"1"`
 		Major      string `example:"Software"`
 		Department string `example:"Engineering"`
 	}
@@ -58,39 +57,6 @@ func (ps *ProfessorService) GetProfessorByID(id string) (*ProfessorProfile, erro
 		return nil, err
 	}
 	return professor, nil
-}
-
-type ProfessorSchedule struct {
-	ID        uint
-	ClassID   uint
-	Class     struct {
-		ID      uint
-		Section string
-		CourseID uint
-		Course   struct {
-			ID         uint
-			CourseCode string
-			CourseName string
-			Semester   int
-			Year       int
-		}
-	}
-	Day       time.Weekday
-	StartTime time.Time
-	EndTime   time.Time
-	Classroom string
-	ClassType string
-}
-
-// TODO: Implement GetProfessorScheduleByID
-func (ps *ProfessorService) GetProfessorScheduleByID(id string) ([]ProfessorSchedule, error) {
-	var schedules []ProfessorSchedule
-
-	// if err := ps.db.Model(&model.Timetable{}).Joins("Class").Joins.First(&schedules, id).Error; err != nil {
-	// 	return nil, err
-	// }
-	return schedules, nil
-
 }
 
 func (ps *ProfessorService) UpdateProfessorByID(context *gin.Context, id string) error {

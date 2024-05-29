@@ -81,22 +81,6 @@ func (h *TAHandler) UpdateClassTA(context *gin.Context) {
 	})
 }
 
-func (h *TAHandler) GetScheduleTA(context *gin.Context) {
-	schedule, err := h.TAService.SchedualTA(context)
-	
-	if err != nil {
-		// Handle error
-		context.JSON(404, gin.H{
-			"message err": err.Error(),
-		})
-		return;
-	}
-	// Return programs
-	context.JSON(200, gin.H{
-		"message": schedule,
-	})
-}
-
 func (h *TAHandler) DeleteClassTA(context *gin.Context) {
 	err := h.TAService.DeleteTA(context)
 	
