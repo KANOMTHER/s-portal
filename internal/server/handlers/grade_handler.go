@@ -30,7 +30,7 @@ func (g *GradeHandler) InitialAll(context *gin.Context) {
 
 	if err := context.ShouldBindJSON(&data); err != nil {
 		context.JSON(400, gin.H{
-			"message err": err,
+			"message err": err.Error(),
 		})
 
 		return
@@ -39,7 +39,7 @@ func (g *GradeHandler) InitialAll(context *gin.Context) {
 	err := g.gradeService.InitialGradeMultiple(data.Year, data.Semester)
 	if err != nil {
 		context.JSON(400, gin.H{
-			"message err": err,
+			"message err": err.Error(),
 		})
 	} else {
 		context.JSON(200, gin.H{
@@ -53,7 +53,7 @@ func (g *GradeHandler) GetStudentFromClassID(context *gin.Context) {
 	classID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
 		context.JSON(400, gin.H{
-			"message err": err,
+			"message err": err.Error(),
 		})
 
 		return
@@ -62,7 +62,7 @@ func (g *GradeHandler) GetStudentFromClassID(context *gin.Context) {
 	studentID, err := g.gradeService.GetStudentIDFromClassID(uint(classID))
 	if err != nil {
 		context.JSON(400, gin.H{
-			"message err": err,
+			"message err": err.Error(),
 		})
 	} else {
 		context.JSON(200, gin.H{
@@ -76,7 +76,7 @@ func (g *GradeHandler) EditGradeMultiple(context *gin.Context) {
 	classID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
 		context.JSON(401, gin.H{
-			"message err": err,
+			"message err": err.Error(),
 		})
 
 		return
@@ -89,7 +89,7 @@ func (g *GradeHandler) EditGradeMultiple(context *gin.Context) {
 	var gradeInfo MultipleGrade
 	if err := context.ShouldBindJSON(&gradeInfo); err != nil {
 		context.JSON(402, gin.H{
-			"message err": err,
+			"message err": err.Error(),
 		})
 
 		return
@@ -105,7 +105,7 @@ func (g *GradeHandler) EditGradeMultiple(context *gin.Context) {
 	err2 := g.gradeService.EditGradeMultiple(grades)
 	if err2 != nil {
 		context.JSON(403, gin.H{
-			"message err": err2,
+			"message err": err2.Error(),
 		})
 	} else {
 		context.JSON(200, gin.H{

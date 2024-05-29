@@ -17,7 +17,7 @@ func (f *GradeHub) GradeFromRegisterAdapter(classID uint, studentID uint, grade 
 
 func (f *GradeHub) GradeStrategy(classRegister ClassRegister, studentID uint, newClass uint) Grade {
 	return Grade{
-		StudentID: 1,
+		StudentID: studentID,
 		ClassID:   classRegister.ClassID,
 		Grade:     0,
 	}

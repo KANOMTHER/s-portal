@@ -71,12 +71,12 @@ func (ps *PaymentService) UpdatePriceByID(payment_id uint) error {
 	return nil
 }
 
-func (ps *PaymentService) GetStudentIDFromPaymentID(payment_id uint) uint {
-	var studentID model.Payment
+// func (ps *PaymentService) GetStudentIDFromPaymentID(payment_id uint) uint {
+// 	var studentID model.Payment
 
-	if err := ps.db.Model(model.Payment{}).Where("ID = ?", payment_id).First(&studentID).Error; err != nil {
-		return 0
-	}
+// 	if err := ps.db.Model(model.Payment{}).Where("ID = ?", payment_id).First(&studentID).Error; err != nil {
+// 		return 0
+// 	}
 
-	return studentID.StudentID
-}
+// 	return studentID.StudentID
+// }
