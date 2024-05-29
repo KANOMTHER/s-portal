@@ -1,23 +1,23 @@
-package model;
+package model
 
 type AbstractStaffFactory interface {
-	CreateInstructor() Instructor;
-	CreateAssistance() TA;
+	CreateInstructor() Instructor
+	CreateAssistance() TA
 }
 
-type StaffFactory struct {}
+type StaffFactory struct{}
 
-func (f*StaffFactory) CreateInstructor(classID uint, class Class, professorID uint, professor Professor) Instructor{
+func (f *StaffFactory) CreateInstructor(classID uint, class Class, professorID uint, professor Professor) Instructor {
 	return Instructor{
-		ClassID: classID,
-		Class: class,
+		ClassID:     classID,
+		Class:       class,
 		ProfessorID: professorID,
-		Professor: professor,
+		Professor:   professor,
 	}
 }
 
-//func (f*StaffFactory) CreateAssistance(classID uint, class Class, studentId uint, student Student) TA{
-func (f*StaffFactory) CreateAssistance(classID uint, studentId uint) TA{
+// func (f*StaffFactory) CreateAssistance(classID uint, class Class, studentId uint, student Student) TA{
+func (f *StaffFactory) CreateAssistance(classID uint, studentId uint) TA {
 	return TA{
 		ClassID: classID,
 		//Class: class,
